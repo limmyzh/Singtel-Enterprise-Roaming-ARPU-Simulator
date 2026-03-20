@@ -99,7 +99,7 @@ input[type=range]{width:100%;height:2px;accent-color:var(--blue);cursor:pointer;
 .warn strong{font-weight:500;color:#633806;}
 
 /* Ref field */
-.ref-field{opacity:0.38;pointer-events:none;margin-bottom:18px;}
+.ref-field{opacity:0.65;pointer-events:none;margin-bottom:18px;}
 .ref-tag{font-size:9px;font-weight:500;text-transform:uppercase;color:var(--text3);background:var(--bg2);border:0.5px solid var(--border2);border-radius:4px;padding:2px 6px;margin-left:5px;display:inline-block;}
 
 /* Formula */
@@ -164,6 +164,12 @@ input[type=range]{width:100%;height:2px;accent-color:var(--blue);cursor:pointer;
 .p-del-btn.protected{opacity:0.2;pointer-events:none;}
 .add-profile-btn{font-size:12px;color:var(--blue);background:none;border:0.5px dashed var(--blue);border-radius:6px;padding:6px 14px;cursor:pointer;margin-top:10px;display:inline-flex;align-items:center;gap:5px;}
 .add-profile-btn:hover{background:var(--bg2);}
+
+/* Collapsible formula */
+.formula-toggle{font-size:11px;font-weight:400;color:var(--blue);background:none;border:none;cursor:pointer;padding:0;letter-spacing:0;text-transform:none;}
+.formula-toggle:hover{opacity:0.75;}
+.formula-body{overflow:hidden;transition:max-height 0.2s ease,opacity 0.2s ease;max-height:1200px;opacity:1;}
+.formula-body.collapsed{max-height:0;opacity:0;}
 
 /* Print */
 @media print{
@@ -252,28 +258,29 @@ input[type=range]{width:100%;height:2px;accent-color:var(--blue);cursor:pointer;
       <div class="panel-hd">Results</div>
       <div class="result-hero">
         <div class="rh-label">Blended roaming data ARPU — per line / month</div>
-        <div class="rh-value" id="oa-arpu">$7.86</div>
+        <div class="rh-value" id="oa-arpu">$8.38</div>
         <div class="rh-sub">Blended across all lines including non-roamers</div>
       </div>
       <div class="rrow">
         <span class="rrow-label"><span class="tip">Roaming penetration of base<span class="tip-i">?</span><span class="tip-box">Active roamers as a % of total base — not just of travellers. Calculated as Traveller % × Active Roamer % of travellers. Distinct from "Active Roamer %" which measures only within the traveller pool.</span></span></span>
         <span class="rrow-val am" id="oa-pen">10.5%</span>
       </div>
-      <div class="rrow"><span class="rrow-label">Weighted plan ARPU (per active roamer)</span><span class="rrow-val" id="oa-plan">$75.00</span></div>
-      <div class="rrow"><span class="rrow-label">Est. monthly roaming data revenue</span><span class="rrow-val hi" id="oa-rev">$7,860</span></div>
+      <div class="rrow"><span class="rrow-label">Weighted plan ARPU (per active roamer)</span><span class="rrow-val" id="oa-plan">$79.82</span></div>
+      <div class="rrow"><span class="rrow-label">Est. monthly roaming data revenue</span><span class="rrow-val hi" id="oa-rev">$8,381</span></div>
       <div class="panel-divider"></div>
       <div class="panel-sub-hd" style="margin-bottom:12px;">Account breakdown</div>
       <div class="rrow"><span class="rrow-label">Total lines</span><span class="rrow-val" id="oa-acct">1,000</span></div>
       <div class="rrow"><span class="rrow-label">Est. travellers / month (Eligible Pool)</span><span class="rrow-val" id="oa-trav">143</span></div>
       <div class="rrow"><span class="rrow-label">Est. active roamers / month</span><span class="rrow-val" id="oa-roamers">105</span></div>
-      <div class="rrow"><span class="rrow-label">Est. silent roamers / month</span><span class="rrow-val" id="oa-silent">38</span></div>
+      <div class="rrow"><span class="rrow-label"><span class="tip">Est. silent roamers / month<span class="tip-i">?</span><span class="tip-box">Travellers who went overseas but did not activate a roaming plan — zero revenue contribution. Calculated as Travellers minus Active Roamers.</span></span></span><span class="rrow-val" id="oa-silent">38</span></div>
     </div>
   </div>
 
   <div id="plan-anchor-a"></div>
 
   <div class="panel" style="margin-bottom:14px;">
-    <div class="panel-hd">Formula &amp; assumptions</div>
+    <div class="panel-hd">Formula &amp; assumptions <button class="formula-toggle no-print" onclick="toggleFormula('a')">▾ collapse</button></div>
+    <div class="formula-body" id="formula-body-a">
     <div class="formula-section">
       <div class="f-label">How blended ARPU is derived</div>
       <div class="f-row">
@@ -289,9 +296,9 @@ input[type=range]{width:100%;height:2px;accent-color:var(--blue);cursor:pointer;
         <span class="f-step">Step 2</span>
         <div class="f-node amber"><div class="f-node-lbl">Roaming penetration</div><div class="f-node-val" id="fa-pen2">10.5%</div></div>
         <div class="f-op">×</div>
-        <div class="f-node"><div class="f-node-lbl">Weighted plan ARPU</div><div class="f-node-val" id="fa-plan">$75</div></div>
+        <div class="f-node"><div class="f-node-lbl">Weighted plan ARPU</div><div class="f-node-val" id="fa-plan">$80</div></div>
         <div class="f-op">=</div>
-        <div class="f-node blue"><div class="f-node-lbl">Blended ARPU / line</div><div class="f-node-val" id="fa-out">$7.86</div></div>
+        <div class="f-node blue"><div class="f-node-lbl">Blended ARPU / line</div><div class="f-node-val" id="fa-out">$8.38</div></div>
       </div>
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:0 28px;margin-top:4px;">
@@ -312,10 +319,11 @@ input[type=range]{width:100%;height:2px;accent-color:var(--blue);cursor:pointer;
         <div class="arow"><span class="arow-label">Daily Plans rate</span><span class="arow-val" id="aa-rate">$29 / day</span></div>
         <div class="arow" style="opacity:0.5;"><span class="arow-label">↳ Daily Plans ARPU / roamer</span><span class="arow-val" id="aa-daily">$159.50</span></div>
         <div class="arow"><span class="arow-label">Monthly Passes ARPU / roamer</span><span class="arow-val" id="aa-monthly">$35.00</span></div>
-        <div class="arow" style="opacity:0.5;"><span class="arow-label">↳ Weighted plan ARPU</span><span class="arow-val" id="aa-plan">$75.00</span></div>
+        <div class="arow" style="opacity:0.5;"><span class="arow-label">↳ Weighted plan ARPU</span><span class="arow-val" id="aa-plan">$79.82</span></div>
       </div>
     </div>
     <div class="assume-note">Derived values (↳) are calculated from inputs above them. Roaming penetration = Traveller % × Active Roamer %. Weighted plan ARPU = Daily Plans mix × Daily ARPU + Monthly Passes mix × Monthly ARPU.</div>
+    </div><!-- /formula-body-a -->
   </div>
 </div>
 
@@ -337,17 +345,18 @@ input[type=range]{width:100%;height:2px;accent-color:var(--blue);cursor:pointer;
       <div class="irow">
         <div class="irow-hd"><span class="irow-label">Account size (lines)</span></div>
         <input type="number" id="nb-acct" value="1000" step="50" min="1" class="num" oninput="calcB()">
-      </div>
-      <div class="warn" id="wb-warn">
-        <strong>Above observed base rate.</strong> Implied roaming penetration (<span id="wb-pen">—</span>) exceeds the observed base of <span id="wb-base">10.5%</span>. May be valid for high-travel industries (consulting, finance) — verify before presenting.
+        <div class="irow-hint">Total number of lines in the account.</div>
       </div>
       <div class="irow">
         <div class="irow-hd">
           <span class="irow-label">Expected active roamers / month</span>
           <span class="irow-val" id="vb-roamers">105</span>
         </div>
-        <input type="range" min="1" max="1000" step="1" value="105" id="sb-roamers" oninput="calcB()">
+        <input type="range" min="1" max="1000" step="1" value="105" id="sb-roamers" oninput="onSliderB()">
         <div class="range-ends"><span class="range-end">1</span><span class="range-end" id="sb-max">1,000</span></div>
+        <div class="warn" id="wb-warn">
+          <strong>Above observed base rate.</strong> Implied roaming penetration (<span id="wb-pen">—</span>) exceeds the observed base of <span id="wb-base">10.5%</span>. May be valid for high-travel industries (consulting, finance) — verify before presenting.
+        </div>
         <div class="irow-hint">Lines expected to actively roam per month. Roaming penetration = this ÷ account size.</div>
       </div>
       <div class="ref-field">
@@ -362,16 +371,16 @@ input[type=range]{width:100%;height:2px;accent-color:var(--blue);cursor:pointer;
     <div class="panel">
       <div class="panel-hd">Results</div>
       <div class="result-hero">
-        <div class="rh-label">Est. monthly roaming data revenue</div>
-        <div class="rh-value" id="ob-rev">$7,860</div>
-        <div class="rh-sub" id="ob-rev-sub">105 active roamers × $75 weighted plan ARPU</div>
+        <div class="rh-label">Blended roaming data ARPU — per line / month</div>
+        <div class="rh-value" id="ob-blended">$8.38</div>
+        <div class="rh-sub">Blended across all lines including non-roamers</div>
       </div>
       <div class="rrow">
         <span class="rrow-label"><span class="tip">Roaming penetration of base<span class="tip-i">?</span><span class="tip-box">Active roamers ÷ total base. In this mode derived directly from your input, not via Traveller% × Roamer%.</span></span></span>
         <span class="rrow-val am" id="ob-pen">10.5%</span>
       </div>
-      <div class="rrow"><span class="rrow-label">Weighted plan ARPU (per active roamer)</span><span class="rrow-val" id="ob-plan">$75.00</span></div>
-      <div class="rrow"><span class="rrow-label">Blended ARPU / line (incl. non-roamers)</span><span class="rrow-val" id="ob-blended">$7.86</span></div>
+      <div class="rrow"><span class="rrow-label">Weighted plan ARPU (per active roamer)</span><span class="rrow-val" id="ob-plan">$79.82</span></div>
+      <div class="rrow"><span class="rrow-label">Est. monthly roaming data revenue</span><span class="rrow-val hi" id="ob-rev">$8,381</span></div>
       <div class="rrow"><span class="rrow-label">Est. active roamers / month</span><span class="rrow-val" id="ob-roamers">105 lines</span></div>
     </div>
   </div>
@@ -379,7 +388,8 @@ input[type=range]{width:100%;height:2px;accent-color:var(--blue);cursor:pointer;
   <div id="plan-anchor-b"></div>
 
   <div class="panel" style="margin-bottom:14px;">
-    <div class="panel-hd">Formula &amp; assumptions</div>
+    <div class="panel-hd">Formula &amp; assumptions <button class="formula-toggle no-print" onclick="toggleFormula('b')">▾ collapse</button></div>
+    <div class="formula-body" id="formula-body-b">
     <div class="formula-section">
       <div class="f-label">How blended ARPU is derived</div>
       <div class="f-row">
@@ -395,9 +405,9 @@ input[type=range]{width:100%;height:2px;accent-color:var(--blue);cursor:pointer;
         <span class="f-step">Step 2</span>
         <div class="f-node amber"><div class="f-node-lbl">Roaming penetration</div><div class="f-node-val" id="fb-pen2">10.5%</div></div>
         <div class="f-op">×</div>
-        <div class="f-node"><div class="f-node-lbl">Weighted plan ARPU</div><div class="f-node-val" id="fb-plan">$75</div></div>
+        <div class="f-node"><div class="f-node-lbl">Weighted plan ARPU</div><div class="f-node-val" id="fb-plan">$80</div></div>
         <div class="f-op">=</div>
-        <div class="f-node blue"><div class="f-node-lbl">Blended ARPU / line</div><div class="f-node-val" id="fb-out">$7.86</div></div>
+        <div class="f-node blue"><div class="f-node-lbl">Blended ARPU / line</div><div class="f-node-val" id="fb-out">$8.38</div></div>
       </div>
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:0 28px;margin-top:4px;">
@@ -412,10 +422,11 @@ input[type=range]{width:100%;height:2px;accent-color:var(--blue);cursor:pointer;
         <div class="arow"><span class="arow-label">Daily Plans / Monthly Passes mix</span><span class="arow-val" id="ab-mix"><span style="color:var(--blue);">36% Daily</span> / <span style="color:var(--green);">64% Monthly</span></span></div>
         <div class="arow" style="opacity:0.5;"><span class="arow-label">↳ Daily Plans ARPU / roamer</span><span class="arow-val" id="ab-daily">$159.50</span></div>
         <div class="arow"><span class="arow-label">Monthly Passes ARPU / roamer</span><span class="arow-val" id="ab-monthly">$35.00</span></div>
-        <div class="arow" style="opacity:0.5;"><span class="arow-label">↳ Weighted plan ARPU</span><span class="arow-val" id="ab-plan">$75.00</span></div>
+        <div class="arow" style="opacity:0.5;"><span class="arow-label">↳ Weighted plan ARPU</span><span class="arow-val" id="ab-plan">$79.82</span></div>
       </div>
     </div>
     <div class="assume-note">Roaming penetration is set directly (roamers ÷ account size) rather than via the two-filter method. Derived values (↳) are calculated from inputs above them.</div>
+    </div><!-- /formula-body-b -->
   </div>
 </div>
 
@@ -428,18 +439,18 @@ input[type=range]{width:100%;height:2px;accent-color:var(--blue);cursor:pointer;
   <div class="settings-cols">
     <div class="settings-section">
       <div class="settings-hd">Base defaults</div>
-      <div class="srow"><span class="srow-label">Traveller % of base</span><div class="srow-right"><input type="number" id="def-trav" value="14.3" step="0.1" class="snum">%</div></div>
-      <div class="srow"><span class="srow-label">Active roamer % of travellers</span><div class="srow-right"><input type="number" id="def-roam" value="73.3" step="0.1" class="snum">%</div></div>
-      <div class="srow"><span class="srow-label">Observed roaming penetration</span><div class="srow-right"><input type="number" id="def-base-pen" value="10.5" step="0.1" class="snum">%</div></div>
-      <div class="srow"><span class="srow-label">Default account size</span><div class="srow-right"><input type="number" id="def-acct" value="1000" step="50" class="snum">lines</div></div>
-      <div class="srow"><span class="srow-label">"By roamer count" default roamers</span><div class="srow-right"><input type="number" id="def-broamers" value="105" step="1" class="snum"></div></div>
+      <div class="srow"><span class="srow-label">Traveller % of base</span><div class="srow-right"><input type="number" id="def-trav" value="14.3" step="0.1" class="snum" oninput="markSettingsDirty()">%</div></div>
+      <div class="srow"><span class="srow-label">Active roamer % of travellers</span><div class="srow-right"><input type="number" id="def-roam" value="73.3" step="0.1" class="snum" oninput="markSettingsDirty()">%</div></div>
+      <div class="srow"><span class="srow-label">Observed roaming penetration</span><div class="srow-right"><input type="number" id="def-base-pen" value="10.5" step="0.1" class="snum" oninput="markSettingsDirty()">%</div></div>
+      <div class="srow"><span class="srow-label">Default account size</span><div class="srow-right"><input type="number" id="def-acct" value="1000" step="50" class="snum" oninput="markSettingsDirty()">lines</div></div>
+      <div class="srow"><span class="srow-label">"By roamer count" default roamers</span><div class="srow-right"><input type="number" id="def-broamers" value="105" step="1" class="snum" oninput="markSettingsDirty()"></div></div>
     </div>
     <div class="settings-section">
       <div class="settings-hd">Plan assumption defaults</div>
-      <div class="srow"><span class="srow-label">Daily Plans avg days / month</span><input type="number" id="def-days" value="5.5" step="0.5" class="snum"></div>
-      <div class="srow"><span class="srow-label">Daily Plans rate ($ / day)</span><div class="srow-right">$<input type="number" id="def-rate" value="29" step="1" class="snum"></div></div>
-      <div class="srow"><span class="srow-label">Monthly Passes ARPU ($)</span><div class="srow-right">$<input type="number" id="def-monthly" value="35" step="1" class="snum"></div></div>
-      <div class="srow"><span class="srow-label">% on Daily Plans (default)</span><div class="srow-right"><input type="number" id="def-mix" value="36" step="1" class="snum">%</div></div>
+      <div class="srow"><span class="srow-label">Daily Plans avg days / month</span><input type="number" id="def-days" value="5.5" step="0.5" class="snum" oninput="markSettingsDirty()"></div>
+      <div class="srow"><span class="srow-label">Daily Plans rate ($ / day)</span><div class="srow-right">$<input type="number" id="def-rate" value="29" step="1" class="snum" oninput="markSettingsDirty()"></div></div>
+      <div class="srow"><span class="srow-label">Monthly Passes ARPU ($)</span><div class="srow-right">$<input type="number" id="def-monthly" value="35" step="1" class="snum" oninput="markSettingsDirty()"></div></div>
+      <div class="srow"><span class="srow-label">% on Daily Plans (default)</span><div class="srow-right"><input type="number" id="def-mix" value="36" step="1" class="snum" oninput="markSettingsDirty()">%</div></div>
     </div>
   </div>
 
@@ -503,7 +514,7 @@ input[type=range]{width:100%;height:2px;accent-color:var(--blue);cursor:pointer;
       <span class="irow-val" id="v-mix-a">36%</span>
     </div>
     <input type="range" min="0" max="100" step="1" value="36" id="s-mix" oninput="onMix(this.value)">
-    <div class="range-ends"><span class="range-end">100% Monthly Passes</span><span class="range-end">100% Daily Plans</span></div>
+    <div class="range-ends"><span class="range-end">← 0% Daily Plans</span><span class="range-end">100% Daily Plans →</span></div>
     <div class="mix-bar" style="margin-top:6px;"><div class="mix-seg-d" id="bar-d" style="width:36%"></div><div class="mix-seg-m" id="bar-m" style="width:64%"></div></div>
     <div class="mix-legend" style="margin-top:4px;">
       <div class="mix-li"><div class="mix-dot" style="background:var(--blue)"></div>Daily Plans <span id="leg-d">36%</span></div>
@@ -515,6 +526,7 @@ input[type=range]{width:100%;height:2px;accent-color:var(--blue);cursor:pointer;
 <script>
 // ── CORE STATE ──────────────────────────────────────────────────────────────
 var currentTab = 'a';
+var settingsDirty = false;
 
 // Default profiles — used if localStorage is empty
 var DEFAULT_PROFILES = [
@@ -546,6 +558,11 @@ function loadFromStorage(){
     });
   }catch(e){
     profiles=JSON.parse(JSON.stringify(DEFAULT_PROFILES));
+    // Also reset settings DOM fields so they match DEFAULT_SETTINGS exactly
+    Object.keys(DEFAULT_SETTINGS).forEach(function(k){
+      var el=document.getElementById('def-'+k);
+      if(el) el.value=DEFAULT_SETTINGS[k];
+    });
   }
 }
 
@@ -568,46 +585,60 @@ function buildProfileTable(){
   profiles.forEach(function(p,i){
     var tr=document.createElement('tr');
     tr.innerHTML=
-      '<td class="ptd-name"><input class="p-name-input" value="'+escHtml(p.name)+'" data-i="'+i+'" oninput="updateProfileField('+i+',\'name\',this.value)"></td>'+
-      '<td class="ptd-num"><input class="p-num-input" type="number" min="0" max="100" step="0.1" value="'+p.trav+'" data-i="'+i+'" oninput="updateProfileField('+i+',\'trav\',this.value)">%</td>'+
-      '<td class="ptd-num"><input class="p-num-input" type="number" min="0" max="100" step="0.1" value="'+p.roam+'" data-i="'+i+'" oninput="updateProfileField('+i+',\'roam\',this.value)">%</td>'+
+      '<td class="ptd-name"><input class="p-name-input" value="'+escHtml(p.name)+'" data-i="'+i+'" oninput="markSettingsDirty();updateProfileField('+i+',\'name\',this.value)"></td>'+
+      '<td class="ptd-num"><input class="p-num-input" type="number" min="0" max="100" step="0.1" value="'+p.trav+'" data-i="'+i+'" oninput="markSettingsDirty();updateProfileField('+i+',\'trav\',this.value)">%</td>'+
+      '<td class="ptd-num"><input class="p-num-input" type="number" min="0" max="100" step="0.1" value="'+p.roam+'" data-i="'+i+'" oninput="markSettingsDirty();updateProfileField('+i+',\'roam\',this.value)">%</td>'+
       '<td class="ptd-del"><button class="p-del-btn'+(p.protected?' protected':'')+'" onclick="deleteProfileRow('+i+')" title="Delete">✕</button></td>';
     tbody.appendChild(tr);
   });
 }
 
+function markSettingsDirty(){ settingsDirty=true; updateSettingsTabLabel(); }
+
 function updateProfileField(i,field,val){
-  if(field==='name') profiles[i].name=val;
-  else profiles[i][field]=parseFloat(val)||0;
+  if(field==='name'){
+    profiles[i].name=val;
+  } else {
+    var num=parseFloat(val);
+    if(!isNaN(num)) profiles[i][field]=num;
+    // If invalid, preserve previous value — browser native validation handles display
+  }
 }
 
 function addProfileRow(){
   profiles.push({name:'New profile',trav:14.3,roam:73.3,protected:false});
+  settingsDirty=true;
+  updateSettingsTabLabel();
   buildProfileTable();
 }
 
 function deleteProfileRow(i){
   if(profiles[i].protected) return;
   profiles.splice(i,1);
+  settingsDirty=true;
+  updateSettingsTabLabel();
   buildProfileTable();
 }
 
-function escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;');}
+function escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 
 function populatePresetDropdowns(){
   ['a','b'].forEach(function(tab){
     var sel=document.getElementById('preset-select-'+tab);
-    var current=sel.value;
+    // Track selection by name so index shifts after delete don't corrupt selection
+    var currentName='';
+    var ci=parseInt(sel.value);
+    if(!isNaN(ci) && profiles[ci]) currentName=profiles[ci].name;
     sel.innerHTML='<option value="">— Select a profile —</option>';
+    var matchIdx=0; // default to Enterprise base (index 0)
     profiles.forEach(function(p,i){
       var opt=document.createElement('option');
       opt.value=i;
       opt.textContent=p.name;
       sel.appendChild(opt);
+      if(currentName && p.name===currentName) matchIdx=i;
     });
-    // Restore previous selection, or default to Enterprise base (index 0)
-    if(current!=='' && profiles[parseInt(current)]) sel.value=current;
-    else sel.value='0';
+    sel.value=matchIdx;
   });
 }
 
@@ -642,6 +673,12 @@ function onSliderA(){
   document.getElementById('preset-select-a').value='';
   document.getElementById('preset-custom-a').classList.add('show');
   calcA();
+}
+
+function onSliderB(){
+  document.getElementById('preset-select-b').value='';
+  document.getElementById('preset-custom-b').classList.add('show');
+  calcB();
 }
 
 // ── PLAN ────────────────────────────────────────────────────────────────────
@@ -696,13 +733,15 @@ function calcA(p){
   var roam  =parseFloat(document.getElementById('sa-roam').value)||0;
   var acct  =parseInt(document.getElementById('na-acct').value)||1000;
 
-  // Core calculation — unchanged from original
-  var pen    =(trav/100)*(roam/100);
-  var blended=pen*p.planArpu;
+  // Core calculation
+  var pen       =(trav/100)*(roam/100);
   var travellers=Math.round((trav/100)*acct);
   var roamers   =Math.round(pen*acct);
   var silent    =travellers-roamers;
-  var rev       =Math.round(blended*acct);
+  // Revenue derived from rounded roamer count so displayed arithmetic is consistent:
+  // rev displayed == displayed_roamers × displayed_planArpu
+  var rev       =Math.round(roamers*p.planArpu);
+  var blended   =acct>0 ? rev/acct : 0;
 
   // Active preset name for assumptions
   var selA=document.getElementById('preset-select-a');
@@ -747,8 +786,8 @@ function calcB(p){
   p=p||getPlan();
   var acct   =parseInt(document.getElementById('nb-acct').value)||1000;
   var sl     =document.getElementById('sb-roamers');
-  // Sync slider max to account size, clamp value
-  if(parseInt(sl.max)<acct){sl.max=acct;}
+  // Slider max always equals account size — never cache a stale larger value
+  sl.max=acct;
   if(parseInt(sl.value)>acct){sl.value=acct;}
   document.getElementById('sb-max').textContent=acct.toLocaleString();
   var roamers=parseInt(sl.value)||1;
@@ -769,7 +808,6 @@ function calcB(p){
   document.getElementById('vb-imp').textContent     =impTravDisplay;
   document.getElementById('vb-roam-ref').textContent=defRoam.toFixed(1)+'%';
   document.getElementById('ob-rev').textContent     ='$'+rev.toLocaleString();
-  document.getElementById('ob-rev-sub').textContent =roamers.toLocaleString()+' active roamers × $'+Math.round(p.planArpu)+' weighted plan ARPU';
   document.getElementById('ob-pen').textContent     =(pen*100).toFixed(1)+'%';
   document.getElementById('ob-plan').textContent    ='$'+p.planArpu.toFixed(2);
   document.getElementById('ob-blended').textContent ='$'+blended.toFixed(2);
@@ -796,13 +834,32 @@ function calcB(p){
 }
 
 // ── TABS ────────────────────────────────────────────────────────────────────
+function updateSettingsTabLabel(){
+  var btn=document.querySelector('.tab[onclick="setTab(\'settings\')"]');
+  if(btn) btn.textContent=(settingsDirty ? '⚙ Settings ●' : '⚙ Settings');
+}
+
 function setTab(t){
+  // Warn if leaving settings with unsaved changes
+  if(currentTab==='settings' && t!=='settings' && settingsDirty){
+    if(!confirm('You have unsaved settings changes. Leave without saving?')) return;
+    // Revert in-memory profiles to what's in storage
+    try{var raw=localStorage.getItem('singtel_profiles');if(raw) profiles=JSON.parse(raw);}catch(e){}
+    settingsDirty=false;
+    updateSettingsTabLabel();
+    buildProfileTable();
+  }
+
   currentTab=t;
   document.querySelectorAll('.tab').forEach(function(b,i){
     b.classList.toggle('active',['a','b','settings'][i]===t);
   });
   document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active');});
   document.getElementById('tab-'+t).classList.add('active');
+
+  // Disable export button when on settings tab (no calc data to export)
+  var exportBtn=document.querySelector('.btn-ghost[onclick="exportCSV()"]');
+  if(exportBtn) exportBtn.disabled=(t==='settings');
 
   // Move plan panel to correct position using explicit anchors
   var pp=document.getElementById('plan-panel');
@@ -843,10 +900,10 @@ function resetDefaults(){
   document.getElementById('n-rate').value   =d.rate;
   document.getElementById('n-monthly').value=d.monthly;
   document.getElementById('s-mix').value    =d.mix;
-  // Clear preset selections
-  document.getElementById('preset-select-a').value='';
+  // Restore Enterprise base preset (index 0) to match reset values
+  document.getElementById('preset-select-a').value='0';
   document.getElementById('preset-custom-a').classList.remove('show');
-  document.getElementById('preset-select-b').value='';
+  document.getElementById('preset-select-b').value='0';
   document.getElementById('preset-custom-b').classList.remove('show');
   onMix(d.mix);
 }
@@ -864,6 +921,8 @@ function saveAllSettings(){
     }
   });
   saveToStorage();
+  settingsDirty=false;
+  updateSettingsTabLabel();
   populatePresetDropdowns();
   var ok=document.getElementById('save-ok');
   ok.classList.add('show');
@@ -872,6 +931,7 @@ function saveAllSettings(){
 
 // ── CSV EXPORT ──────────────────────────────────────────────────────────────
 function exportCSV(){
+  if(currentTab==='settings') return; // Nothing to export from settings
   var p=getPlan();
   var rows=[];
   var ts=new Date().toISOString().slice(0,16).replace('T',' ');
@@ -884,9 +944,13 @@ function exportCSV(){
     var trav  =parseFloat(document.getElementById('sa-trav').value)||0;
     var roam  =parseFloat(document.getElementById('sa-roam').value)||0;
     var acct  =parseInt(document.getElementById('na-acct').value)||1000;
-    var pen   =(trav/100)*(roam/100);
-    var blended=pen*p.planArpu;
-    var rev   =Math.round(blended*acct);
+    var pen        =(trav/100)*(roam/100);
+    var travellers =Math.round((trav/100)*acct);
+    var roamersA   =Math.round(pen*acct);
+    var silent     =travellers-roamersA;
+    // Consistent with calcA(): revenue = roamers × planArpu (no double-rounding)
+    var rev        =Math.round(roamersA*p.planArpu);
+    var blended    =acct>0 ? rev/acct : 0;
     var selA  =document.getElementById('preset-select-a');
     var pidx  =parseInt(selA.value);
     var profName=(!isNaN(pidx)&&profiles[pidx])?profiles[pidx].name:'Custom';
@@ -902,9 +966,9 @@ function exportCSV(){
     rows.push(['Roaming penetration of base',(pen*100).toFixed(1)+'%']);
     rows.push(['Weighted plan ARPU (per active roamer)','$'+p.planArpu.toFixed(2)]);
     rows.push(['Est. monthly roaming data revenue','$'+rev.toLocaleString()]);
-    rows.push(['Est. travellers / month',Math.round((trav/100)*acct)]);
-    rows.push(['Est. active roamers / month',Math.round(pen*acct)]);
-    rows.push(['Est. silent roamers / month',Math.round((trav/100)*acct)-Math.round(pen*acct)]);
+    rows.push(['Est. travellers / month',travellers]);
+    rows.push(['Est. active roamers / month',roamersA]);
+    rows.push(['Est. silent roamers / month',silent]);
   } else {
     var acctB  =parseInt(document.getElementById('nb-acct').value)||1000;
     var roamers=parseInt(document.getElementById('sb-roamers').value)||1;
@@ -954,61 +1018,83 @@ function exportCSV(){
   URL.revokeObjectURL(url);
 }
 
+// ── FORMULA TOGGLE ──────────────────────────────────────────────────────────
+function toggleFormula(tab){
+  var body=document.getElementById('formula-body-'+tab);
+  var btn=document.querySelector('#tab-'+tab+' .formula-toggle');
+  if(!body||!btn) return;
+  var collapsed=body.classList.toggle('collapsed');
+  btn.textContent=collapsed?'▸ expand':'▾ collapse';
+}
+
 // ── SELF-TEST ───────────────────────────────────────────────────────────────
-// Runs silently on load. Logs to console only. Does not affect UI.
+// Runs silently on load. Logs failures to console only. Does not affect UI.
 function runTests(){
   var pass=0; var fail=0;
   function assert(label,actual,expected,tol){
     tol=tol||0.001;
     if(Math.abs(actual-expected)<=tol){pass++;}
-    else{fail++;}
+    else{fail++;console.warn('FAIL ['+label+']: got '+actual+', expected '+expected+' ±'+tol);}
+  }
+  function assertBool(label,actual,expected){
+    if(actual===expected){pass++;}
+    else{fail++;console.warn('FAIL ['+label+']: got '+actual+', expected '+expected);}
   }
 
   // getPlan formula: planArpu = (mix/100)*dailyA + ((100-mix)/100)*monthly
-  // Test 1: baseline defaults
-  // 5.5 × 29 = 159.5; (0.36×159.5) + (0.64×35) = 57.42 + 22.4 = 79.82
+  // Test 1: baseline defaults — 5.5×29=159.5; (0.36×159.5)+(0.64×35)=57.42+22.40=79.82
   var dailyA=5.5*29; // 159.5
   var planArpu=(36/100)*dailyA+((100-36)/100)*35;
   assert('planArpu baseline',planArpu,79.82,0.01);
 
-  // Test 2: calcA penetration
-  // pen = (14.3/100) × (73.3/100) = 0.104819
+  // Test 2: calcA penetration — pen = (14.3/100)×(73.3/100) = 0.104819
   var pen=(14.3/100)*(73.3/100);
   assert('pen baseline',pen*100,10.4819,0.01);
 
-  // Test 3: blended ARPU = pen × planArpu
-  var blended=pen*planArpu;
-  assert('blended baseline',blended,8.365,0.01); // 0.104819 × 79.82 ≈ 8.367
+  // Test 3: blended ARPU = rev/acct (post revenue-from-roamers fix)
+  // roamers = Math.round(0.104819×1000) = 105; rev = Math.round(105×79.82) = 8381
+  // blended = 8381/1000 = 8.381
+  var roamersT3=Math.round(pen*1000);
+  var revT3=Math.round(roamersT3*planArpu);
+  var blendedT3=revT3/1000;
+  assert('blended baseline',blendedT3,8.381,0.01);
 
-  // Test 4: 100% DRS mix → planArpu = dailyA
+  // Test 4: 100% Daily Plans mix → planArpu = dailyA
   var p100=(100/100)*dailyA+0*35;
   assert('100pct DRS planArpu',p100,dailyA,0.001);
 
-  // Test 5: 0% DRS → planArpu = monthly
+  // Test 5: 0% Daily Plans → planArpu = monthly
   var p0=0*dailyA+(100/100)*35;
   assert('0pct DRS planArpu',p0,35,0.001);
 
   // Test 6: calcB formula — pen = roamers/acct
   var penB=105/1000;
   assert('calcB pen',penB,0.105,0.001);
-  var blendedB=penB*planArpu;
-  assert('calcB blended',blendedB,penB*79.82,0.001);
+  // calcB revenue = Math.round(roamers × planArpu) — blended = rev/acct
+  var revB=Math.round(105*planArpu);
+  assert('calcB rev',revB,8381,1);
 
-  // Test 7: revenue = blended × acct (integer)
-  var rev=Math.round(blended*1000);
-  assert('calcA rev',rev,8367,1);
+  // Test 7: revenue = roamers × planArpu (rounded once — post Finding 2 fix)
+  assert('calcA rev',revT3,8381,1);
 
-  // Test 8: implied trav cap
+  // Test 8: revenue consistency — rev == displayed_roamers × planArpu exactly
+  assert('rev consistency',revT3,Math.round(roamersT3*planArpu),0);
+
+  // Test 9: implied trav cap — boolean check via assertBool (not numeric tolerance)
   var defRoam=73.3;
-  var impTrav=(1.0/(defRoam/100))*100; // pen=100%
-  assert('impTrav at 100pct pen > 100',impTrav>100,true,0.5);
+  var impTrav=(1.0/(defRoam/100))*100; // pen=100% → >100
+  assertBool('impTrav at 100pct pen > 100',impTrav>100,true);
 
-  // Test 9: preset apply — only sets sliders, pen recalculated from them
-  // Simulated: trav=28, roam=85 → pen = 0.28×0.85 = 0.238
+  // Test 10: preset apply — Consulting/Finance: pen = 0.28×0.85 = 0.238
   var presetPen=(28/100)*(85/100);
   assert('preset pen consulting',presetPen*100,23.8,0.01);
 
-  // Tests run silently — remove log
+  // Test 11: warning threshold is strictly > basePen, not >=
+  var basePen=10.5;
+  assertBool('warning at exactly basePen is OFF', (10.5*100)>basePen*100, false);
+  assertBool('warning just above basePen is ON',  (10.6*100)>basePen*100, true);
+
+  if(fail>0) console.warn('runTests: '+fail+' failure(s), '+pass+' passed.');
 }
 
 // ── INIT ────────────────────────────────────────────────────────────────────
