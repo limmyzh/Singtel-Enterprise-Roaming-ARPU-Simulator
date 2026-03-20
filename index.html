@@ -53,7 +53,7 @@ body::before{content:'';display:block;height:3px;background:linear-gradient(90de
 .irow-label{font-size:12px;color:var(--text2);}
 .irow-val{font-family:'DM Mono',monospace;font-size:14px;font-weight:500;}
 .irow-hint{font-size:10px;color:var(--text3);margin-top:4px;line-height:1.5;}
-input[type=range]{width:100%;height:6px;accent-color:var(--blue);cursor:pointer;margin:8px 0 2px;border-radius:3px;background:linear-gradient(to right,var(--blue) 0%,var(--blue) 50%,var(--border) 50%,var(--border) 100%);background-size:100% 100%;background-repeat:no-repeat;-webkit-appearance:none;appearance:none;}
+input[type=range]{width:100%;height:6px;accent-color:var(--blue);cursor:pointer;margin:8px 0 2px;border-radius:3px;background:linear-gradient(to right,var(--blue) 0%,var(--blue) 50%,var(--border2) 50%,var(--border2) 100%);background-size:100% 100%;background-repeat:no-repeat;-webkit-appearance:none;appearance:none;}
 input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:18px;height:18px;border-radius:50%;background:#fff;border:2px solid var(--blue);cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,0.12);}
 input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:#fff;border:2px solid var(--blue);cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,0.12);}
 input[type=range]::-moz-range-track{background:none;border:none;}
@@ -284,6 +284,7 @@ input[type=range]::-moz-range-track{background:none;border:none;}
   </div>
 
   <div id="plan-anchor-a"></div>
+  <!-- Plan panel lives here on Tab A (initial position) -->
 
   <div class="panel" style="margin-bottom:14px;">
     <div class="panel-hd">Formula &amp; assumptions <button class="formula-toggle no-print" onclick="toggleFormula('a')">▾ collapse</button></div>
@@ -487,7 +488,7 @@ input[type=range]::-moz-range-track{background:none;border:none;}
 
 </div><!-- /wrap -->
 
-<!-- PLAN PANEL — lives here, moved into active tab by JS -->
+<!-- PLAN PANEL — injected by JS into active tab; starts hidden until setTab() runs -->
 <div class="panel plan-config-panel" style="margin-bottom:14px;display:none;" id="plan-panel">
   <div class="panel-hd">Plan assumptions <span style="font-size:10px;font-weight:400;color:var(--text3);text-transform:none;letter-spacing:0;">— shared across all modes</span></div>
   <!-- Print-only static summary -->
@@ -714,6 +715,7 @@ function updatePlanDisplay(p){
 
 function onMix(v){
   v=parseFloat(v);
+  updateSliderFill(document.getElementById('s-mix'));
   document.getElementById('v-mix-a').textContent=v+'%';
   document.getElementById('bar-d').style.width=v+'%';
   document.getElementById('bar-m').style.width=(100-v)+'%';
@@ -755,6 +757,9 @@ function calcA(p){
   var pidx=parseInt(selA.value);
   var profName=(!isNaN(pidx)&&profiles[pidx])?profiles[pidx].name:'Custom';
 
+  // Update slider fills
+  updateSliderFill(document.getElementById('sa-trav'));
+  updateSliderFill(document.getElementById('sa-roam'));
   // Update display
   document.getElementById('va-trav').textContent  =trav.toFixed(1)+'%';
   document.getElementById('va-roam').textContent  =roam.toFixed(1)+'%';
@@ -810,6 +815,8 @@ function calcB(p){
   var impTrav=(pen/(defRoam/100))*100;
   var impTravDisplay=impTrav>100?'> 100% — not feasible':impTrav.toFixed(1)+'%';
 
+  // Update slider fill
+  updateSliderFill(document.getElementById('sb-roamers'));
   // Update display
   document.getElementById('vb-roamers').textContent =roamers.toLocaleString();
   document.getElementById('vb-imp').textContent     =impTravDisplay;
@@ -840,6 +847,15 @@ function calcB(p){
   document.getElementById('wb-warn').classList.toggle('show',pen*100>basePen);
 }
 
+// ── SLIDER FILL ─────────────────────────────────────────────────────────────
+function updateSliderFill(el){
+  var min=parseFloat(el.min)||0;
+  var max=parseFloat(el.max)||100;
+  var val=parseFloat(el.value)||0;
+  var pct=((val-min)/(max-min))*100;
+  el.style.background='linear-gradient(to right,var(--blue) 0%,var(--blue) '+pct+'%,var(--border2) '+pct+'%,var(--border2) 100%)';
+}
+
 // ── TABS ────────────────────────────────────────────────────────────────────
 function updateSettingsTabLabel(){
   var btn=document.querySelector('.tab[onclick="setTab(\'settings\')"]');
@@ -858,6 +874,17 @@ function setTab(t){
   }
 
   currentTab=t;
+
+  // Move plan panel BEFORE changing tab visibility to avoid layout flash
+  var pp=document.getElementById('plan-panel');
+  if(t==='settings'){
+    pp.style.display='none';
+  } else {
+    pp.style.display='';
+    var anchor=document.getElementById('plan-anchor-'+t);
+    if(anchor) anchor.parentNode.insertBefore(pp, anchor);
+  }
+
   document.querySelectorAll('.tab').forEach(function(b,i){
     b.classList.toggle('active',['a','b','settings'][i]===t);
   });
@@ -867,16 +894,6 @@ function setTab(t){
   // Disable export button when on settings tab (no calc data to export)
   var exportBtn=document.querySelector('.btn-ghost[onclick="exportCSV()"]');
   if(exportBtn) exportBtn.disabled=(t==='settings');
-
-  // Move plan panel to correct position using explicit anchors
-  var pp=document.getElementById('plan-panel');
-  if(t==='settings'){
-    pp.style.display='none';
-  } else {
-    pp.style.display='';
-    var anchor=document.getElementById('plan-anchor-'+t);
-    if(anchor) anchor.parentNode.insertBefore(pp, anchor);
-  }
 
   if(t!=='settings') calcAll();
 }
