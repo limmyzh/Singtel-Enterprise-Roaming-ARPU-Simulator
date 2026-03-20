@@ -78,9 +78,9 @@ input[type=range]::-moz-range-track{background:none;border:none;}
 .pf{display:flex;flex-direction:column;gap:4px;}
 .pf-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.04em;}
 .pf-hint{font-size:10px;color:var(--text3);margin-top:2px;}
-.mix-bar{height:5px;border-radius:3px;overflow:hidden;display:flex;margin:6px 0 3px;}
-.mix-seg-d{background:var(--blue);transition:width 0.13s;}
-.mix-seg-m{background:var(--green);transition:width 0.13s;}
+.mix-bar{height:5px;border-radius:3px;overflow:hidden;display:flex;flex-direction:row;margin:6px 0 3px;}
+.mix-seg-d{background:var(--blue);height:5px;flex-shrink:0;transition:width 0.13s;}
+.mix-seg-m{background:var(--green);height:5px;flex:1 0 0;transition:width 0.13s;}
 .mix-legend{display:flex;gap:12px;flex-wrap:wrap;}
 .mix-li{display:flex;align-items:center;gap:4px;font-size:10px;color:var(--text3);}
 .mix-dot{width:7px;height:7px;border-radius:50%;}
@@ -707,6 +707,12 @@ function getPlan(){
 }
 
 function updatePlanDisplay(p){
+  updateSliderFill(document.getElementById('s-mix'));
+  document.getElementById('v-mix-a').textContent=p.mix+'%';
+  document.getElementById('bar-d').style.width=p.mix+'%';
+  document.getElementById('bar-m').style.width=(100-p.mix)+'%';
+  document.getElementById('leg-d').textContent=p.mix+'%';
+  document.getElementById('leg-m').textContent=(100-p.mix)+'%';
   document.getElementById('daily-arpu').textContent='$'+p.dailyA.toFixed(2);
   document.getElementById('wtd-arpu').textContent='$'+p.planArpu.toFixed(2);
   // Print summary
