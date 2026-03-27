@@ -3,215 +3,963 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light only">
+<meta name="supported-color-schemes" content="light">
 <title>Roaming ARPU Simulator — Singtel Enterprise Mobility</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+
 :root{
-  --bg:#fff;--bg2:#f5f5f2;--text:#1a1a18;--text2:#5f5e5a;--text3:#9c9a92;
-  --border:rgba(0,0,0,0.11);--border2:rgba(0,0,0,0.18);
-  --blue:#378ADD;--blue-dark:#185FA5;--green:#1D9E75;
-  --amber:#854F0B;--amber-light:#FAEEDA;--amber-border:#FAC775;
-  --radius:12px;--radius-sm:7px;
+  color-scheme:light;
+  /* Surfaces */
+  --bg:#ffffff;
+  --bg2:#f6f6f8;
+  --bg3:#eeeef2;
+  --bg4:#e4e4ea;
+
+  /* Text */
+  --text:#09090d;
+  --text2:#3f3f52;
+  --text3:#8b8ba0;
+  --text4:#c2c2d4;
+
+  /* Borders */
+  --border:rgba(0,0,0,0.07);
+  --border2:rgba(0,0,0,0.12);
+
+  /* Indigo brand */
+  --i50:#eef2ff;--i100:#e0e7ff;--i200:#c7d2fe;
+  --i300:#a5b4fc;--i400:#818cf8;--i500:#6366f1;
+  --i600:#4f46e5;--i700:#4338ca;--i900:#312e81;
+
+  /* Accents */
+  --blue:#3b82f6;--blue-d:#1d4ed8;
+  --green:#10b981;--green-d:#059669;
+  --amber:#d97706;--amber-light:#fffbeb;--amber-border:#fde68a;
+  --red:#ef4444;
+
+  /* Gradients */
+  --grad-brand:linear-gradient(135deg,#6366f1 0%,#818cf8 50%,#3b82f6 100%);
+  --grad-brand-2:linear-gradient(135deg,#4f46e5 0%,#6366f1 100%);
+  --grad-subtle:linear-gradient(160deg,#f0f0ff 0%,#f6f8ff 50%,#fff 100%);
+  --grad-green:linear-gradient(135deg,#059669,#10b981);
+
+  /* Shadows */
+  --s-xs:0 1px 2px rgba(0,0,0,0.04);
+  --s-sm:0 2px 6px rgba(0,0,0,0.06),0 1px 2px rgba(0,0,0,0.04);
+  --s-md:0 6px 20px rgba(0,0,0,0.07),0 2px 6px rgba(0,0,0,0.04);
+  --s-lg:0 16px 50px rgba(0,0,0,0.09),0 4px 12px rgba(0,0,0,0.05);
+  --s-indigo:0 4px 24px rgba(99,102,241,0.28),0 1px 4px rgba(99,102,241,0.12);
+  --s-indigo-lg:0 12px 40px rgba(99,102,241,0.35),0 4px 12px rgba(99,102,241,0.15);
+
+  /* Shape */
+  --r:16px;--r-sm:10px;--r-xs:6px;
+
+  /* Motion — spring feels */
+  --spring:cubic-bezier(0.34,1.56,0.64,1);
+  --ease-out:cubic-bezier(0.16,1,0.3,1);
+  --ease-io:cubic-bezier(0.4,0,0.2,1);
+  --t:0.2s;--t-md:0.3s;--t-lg:0.5s;
 }
-body{font-family:'DM Sans',sans-serif;font-size:14px;color:var(--text);background:var(--bg2);min-height:100vh;padding:28px 20px;}
-.wrap{max-width:880px;margin:0 auto;}
 
-/* Header */
-.header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:22px;}
-.badge{font-size:10px;font-weight:500;letter-spacing:0.07em;text-transform:uppercase;color:#cc0000;margin-bottom:7px;display:block;}
-.header h1{font-size:19px;font-weight:500;letter-spacing:-0.01em;margin-bottom:3px;}
-.header p{font-size:12px;color:var(--text3);}
-.header-right{display:flex;align-items:center;gap:8px;padding-top:4px;flex-wrap:wrap;}
-.btn-ghost{font-size:11px;color:var(--text3);background:none;border:0.5px solid var(--border2);border-radius:6px;padding:5px 11px;cursor:pointer;white-space:nowrap;}
-.btn-ghost:hover{color:var(--text);background:var(--bg);}
-.btn-accent{font-size:11px;color:#fff;background:var(--blue);border:none;border-radius:6px;padding:5px 11px;cursor:pointer;white-space:nowrap;}
-.btn-accent:hover{opacity:0.88;}
+/* ── Reset & base ── */
+body{
+  font-family:'Manrope',sans-serif;
+  font-size:14px;color:var(--text);
+  background:var(--bg2);
+  min-height:100vh;padding:32px 24px;
+  overflow-x:hidden;
+  /* Force light mode — this tool is designed for light */
+  color-scheme:light only;
+}
+html{color-scheme:light only;background:#f6f6f8;}
 
-/* Tabs */
-.tab-nav{display:flex;background:var(--bg);border:0.5px solid var(--border2);border-radius:9px;padding:3px;gap:2px;margin-bottom:18px;width:fit-content;}
-.tab{padding:7px 16px;font-size:12px;font-weight:500;color:var(--text3);border:none;background:none;border-radius:7px;cursor:pointer;transition:all 0.13s;white-space:nowrap;}
-.tab.active{background:var(--bg2);color:var(--text);box-shadow:0 0.5px 3px rgba(0,0,0,0.09);}
-.section{display:none;}.section.active{display:block;}
+/* ── Animated background mesh ── */
+@keyframes bgFloat{
+  0%{opacity:1;transform:scale(1) translate(0,0);}
+  33%{opacity:0.85;transform:scale(1.05) translate(-1%,1%);}
+  66%{opacity:0.9;transform:scale(0.97) translate(1%,-1%);}
+  100%{opacity:1;transform:scale(1.03) translate(-0.5%,0.5%);}
+}
+@keyframes headerIn{
+  from{opacity:0;transform:translateY(10px);}
+  to{opacity:1;transform:translateY(0);}
+}
+body::before{
+  content:'';position:fixed;inset:0;z-index:-2;
+  background:
+    radial-gradient(ellipse 80% 60% at 10% -10%,rgba(99,102,241,0.07) 0%,transparent 60%),
+    radial-gradient(ellipse 60% 50% at 90% 100%,rgba(59,130,246,0.06) 0%,transparent 60%);
+  animation:bgFloat 12s ease-in-out infinite alternate;
+}
 
-/* Layout */
-.cols{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;}
-@media(max-width:620px){.cols{grid-template-columns:1fr;}}
-.panel{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius);padding:20px;}
-.panel-hd{font-size:10px;font-weight:500;letter-spacing:0.07em;text-transform:uppercase;color:var(--text3);margin-bottom:16px;padding-bottom:11px;border-bottom:0.5px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
-.panel-divider{height:0.5px;background:var(--border);margin:16px 0;}
-.panel-sub-hd{font-size:10px;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;color:var(--text3);margin-bottom:12px;}
+/* ── Dot grid overlay ── */
+body::after{
+  content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background-image:radial-gradient(circle,rgba(0,0,0,0.045) 1px,transparent 1px);
+  background-size:22px 22px;
+}
 
-/* Inputs */
-.irow{margin-bottom:18px;}
+.wrap{max-width:900px;margin:0 auto;}
+
+/* ── Header entrance ── */
+.header{
+  animation:headerIn 0.4s var(--ease-out) both;
+  margin-bottom:24px;
+}
+.header-top{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:10px;
+}
+.badge{
+  font-family:'Manrope',sans-serif;
+  font-size:10px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;
+  color:#fff;display:inline-flex;align-items:center;gap:5px;
+  background:var(--grad-brand);
+  padding:4px 11px;border-radius:99px;
+  box-shadow:var(--s-indigo);
+  white-space:nowrap;
+}
+.badge::before{content:'◆';font-size:7px;opacity:0.8;}
+.header h1{
+  font-family:'Syne',sans-serif;
+  font-size:22px;font-weight:700;letter-spacing:-0.03em;margin-bottom:5px;color:var(--text);
+}
+.header p{font-size:12px;color:var(--text3);font-weight:500;}
+.header-right{display:flex;align-items:center;gap:6px;}
+
+/* ── Buttons ── */
+.btn-ghost{
+  font-family:'Manrope',sans-serif;
+  font-size:11px;font-weight:700;color:var(--text2);
+  background:#fff;
+  border:1px solid var(--border2);
+  border-radius:99px;padding:8px 18px;cursor:pointer;white-space:nowrap;
+  box-shadow:var(--s-sm);letter-spacing:0.02em;
+  transition:all var(--t) var(--ease-out);
+  position:relative;overflow:hidden;
+}
+.btn-ghost::before{
+  content:'';position:absolute;inset:0;
+  background:var(--grad-brand);opacity:0;
+  transition:opacity var(--t);
+}
+.btn-ghost::after{
+  content:attr(data-label);
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  color:#fff;font-size:11px;font-weight:700;
+  opacity:0;transition:opacity var(--t);
+}
+.btn-ghost:hover{
+  border-color:var(--i300);color:var(--i600);
+  box-shadow:var(--s-indigo);
+  transform:translateY(-2px);
+}
+.btn-ghost:active{transform:translateY(0);box-shadow:var(--s-sm);}
+
+/* ── Tab nav — sliding pill ── */
+.tab-nav{
+  display:flex;position:relative;
+  background:rgba(255,255,255,0.97);
+  border:1px solid rgba(0,0,0,0.08);
+  border-radius:99px;
+  padding:4px;gap:0;margin-bottom:24px;width:fit-content;
+  box-shadow:var(--s-md);
+  overflow:hidden;
+}
+.tab-pill{
+  position:absolute;
+  top:4px;left:4px;
+  height:calc(100% - 8px);width:40px;
+  background:var(--grad-brand);
+  border-radius:99px;
+  box-shadow:var(--s-indigo);
+  transition:left 0.28s cubic-bezier(0.4,0,0.2,1),width 0.28s cubic-bezier(0.4,0,0.2,1);
+  pointer-events:none;
+  z-index:0;
+}
+.tab{
+  font-family:'Manrope',sans-serif;
+  padding:8px 18px;font-size:12px;font-weight:700;
+  color:var(--text3);border:none;background:transparent;
+  border-radius:99px;cursor:pointer;
+  transition:color 0.2s ease;
+  white-space:nowrap;letter-spacing:0.02em;
+  position:relative;z-index:1;
+}
+.tab:hover:not(.active){color:var(--text2);}
+.tab.active{color:#fff;}
+
+/* ── Slider + number input combo ── */
+.slider-input-row{display:flex;align-items:center;gap:10px;margin:8px 0 2px;}
+.slider-input-row input[type=range]{flex:1;margin:0;}
+.slider-num{
+  font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;
+  width:58px;padding:5px 7px;text-align:center;
+  border:1.5px solid var(--i200);border-radius:var(--r-xs);
+  background:var(--i50);color:var(--i700);outline:none;
+  transition:border-color var(--t),box-shadow var(--t);
+  flex-shrink:0;
+  -moz-appearance:textfield;
+}
+.slider-num::-webkit-outer-spin-button,
+.slider-num::-webkit-inner-spin-button{-webkit-appearance:none;margin:0;}
+.slider-num:focus{
+  border-color:var(--i500);
+  box-shadow:0 0 0 3px rgba(99,102,241,0.12);
+  background:#fff;
+}
+
+/* ── Revenue highlight cards ── */
+.rev-cards{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:16px 0;}
+.rev-card{
+  border-radius:var(--r-sm);padding:12px 14px;
+  border:1.5px solid var(--i100);
+  background:linear-gradient(135deg,var(--i50) 0%,#f0f4ff 100%);
+}
+.rev-card.annual{
+  border-color:var(--i200);
+  background:linear-gradient(135deg,var(--i100) 0%,var(--i50) 100%);
+}
+.rev-card-label{
+  font-family:'Syne',sans-serif;
+  font-size:9px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;
+  color:var(--i500);margin-bottom:6px;
+}
+.rev-card.annual .rev-card-label{color:var(--i700);}
+.rev-card-value{
+  font-family:'JetBrains Mono',monospace;
+  font-size:18px;font-weight:700;
+  color:var(--i700);letter-spacing:-0.02em;
+}
+.rev-card.annual .rev-card-value{font-size:22px;color:var(--i900);}
+
+/* ── Section transitions ── */
+.section{display:none;}
+.section.active{display:block;}
+
+/* No entry animations — iOS Safari compatibility */
+
+/* ── Layout ── */
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;}
+@media(max-width:640px){.cols{grid-template-columns:1fr;}}
+
+/* ── Panels ── */
+.panel{
+  background:#fff;border-radius:var(--r);padding:22px;
+  box-shadow:var(--s-md);
+  border:1px solid rgba(255,255,255,0.95);
+  transition:box-shadow var(--t-md) var(--ease-out),transform var(--t-md) var(--ease-out);
+  position:relative;overflow:hidden;
+}
+/* Top shimmer edge */
+.panel::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent 0%,rgba(255,255,255,0.95) 30%,rgba(200,212,254,0.6) 50%,rgba(255,255,255,0.95) 70%,transparent 100%);
+}
+/* Subtle left accent on results panel */
+.panel-results::after{
+  content:'';position:absolute;top:16px;bottom:16px;left:0;width:3px;
+  background:var(--grad-brand);border-radius:0 3px 3px 0;
+  opacity:0.7;
+}
+.panel:hover{
+  box-shadow:var(--s-lg);
+}
+.panel-results{
+  background:linear-gradient(155deg,#f7f7ff 0%,#fff 45%);
+}
+.preset-badge.pop{
+  transform:scale(1.06);
+  box-shadow:0 0 0 4px rgba(217,119,6,0.12);
+}
+
+.panel-hd{
+  font-family:'Syne',sans-serif;
+  font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;
+  color:var(--text3);margin-bottom:18px;padding-bottom:14px;
+  border-bottom:1px solid var(--border);
+  display:flex;justify-content:space-between;align-items:center;
+}
+.panel-divider{height:1px;background:var(--border);margin:18px 0;}
+.panel-sub-hd{
+  font-family:'Syne',sans-serif;
+  font-size:10px;font-weight:700;letter-spacing:0.09em;text-transform:uppercase;
+  color:var(--text3);margin-bottom:14px;
+}
+
+/* ── Inputs ── */
+.irow{margin-bottom:20px;}
 .irow:last-child{margin-bottom:0;}
-.irow-hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;}
-.irow-label{font-size:12px;color:var(--text2);}
-.irow-val{font-family:'DM Mono',monospace;font-size:14px;font-weight:500;}
-.irow-hint{font-size:10px;color:var(--text3);margin-top:4px;line-height:1.5;}
-input[type=range]{width:100%;height:2px;accent-color:var(--blue);cursor:pointer;margin:5px 0 2px;}
-.range-ends{display:flex;justify-content:space-between;}
-.range-end{font-size:10px;color:var(--text3);}
-.num{font-family:'DM Mono',monospace;font-size:14px;font-weight:500;padding:7px 10px;border:0.5px solid var(--border2);border-radius:var(--radius-sm);background:var(--bg2);color:var(--text);outline:none;transition:border-color 0.13s;width:100%;}
-.num:focus{border-color:var(--blue);}
+.irow-hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px;}
+.irow-label{font-size:12px;font-weight:600;color:var(--text2);letter-spacing:0.01em;}
+.irow-val{
+  font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;
+  color:var(--i600);
+  background:linear-gradient(135deg,var(--i50),#eff6ff);
+  border:1px solid var(--i100);
+  padding:3px 10px;border-radius:99px;
+  transition:all var(--t) var(--spring);
+  min-width:46px;text-align:center;
+}
 
-/* Industry preset dropdown */
-.preset-row{display:flex;align-items:center;gap:8px;margin-bottom:16px;padding-bottom:16px;border-bottom:0.5px solid var(--border);}
-.preset-label{font-size:11px;color:var(--text3);white-space:nowrap;}
-.preset-select{font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;padding:6px 10px;border:0.5px solid var(--border2);border-radius:6px;background:var(--bg2);color:var(--text);outline:none;cursor:pointer;flex:1;}
-.preset-select:focus{border-color:var(--blue);}
-.preset-badge{font-size:10px;color:var(--text3);background:var(--bg2);border:0.5px solid var(--border2);border-radius:4px;padding:2px 7px;white-space:nowrap;display:none;}
-.preset-badge.show{display:inline-block;}
+.irow-hint{font-size:10px;color:var(--text3);margin-top:6px;line-height:1.65;font-weight:500;}
 
-/* Plan config */
-.pf{display:flex;flex-direction:column;gap:4px;}
-.pf-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.04em;}
-.pf-hint{font-size:10px;color:var(--text3);margin-top:2px;}
-.mix-bar{height:5px;border-radius:3px;overflow:hidden;display:flex;margin:6px 0 3px;}
-.mix-seg-d{background:var(--blue);transition:width 0.13s;}
-.mix-seg-m{background:var(--green);transition:width 0.13s;}
-.mix-legend{display:flex;gap:12px;flex-wrap:wrap;}
-.mix-li{display:flex;align-items:center;gap:4px;font-size:10px;color:var(--text3);}
-.mix-dot{width:7px;height:7px;border-radius:50%;}
+/* Number inputs */
+.num{
+  font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:500;
+  padding:10px 14px;
+  border:1.5px solid var(--border2);border-radius:var(--r-sm);
+  background:#fff;color:var(--text);outline:none;
+  box-shadow:var(--s-xs),inset 0 1px 3px rgba(0,0,0,0.04);
+  transition:all var(--t) var(--ease-io);
+  width:100%;
+  position:relative;
+}
+.num:hover{border-color:var(--i200);background:#fff;}
+.num:focus{
+  border-color:var(--i500);
+  box-shadow:0 0 0 4px rgba(99,102,241,0.14),var(--s-xs);
+  animation:focusRing 0.3s var(--ease-out) both;
+}
+@keyframes focusRing{
+  0%{box-shadow:0 0 0 0px rgba(99,102,241,0.35),var(--s-xs);}
+  100%{box-shadow:0 0 0 4px rgba(99,102,241,0.14),var(--s-xs);}
+}
 
-/* Results */
-.result-hero{padding:14px 0 18px;border-bottom:0.5px solid var(--border);margin-bottom:14px;}
-.rh-label{font-size:10px;text-transform:uppercase;letter-spacing:0.06em;color:var(--text3);margin-bottom:5px;}
-.rh-value{font-family:'DM Mono',monospace;font-size:44px;font-weight:400;letter-spacing:-0.02em;line-height:1;}
-.rh-sub{font-size:11px;color:var(--text3);margin-top:5px;line-height:1.5;}
-.rrow{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:0.5px solid var(--border);}
+/* ── Sliders ── */
+.range-ends{display:flex;justify-content:space-between;margin-top:5px;}
+.range-end{font-family:'Manrope',sans-serif;font-size:10px;font-weight:700;color:var(--text4);letter-spacing:0.03em;}
+
+input[type=range]{
+  -webkit-appearance:none;appearance:none;
+  width:100%;height:6px;border-radius:99px;
+  cursor:pointer;margin:12px 0 4px;outline:none;
+  background:transparent;
+}
+input[type=range]::-webkit-slider-runnable-track{
+  height:6px;border-radius:99px;
+  background:linear-gradient(
+    to right,
+    var(--i500) var(--val,36%),
+    var(--bg4) var(--val,36%)
+  );
+  box-shadow:inset 0 1px 2px rgba(0,0,0,0.1);
+  transition:background 0.05s;
+}
+input[type=range]::-moz-range-track{height:6px;border-radius:99px;background:var(--bg4);}
+input[type=range]::-moz-range-progress{height:6px;background:var(--i500);border-radius:99px;}
+input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none;appearance:none;
+  width:22px;height:22px;border-radius:50%;
+  background:radial-gradient(circle at 35% 35%,#fff 0%,#f0f0ff 100%);
+  border:2.5px solid var(--i500);
+  box-shadow:0 2px 10px rgba(99,102,241,0.3),0 1px 3px rgba(0,0,0,0.12),inset 0 1px 0 rgba(255,255,255,0.8);
+  margin-top:-8px;
+  transition:transform var(--t) var(--spring),box-shadow var(--t) var(--ease-out);
+}
+input[type=range]:hover::-webkit-slider-thumb{
+  transform:scale(1.25);
+  box-shadow:0 6px 20px rgba(99,102,241,0.4),0 2px 6px rgba(0,0,0,0.12),inset 0 1px 0 rgba(255,255,255,0.8);
+}
+input[type=range]:active::-webkit-slider-thumb{
+  transform:scale(1.1);
+  border-color:var(--i700);
+  box-shadow:0 2px 12px rgba(99,102,241,0.5),inset 0 1px 0 rgba(255,255,255,0.8);
+}
+input[type=range]::-moz-range-thumb{
+  width:22px;height:22px;border-radius:50%;
+  background:#fff;border:2.5px solid var(--i500);
+  box-shadow:0 2px 10px rgba(99,102,241,0.3);cursor:pointer;
+}
+
+/* ── Preset row ── */
+.preset-row{
+  display:flex;align-items:center;gap:8px;
+  margin-bottom:18px;padding-bottom:18px;border-bottom:1px solid var(--border);
+}
+.preset-label{font-size:11px;font-weight:700;color:var(--text3);white-space:nowrap;letter-spacing:0.03em;}
+.preset-select{
+  font-family:'Manrope',sans-serif;font-size:12px;font-weight:600;
+  padding:7px 12px;border:1.5px solid var(--border2);border-radius:var(--r-sm);
+  background:#fff;color:var(--text);outline:none;cursor:pointer;flex:1;
+  box-shadow:var(--s-xs);transition:all var(--t);
+}
+.preset-select:focus{border-color:var(--i500);box-shadow:0 0 0 3px rgba(99,102,241,0.12);}
+.preset-badge{
+  font-size:10px;font-weight:700;letter-spacing:0.05em;
+  color:var(--amber);background:var(--amber-light);
+  border:1px solid var(--amber-border);
+  border-radius:99px;padding:3px 10px;white-space:nowrap;
+  display:none;opacity:0;transform:translateX(6px);
+  transition:all 0.2s var(--spring);
+}
+.preset-badge.show{
+  display:inline-block;opacity:1;transform:translateX(0);
+}
+
+/* ── Plan config ── */
+.pf{display:flex;flex-direction:column;gap:5px;}
+.pf-label{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;}
+.pf-hint{font-size:10px;color:var(--text3);margin-top:3px;font-weight:500;}
+
+/* Mix bar — spring segments */
+.mix-bar{
+  height:12px;border-radius:99px;overflow:hidden;display:flex;
+  margin:12px 0 7px;
+  box-shadow:inset 0 2px 4px rgba(0,0,0,0.12),inset 0 -1px 0 rgba(255,255,255,0.1);
+  background:var(--bg4);position:relative;
+}
+.mix-seg-d{
+  background:linear-gradient(90deg,var(--i600) 0%,var(--i400) 60%,var(--blue) 100%);
+  transition:width 0.4s var(--spring);
+  position:relative;
+}
+
+.mix-seg-m{
+  background:var(--grad-green);
+  transition:width 0.4s var(--spring);
+}
+.mix-legend{display:flex;gap:14px;flex-wrap:wrap;align-items:center;}
+.mix-li{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--text3);letter-spacing:0.01em;}
+.mix-dot{width:8px;height:8px;border-radius:50%;box-shadow:0 1px 3px rgba(0,0,0,0.15);}
+
+/* ── Result hero ── */
+.result-hero{padding:18px 0 22px;border-bottom:1px solid var(--border);margin-bottom:16px;}
+.rh-label{
+  font-family:'Syne',sans-serif;
+  font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--text3);margin-bottom:10px;
+}
+.rh-value{
+  font-family:'JetBrains Mono',monospace;font-size:48px;font-weight:600;
+  letter-spacing:-0.04em;line-height:1;
+  background:var(--grad-brand);
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;
+  display:inline-block;
+  transition:filter 0.15s var(--ease-io),transform 0.15s var(--ease-io),opacity 0.15s;
+}
+.rh-value.updating{
+  transform:scale(0.96);
+  opacity:0.3;
+}
+.rh-sub{font-size:11px;color:var(--text3);margin-top:9px;line-height:1.6;font-weight:600;}
+
+/* ── Result rows — cascade reveal ── */
+.rrow{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:10px 8px;border-bottom:1px solid var(--border);
+  margin:0 -8px;
+  border-radius:8px;
+  transition:background var(--t),transform var(--t) var(--ease-out);
+}
 .rrow:last-child{border-bottom:none;}
-.rrow-label{font-size:11px;color:var(--text2);}
-.rrow-val{font-family:'DM Mono',monospace;font-size:12px;font-weight:500;}
-.rrow-val.hi{color:var(--blue-dark);font-size:14px;}
-.rrow-val.am{color:var(--amber);}
+.rrow:hover{background:var(--i50);}
+.rrow-label{font-size:11px;font-weight:600;color:var(--text2);}
+.rrow-val{
+  font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;color:var(--text);
+  background:var(--bg2);padding:3px 9px;border-radius:7px;
+  border:1px solid transparent;
+  transition:all var(--t) var(--ease-out);
+}
+.rrow-val.hi{
+  color:var(--i700);font-size:14px;font-weight:700;
+  background:linear-gradient(135deg,var(--i50),#eff6ff);
+  border-color:var(--i100);
+  box-shadow:0 1px 4px rgba(99,102,241,0.12);
+}
+.rrow-val.am{
+  color:var(--amber);background:var(--amber-light);border-color:var(--amber-border);
+}
 
-/* Tooltip */
-.tip{position:relative;display:inline-flex;align-items:center;gap:3px;}
-.tip-i{display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;border-radius:50%;background:var(--bg2);border:0.5px solid var(--border2);font-size:9px;color:var(--text3);cursor:help;flex-shrink:0;}
-.tip-box{position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);background:var(--text);color:#fff;font-size:11px;line-height:1.5;padding:8px 10px;border-radius:6px;width:230px;pointer-events:none;opacity:0;transition:opacity 0.13s;z-index:30;font-weight:400;}
-.tip-box::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:4px solid transparent;border-top-color:var(--text);}
-.tip:hover .tip-box{opacity:1;}
 
-/* Warning */
-.warn{background:var(--amber-light);border:0.5px solid var(--amber-border);border-radius:var(--radius-sm);padding:10px 13px;font-size:11px;color:var(--amber);line-height:1.6;margin-bottom:16px;display:none;}
+
+/* ── Value flash ── */
+@keyframes valFlash{
+  0%{background:rgba(99,102,241,0.18);}
+  100%{background:var(--bg2);}
+}
+.rrow-val.flash{animation:valFlash 0.4s ease forwards;}
+.rh-value.flash{opacity:1;transition:opacity 0.3s;}
+
+/* ── Tooltip ── */
+.tip{position:relative;display:inline-flex;align-items:center;gap:4px;}
+.tip-i{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:16px;height:16px;border-radius:50%;
+  background:linear-gradient(135deg,var(--i50),var(--i100));
+  border:1.5px solid var(--i200);
+  font-size:9px;font-weight:700;color:var(--i500);cursor:help;flex-shrink:0;
+  transition:all var(--t) var(--spring);
+}
+.tip:hover .tip-i{
+  background:var(--grad-brand);color:#fff;border-color:var(--i400);
+  transform:scale(1.15);
+  box-shadow:var(--s-indigo);
+}
+.tip-box{
+  position:absolute;bottom:calc(100% + 12px);left:50%;
+  transform:translateX(-50%) translateY(8px) scale(0.95);
+  background:linear-gradient(135deg,#1e1b4b 0%,#1a1a3e 100%);
+  color:#c7d2fe;
+  font-size:11px;line-height:1.65;
+  padding:11px 15px;border-radius:12px;width:245px;
+  pointer-events:none;opacity:0;
+  transition:opacity 0.2s var(--ease-out),transform 0.2s var(--ease-out);
+  z-index:30;font-weight:500;
+  box-shadow:0 16px 50px rgba(30,27,75,0.3),0 4px 16px rgba(30,27,75,0.15),0 0 0 1px rgba(99,102,241,0.2);
+}
+.tip-box::after{
+  content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);
+  border:7px solid transparent;border-top-color:#1e1b4b;
+}
+.tip:hover .tip-box{opacity:1;transform:translateX(-50%) translateY(0) scale(1);}
+
+/* ── Warning ── */
+.warn{
+  background:linear-gradient(135deg,#fffbeb,#fff8e1);
+  border:1px solid var(--amber-border);
+  border-radius:var(--r-sm);padding:12px 16px;
+  font-size:11px;color:var(--amber);line-height:1.7;
+  margin-bottom:18px;display:none;font-weight:600;
+  box-shadow:0 2px 8px rgba(217,119,6,0.1);
+}
 .warn.show{display:block;}
-.warn strong{font-weight:500;color:#633806;}
+.warn strong{font-weight:800;color:#92400e;}
 
-/* Ref field */
-.ref-field{opacity:0.65;pointer-events:none;margin-bottom:18px;}
-.ref-tag{font-size:9px;font-weight:500;text-transform:uppercase;color:var(--text3);background:var(--bg2);border:0.5px solid var(--border2);border-radius:4px;padding:2px 6px;margin-left:5px;display:inline-block;}
+/* ── Ref field ── */
+.ref-field{opacity:0.38;pointer-events:none;margin-bottom:18px;}
+.ref-tag{
+  font-family:'Syne',sans-serif;
+  font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;
+  color:var(--text3);background:var(--bg3);
+  border:1px solid var(--border2);border-radius:99px;
+  padding:2px 9px;margin-left:6px;display:inline-block;
+}
 
-/* Formula */
-.formula-section{margin-bottom:16px;padding-bottom:16px;border-bottom:0.5px solid var(--border);}
-.f-label{font-size:10px;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;color:var(--text3);margin-bottom:12px;}
-.f-row{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:10px;}
+/* ── Formula strip ── */
+.formula-section{margin-bottom:18px;padding-bottom:18px;border-bottom:1px solid var(--border);}
+.f-label{
+  font-family:'Syne',sans-serif;
+  font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;
+  color:var(--text3);margin-bottom:16px;
+}
+.f-row{display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:14px;}
 .f-row:last-child{margin-bottom:0;}
-.f-step-div{width:100%;height:0.5px;background:var(--border);margin:8px 0;}
+.f-step-div{width:100%;height:1px;background:var(--border);margin:12px 0;}
 .f-node{text-align:center;}
-.f-node-lbl{font-size:10px;color:var(--text3);text-transform:uppercase;margin-bottom:2px;}
-.f-node-val{font-family:'DM Mono',monospace;font-size:13px;font-weight:500;color:var(--text);}
-.f-op{font-size:14px;color:var(--text3);padding:0 3px;font-weight:300;}
-.f-step{font-size:10px;color:var(--text3);margin-right:3px;}
-.f-node.amber .f-node-val{color:var(--amber);}
-.f-node.amber .f-node-lbl{color:#BA7517;}
-.f-node.blue .f-node-val{color:var(--blue-dark);font-size:15px;}
-.f-node.blue .f-node-lbl{color:var(--blue);}
+.f-node-lbl{
+  font-family:'Syne',sans-serif;
+  font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase;
+  letter-spacing:0.07em;margin-bottom:6px;
+}
+.f-node-val{
+  font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;color:var(--text);
+  background:var(--bg2);border:1.5px solid var(--border2);
+  border-radius:9px;padding:6px 11px;display:inline-block;
+  box-shadow:var(--s-xs),inset 0 1px 0 rgba(255,255,255,0.8);
+  transition:all var(--t) var(--spring);
+}
 
-/* Assumptions */
-.assume-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 24px;}
-@media(max-width:600px){.assume-grid{grid-template-columns:1fr;}}
-.arow{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:0.5px solid var(--border);}
+
+.f-op{font-size:20px;color:var(--text4);padding:0 2px;font-weight:300;line-height:1;}
+.f-step{
+  font-family:'Syne',sans-serif;
+  font-size:10px;font-weight:700;color:var(--i400);margin-right:4px;letter-spacing:0.06em;
+  background:var(--i50);border:1px solid var(--i100);
+  padding:2px 7px;border-radius:99px;
+}
+.f-node.amber .f-node-val{
+  color:var(--amber);background:linear-gradient(135deg,var(--amber-light),#fff9e6);
+  border-color:var(--amber-border);
+}
+.f-node.amber .f-node-lbl{color:var(--amber);}
+.f-node.blue .f-node-val{
+  color:var(--i700);font-size:15px;
+  background:linear-gradient(135deg,var(--i50),var(--i100));
+  border-color:var(--i200);
+  box-shadow:var(--s-indigo),inset 0 1px 0 rgba(255,255,255,0.6);
+}
+.f-node.blue .f-node-lbl{color:var(--i500);}
+
+/* ── Assumptions ── */
+.arow{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:8px 0;border-bottom:1px solid var(--border);
+}
 .arow:last-child{border-bottom:none;}
-.arow-label{font-size:11px;color:var(--text2);}
-.arow-val{font-family:'DM Mono',monospace;font-size:11px;font-weight:500;}
-.assume-note{font-size:11px;color:var(--text3);margin-top:12px;line-height:1.7;padding-top:10px;border-top:0.5px solid var(--border);}
-.assume-note strong{color:var(--text2);font-weight:500;}
+.arow-label{font-size:11px;font-weight:600;color:var(--text2);}
+.arow-val{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;color:var(--text);}
+.assume-note{
+  font-size:11px;color:var(--text3);margin-top:14px;line-height:1.8;
+  padding-top:12px;border-top:1px solid var(--border);font-weight:500;
+}
+.assume-note strong{color:var(--text2);font-weight:700;}
+.assume-note.muted{margin-top:10px;font-size:11px;color:var(--text3);}
+.rrow.revenue-basis{opacity:0.78;}
+.rrow.revenue-basis .rrow-val{font-size:12px;color:var(--text2);}
 
-/* Settings */
-.settings-section{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:14px;}
-.settings-hd{font-size:10px;font-weight:500;letter-spacing:0.07em;text-transform:uppercase;color:var(--text3);margin-bottom:14px;padding-bottom:10px;border-bottom:0.5px solid var(--border);}
-.settings-note-box{background:var(--bg2);border-radius:var(--radius-sm);padding:12px 14px;font-size:11px;color:var(--text3);line-height:1.6;margin-bottom:14px;}
-.settings-note-box strong{color:var(--text2);font-weight:500;}
-.settings-cols{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+/* ── Settings ── */
+.settings-section{
+  background:#fff;border-radius:var(--r);padding:22px;margin-bottom:16px;
+  box-shadow:var(--s-md);
+  border:1px solid rgba(255,255,255,0.9);
+}
+.settings-hd{
+  font-family:'Syne',sans-serif;
+  font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;
+  color:var(--text3);margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--border);
+}
+.settings-note-box{
+  background:linear-gradient(135deg,#eef2ff,#eff6ff);
+  border:1px solid var(--i100);border-radius:var(--r-sm);
+  padding:14px 16px;font-size:11px;color:var(--i700);
+  line-height:1.7;margin-bottom:18px;font-weight:600;
+  box-shadow:0 2px 8px rgba(99,102,241,0.08);
+}
+.settings-note-box strong{color:var(--i900);font-weight:800;}
+.settings-cols{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
 @media(max-width:600px){.settings-cols{grid-template-columns:1fr;}}
-.srow{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:0.5px solid var(--border);}
+.srow{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:10px 0;border-bottom:1px solid var(--border);
+}
 .srow:last-child{border-bottom:none;}
-.srow-label{font-size:12px;color:var(--text2);}
-.srow-right{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--text3);}
-.snum{font-family:'DM Mono',monospace;font-size:13px;font-weight:500;width:80px;padding:5px 8px;border:0.5px solid var(--border2);border-radius:6px;background:var(--bg2);color:var(--text);outline:none;text-align:right;}
-.snum:focus{border-color:var(--blue);}
-.save-row{display:flex;align-items:center;gap:10px;margin-top:14px;}
-.btn-save{padding:8px 20px;font-size:13px;font-weight:500;background:var(--text);color:#fff;border:none;border-radius:7px;cursor:pointer;}
-.btn-save:hover{opacity:0.83;}
-.save-ok{font-size:11px;color:var(--green);display:none;}
+.srow-label{font-size:12px;font-weight:600;color:var(--text2);}
+.srow-right{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:var(--text3);}
+.snum{
+  font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:500;
+  width:82px;padding:6px 10px;
+  border:1.5px solid var(--border2);border-radius:var(--r-xs);
+  background:var(--bg2);color:var(--text);outline:none;text-align:right;
+  transition:all var(--t);box-shadow:var(--s-xs);
+}
+.snum:focus{
+  border-color:var(--i500);
+  box-shadow:0 0 0 3px rgba(99,102,241,0.14);
+  background:#fff;
+}
+.save-row{display:flex;align-items:center;gap:12px;margin-top:18px;}
+.btn-save{
+  font-family:'Manrope',sans-serif;
+  padding:11px 28px;font-size:13px;font-weight:800;
+  background:var(--grad-brand);color:#fff;border:none;border-radius:99px;
+  cursor:pointer;letter-spacing:0.03em;
+  box-shadow:var(--s-indigo);
+  transition:all var(--t-md) var(--ease-out);
+  position:relative;overflow:hidden;
+}
+.btn-save::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,0.15),transparent);
+  transform:translateX(-100%);
+}
+.btn-save:hover{
+  transform:translateY(-3px);
+  box-shadow:var(--s-indigo-lg);
+}
+.btn-save:hover::after{
+  animation:btnShimmer 0.6s var(--ease-out) forwards;
+}
+@keyframes btnShimmer{
+  from{transform:translateX(-100%);}
+  to{transform:translateX(200%);}
+}
+.btn-save:active{transform:translateY(0);box-shadow:var(--s-indigo);}
+.save-ok{font-size:11px;font-weight:800;color:var(--green-d);display:none;letter-spacing:0.03em;}
 .save-ok.show{display:inline;}
 
-/* Industry profiles table in settings */
-.profile-table{width:100%;border-collapse:collapse;margin-top:4px;}
-.profile-table th{font-size:10px;font-weight:500;letter-spacing:0.05em;text-transform:uppercase;color:var(--text3);text-align:left;padding:6px 8px;border-bottom:0.5px solid var(--border);}
-.profile-table td{padding:6px 8px;border-bottom:0.5px solid var(--border);vertical-align:middle;}
+/* Industry profiles table */
+.profile-table{width:100%;border-collapse:collapse;margin-top:6px;}
+.profile-table th{
+  font-family:'Syne',sans-serif;
+  font-size:10px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;
+  color:var(--text3);text-align:left;padding:7px 10px;border-bottom:1px solid var(--border);
+}
+.profile-table td{padding:6px 10px;border-bottom:1px solid var(--border);vertical-align:middle;}
 .profile-table tr:last-child td{border-bottom:none;}
-.ptd-name{width:50%;}
-.ptd-num{width:18%;}
-.ptd-del{width:10%;text-align:center;}
-.p-name-input{font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;width:100%;padding:4px 7px;border:0.5px solid var(--border2);border-radius:5px;background:var(--bg2);color:var(--text);outline:none;}
-.p-name-input:focus{border-color:var(--blue);}
-.p-num-input{font-family:'DM Mono',monospace;font-size:12px;font-weight:500;width:100%;padding:4px 7px;border:0.5px solid var(--border2);border-radius:5px;background:var(--bg2);color:var(--text);outline:none;text-align:right;}
-.p-num-input:focus{border-color:var(--blue);}
-.p-del-btn{font-size:13px;color:var(--text3);background:none;border:none;cursor:pointer;padding:2px 6px;border-radius:4px;}
-.p-del-btn:hover{color:#D85A30;background:var(--amber-light);}
-.p-del-btn.protected{opacity:0.2;pointer-events:none;}
-.add-profile-btn{font-size:12px;color:var(--blue);background:none;border:0.5px dashed var(--blue);border-radius:6px;padding:6px 14px;cursor:pointer;margin-top:10px;display:inline-flex;align-items:center;gap:5px;}
-.add-profile-btn:hover{background:var(--bg2);}
+.profile-table tr:hover td{background:var(--i50);}
+.ptd-name{width:50%;}.ptd-num{width:18%;}.ptd-del{width:10%;text-align:center;}
+.p-name-input{
+  font-family:'Manrope',sans-serif;font-size:12px;font-weight:600;
+  width:100%;padding:5px 9px;border:1.5px solid var(--border2);border-radius:6px;
+  background:var(--bg2);color:var(--text);outline:none;transition:all var(--t);
+}
+.p-name-input:focus{border-color:var(--i500);box-shadow:0 0 0 3px rgba(99,102,241,0.1);background:#fff;}
+.p-num-input{
+  font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;
+  width:100%;padding:5px 9px;border:1.5px solid var(--border2);border-radius:6px;
+  background:var(--bg2);color:var(--text);outline:none;text-align:right;transition:all var(--t);
+}
+.p-num-input:focus{border-color:var(--i500);box-shadow:0 0 0 3px rgba(99,102,241,0.1);background:#fff;}
+.p-del-btn{font-size:15px;color:var(--text3);background:none;border:none;cursor:pointer;padding:3px 7px;border-radius:6px;transition:all var(--t);}
+.p-del-btn:hover{color:var(--red);background:#fef2f2;transform:scale(1.1);}
+.p-del-btn.protected{opacity:0.15;pointer-events:none;}
+.add-profile-btn{
+  font-family:'Manrope',sans-serif;
+  font-size:12px;font-weight:700;color:var(--i600);
+  background:none;border:2px dashed var(--i200);
+  border-radius:var(--r-sm);padding:8px 18px;cursor:pointer;
+  margin-top:12px;display:inline-flex;align-items:center;gap:7px;
+  transition:all var(--t) var(--spring);letter-spacing:0.02em;
+}
+.add-profile-btn:hover{
+  background:var(--i50);border-color:var(--i400);
+  transform:translateY(-1px);box-shadow:var(--s-sm);
+}
 
-/* Collapsible formula */
-.formula-toggle{font-size:11px;font-weight:400;color:var(--blue);background:none;border:none;cursor:pointer;padding:0;letter-spacing:0;text-transform:none;}
-.formula-toggle:hover{opacity:0.75;}
-.formula-body{overflow:hidden;transition:max-height 0.2s ease,opacity 0.2s ease;max-height:1200px;opacity:1;}
-.formula-body.collapsed{max-height:0;opacity:0;}
+/* ── Divider section labels ── */
+.section-group-hd{
+  font-family:'Syne',sans-serif;
+  font-size:10px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;
+  color:var(--text3);padding:8px 0;border-bottom:2px solid var(--i100);margin-bottom:4px;
+}
 
 /* Print */
 @media print{
   .tab-nav,.header-right,.no-print,
   .preset-row,.warn,.ref-field,
   input[type=range],input[type=number],select,button{display:none!important;}
-  body{background:#fff;padding:16px;}
+  body{background:#fff;padding:16px;background-image:none;}
+  body::before,body::after{display:none;}
   .wrap{max-width:100%;}
-  .section{display:none!important;}
+  .section{display:none!important;opacity:1!important;}
   .section.active{display:block!important;}
   #plan-panel{display:block!important;}
   .plan-config-panel>div:not(.print-plan-summary){display:none!important;}
   .print-plan-summary{display:block!important;}
-  .header{margin-bottom:12px;}
-  .cols{grid-template-columns:1fr 1fr;}
-  .panel{break-inside:avoid;border:0.5px solid #ccc;}
-  .rh-value{font-size:28px;}
+  .rh-value{-webkit-text-fill-color:var(--i700);}
+  .panel{box-shadow:none;border:1px solid #e5e7eb;}
   h1{font-size:15px;}
 }
+
+/* ── Force light mode regardless of system setting ── */
+@media (prefers-color-scheme: dark) {
+  :root{
+    --bg:#ffffff;--bg2:#f6f6f8;--bg3:#eeeef2;--bg4:#e4e4ea;
+    --text:#09090d;--text2:#3f3f52;--text3:#8b8ba0;--text4:#c2c2d4;
+    --border:rgba(0,0,0,0.07);--border2:rgba(0,0,0,0.12);
+  }
+  body{background:#f6f6f8;color:#09090d;}
+  html{background:#f6f6f8;}
+  .panel{background:#ffffff;}
+  .num,.preset-select,.snum,.p-name-input,.p-num-input{background:#ffffff;color:#09090d;}
+  .settings-section{background:#ffffff;}
+  body::before{background:radial-gradient(ellipse 80% 60% at 10% -10%,rgba(99,102,241,0.07) 0%,transparent 60%),radial-gradient(ellipse 60% 50% at 90% 100%,rgba(59,130,246,0.06) 0%,transparent 60%);}
+}
+/* ── Splash screen ── */
+#splash{
+  position:fixed;inset:0;z-index:1000;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:linear-gradient(145deg,#1e1b4b 0%,#312e81 40%,#1d4ed8 100%);
+  transition:clip-path 0.65s cubic-bezier(0.4,0,0.2,1);
+  clip-path:circle(150% at 50% 50%);
+  cursor:pointer;
+  overflow:hidden;
+}
+#splash.hiding{
+  clip-path:circle(0% at var(--click-x,50%) var(--click-y,50%));
+  pointer-events:none;
+  transition:clip-path 0.65s cubic-bezier(0.4,0,0.2,1);
+}
+
+/* Mouse-tracked spotlight */
+.splash-spotlight{
+  position:absolute;inset:0;
+  background:radial-gradient(circle 400px at 50% 50%,rgba(165,180,252,0.12) 0%,transparent 70%);
+  pointer-events:none;
+  transition:opacity 0.3s;
+  opacity:0;
+}
+#splash:hover .splash-spotlight{opacity:1;}
+
+/* Animated orbs behind splash content */
+#splash::before{
+  content:'';position:absolute;
+  width:600px;height:600px;border-radius:50%;
+  background:radial-gradient(circle,rgba(129,140,248,0.25) 0%,transparent 70%);
+  top:-150px;right:-150px;
+  animation:orbFloat 8s ease-in-out infinite alternate;
+}
+#splash::after{
+  content:'';position:absolute;
+  width:400px;height:400px;border-radius:50%;
+  background:radial-gradient(circle,rgba(59,130,246,0.2) 0%,transparent 70%);
+  bottom:-100px;left:-100px;
+  animation:orbFloat 10s ease-in-out infinite alternate-reverse;
+}
+@keyframes orbFloat{
+  from{transform:translate(0,0) scale(1);}
+  to{transform:translate(30px,-30px) scale(1.1);}
+}
+
+/* Grid pattern overlay on splash */
+.splash-grid{
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.04) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,0.04) 1px,transparent 1px);
+  background-size:40px 40px;
+  pointer-events:none;
+}
+
+.splash-inner{
+  transform-style:preserve-3d;
+  will-change:transform;
+  position:relative;z-index:1;
+  text-align:center;padding:0 32px;
+  max-width:480px;
+}
+
+.splash-badge{
+  font-family:'Manrope',sans-serif;
+  font-size:10px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;
+  color:rgba(199,210,254,0.9);
+  background:rgba(255,255,255,0.08);
+  border:1px solid rgba(165,180,252,0.3);
+  border-radius:99px;padding:5px 16px;
+  display:inline-flex;align-items:center;gap:6px;
+  margin-bottom:28px;
+  animation:splashItemIn 0.7s 0.1s var(--ease-out) both;
+}
+.splash-badge::before{content:'◆';font-size:7px;color:var(--i400);}
+
+.splash-title{
+  font-family:'Syne',sans-serif;
+  font-size:36px;font-weight:800;letter-spacing:-0.04em;
+  color:#fff;line-height:1.1;
+  margin-bottom:16px;
+  animation:splashItemIn 0.7s 0.2s var(--ease-out) both;
+}
+.splash-title span{
+  background:linear-gradient(135deg,#a5b4fc,#93c5fd);
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+.splash-sub{
+  font-family:'Manrope',sans-serif;
+  font-size:14px;font-weight:500;line-height:1.65;
+  color:rgba(199,210,254,0.75);
+  margin-bottom:40px;
+  animation:splashItemIn 0.7s 0.3s var(--ease-out) both;
+}
+
+.splash-stats{
+  display:flex;gap:32px;justify-content:center;
+  margin-bottom:44px;
+  animation:splashItemIn 0.7s 0.4s var(--ease-out) both;
+}
+.splash-stat{text-align:center;}
+.splash-stat-val{
+  font-family:'JetBrains Mono',monospace;
+  font-size:22px;font-weight:600;color:#fff;letter-spacing:-0.02em;
+  display:block;margin-bottom:4px;
+}
+.splash-stat-lbl{
+  font-size:10px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;
+  color:rgba(165,180,252,0.6);
+}
+.splash-stat-div{
+  width:1px;background:rgba(165,180,252,0.2);align-self:stretch;
+}
+
+.splash-cta{
+  font-family:'Manrope',sans-serif;
+  font-size:14px;font-weight:700;letter-spacing:0.02em;
+  color:#fff;
+  background:rgba(255,255,255,0.1);
+  border:1.5px solid rgba(165,180,252,0.35);
+  border-radius:99px;padding:14px 40px;
+  cursor:pointer;display:inline-flex;align-items:center;gap:10px;
+  transition:all 0.2s var(--ease-out);
+  animation:splashItemIn 0.7s 0.5s var(--ease-out) both;
+}
+.splash-cta:hover{
+  background:rgba(255,255,255,0.18);
+  border-color:rgba(165,180,252,0.6);
+  transform:translateY(-2px);
+  box-shadow:0 8px 32px rgba(99,102,241,0.4);
+}
+.splash-cta-arrow{
+  font-size:18px;
+  transition:transform 0.2s var(--ease-out);
+}
+.splash-cta:hover .splash-cta-arrow{transform:translateX(4px);}
+
+.splash-hint{
+  font-size:11px;font-weight:500;
+  color:rgba(165,180,252,0.4);
+  margin-top:20px;
+  animation:splashItemIn 0.7s 0.65s var(--ease-out) both;
+}
+
+.splash-attr{
+  font-size:13px;font-weight:600;
+  color:rgba(165,180,252,0.55);
+  margin-top:10px;
+  letter-spacing:0.01em;
+  animation:splashItemIn 0.7s 0.75s var(--ease-out) both;
+}
+  from{opacity:0;transform:translateY(20px);}
+  to{opacity:1;transform:translateY(0);}
+}
+
+/* Main content hidden until splash dismisses */
+#main-content{
+  opacity:0;
+  transform:translateY(12px);
+  transition:opacity 0.5s 0.15s var(--ease-out),transform 0.5s 0.15s var(--ease-out);
+}
+#main-content.visible{
+  opacity:1;
+  transform:translateY(0);
+}
 </style>
+
 </head>
 <body>
+
+<!-- SPLASH SCREEN -->
+<div id="splash" onclick="dismissSplash(event)">
+  <div class="splash-grid"></div>
+  <div class="splash-spotlight" id="splash-spotlight"></div>
+  <div class="splash-inner" id="splash-inner">
+    <div class="splash-badge">Singtel Enterprise Mobility</div>
+    <div class="splash-title">Roaming Revenue<br><span>per New Line</span></div>
+    <div class="splash-sub">Estimate what a new enterprise account contributes in roaming data revenue — by travel behaviour, roamer count, or revenue target.</div>
+    <button class="splash-cta" onclick="dismissSplash(event)">
+      Open Simulator <span class="splash-cta-arrow">→</span>
+    </button>
+    <div class="splash-hint">Click anywhere to continue</div>
+    <div class="splash-attr">by henry.lim@singtel.com</div>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div id="main-content">
 <div class="wrap">
 
 <!-- HEADER -->
 <div class="header">
-  <div class="header-left">
+  <div class="header-top">
     <span class="badge">Singtel Enterprise Mobility</span>
-    <h1>Roaming Revenue per New Line</h1>
-    <p>Estimate what a new account contributes in roaming data revenue per line per month.</p>
+    <div class="header-right">
+      <button class="btn-ghost no-print" id="btn-reset" data-label="Reset" onclick="resetDefaults()">↺ Reset</button>
+      <button class="btn-ghost no-print" id="btn-export" data-label="CSV" onclick="exportCSV()">⤓ CSV</button>
+    </div>
   </div>
-  <div class="header-right">
-    <button class="btn-ghost no-print" onclick="resetDefaults()">↺ Reset to defaults</button>
-    <button class="btn-ghost no-print" onclick="exportCSV()">⤓ Export CSV</button>
-  </div>
+  <h1>Roaming Revenue per New Line</h1>
+  <p>Estimate what a new account contributes in roaming data revenue per line per month.</p>
 </div>
 
 <!-- TABS -->
-<div class="tab-nav no-print">
-  <button class="tab active" onclick="setTab('a')">By travel behaviour</button>
-  <button class="tab" onclick="setTab('b')">By roamer count</button>
-  <button class="tab" onclick="setTab('settings')">⚙ Settings</button>
+<div class="tab-nav no-print" role="tablist" aria-label="Simulator modes">
+  <button type="button" class="tab active" role="tab" aria-selected="true" onclick="setTab('a')">By travel behaviour</button>
+  <button type="button" class="tab" role="tab" aria-selected="false" onclick="setTab('b')">By roamer count</button>
+  <button type="button" class="tab" role="tab" aria-selected="false" onclick="setTab('c')">By revenue target</button>
+  <button type="button" class="tab" role="tab" aria-selected="false" onclick="setTab('settings')">⚙ Settings</button>
 </div>
 
 <!-- ══ TAB A ══ -->
@@ -232,55 +980,69 @@ input[type=range]{width:100%;height:2px;accent-color:var(--blue);cursor:pointer;
       <div class="irow">
         <div class="irow-hd"><span class="irow-label">Account size (lines)</span></div>
         <input type="number" id="na-acct" value="1000" step="50" min="1" class="num" oninput="calcA()">
-        <div class="irow-hint">Total number of lines in the account.</div>
+        <div class="irow-hint">Total number of lines in the account. <span id="na-acct-fmt" style="font-family:'JetBrains Mono',monospace;font-weight:500;color:var(--text2);">= 1,000 lines</span></div>
       </div>
       <div class="irow">
         <div class="irow-hd">
           <span class="irow-label">Traveller % of base</span>
           <span class="irow-val" id="va-trav">14.3%</span>
         </div>
-        <input type="range" min="1" max="100" step="0.1" value="14.3" id="sa-trav" oninput="onSliderA()">
-        <div class="range-ends"><span class="range-end">1%</span><span class="range-end">100%</span></div>
-        <div class="irow-hint">% of lines that travel overseas in a given month. Travellers don't pay — they're the eligible pool only.</div>
+        <div class="slider-input-row">
+          <input type="range" min="0" max="100" step="0.1" value="14.3" id="sa-trav" oninput="syncSliderNum('sa-trav','na-trav');onSliderA();">
+          <input type="number" id="na-trav" value="14.3" min="0" max="100" step="0.1" class="slider-num" oninput="syncNumSlider('na-trav','sa-trav');onSliderA();">
+        </div>
+        <div class="range-ends"><span class="range-end">0%</span><span class="range-end">100%</span></div>
+        <div class="irow-hint">% of lines that travel overseas in a given month. Travellers don't pay — they're the eligible pool only. Use 0% to model no travel in month.</div>
       </div>
       <div class="irow">
         <div class="irow-hd">
           <span class="irow-label">Active roamer % of travellers</span>
           <span class="irow-val" id="va-roam">73.3%</span>
         </div>
-        <input type="range" min="1" max="100" step="0.5" value="73.3" id="sa-roam" oninput="onSliderA()">
-        <div class="range-ends"><span class="range-end">1%</span><span class="range-end">100%</span></div>
-        <div class="irow-hint">Of travellers, % who activate roaming and incur charges. The rest are silent roamers — no revenue.</div>
+        <div class="slider-input-row">
+          <input type="range" min="0" max="100" step="0.1" value="73.3" id="sa-roam" oninput="syncSliderNum('sa-roam','na-roam');onSliderA();">
+          <input type="number" id="na-roam" value="73.3" min="0" max="100" step="0.1" class="slider-num" oninput="syncNumSlider('na-roam','sa-roam');onSliderA();">
+        </div>
+        <div class="range-ends"><span class="range-end">0%</span><span class="range-end">100%</span></div>
+        <div class="irow-hint">Of travellers, % who activate roaming and incur charges. The rest are silent roamers — no revenue. Use 0% to model no roaming among travellers.</div>
       </div>
     </div>
 
-    <div class="panel">
+    <div class="panel panel-results">
       <div class="panel-hd">Results</div>
       <div class="result-hero">
         <div class="rh-label">Blended roaming data ARPU — per line / month</div>
-        <div class="rh-value" id="oa-arpu">$8.38</div>
+        <div class="rh-value" id="oa-arpu">$7.86</div>
         <div class="rh-sub">Blended across all lines including non-roamers</div>
+      </div>
+      <div class="rev-cards">
+        <div class="rev-card">
+          <div class="rev-card-label">Est. monthly revenue</div>
+          <div class="rev-card-value" id="oa-rev">$7,860.00</div>
+        </div>
+        <div class="rev-card annual">
+          <div class="rev-card-label">Est. annual revenue</div>
+          <div class="rev-card-value" id="oa-rev-annual">$94,320.00</div>
+        </div>
       </div>
       <div class="rrow">
         <span class="rrow-label"><span class="tip">Roaming penetration of base<span class="tip-i">?</span><span class="tip-box">Active roamers as a % of total base — not just of travellers. Calculated as Traveller % × Active Roamer % of travellers. Distinct from "Active Roamer %" which measures only within the traveller pool.</span></span></span>
         <span class="rrow-val am" id="oa-pen">10.5%</span>
       </div>
-      <div class="rrow"><span class="rrow-label">Weighted plan ARPU (per active roamer)</span><span class="rrow-val" id="oa-plan">$79.82</span></div>
-      <div class="rrow"><span class="rrow-label">Est. monthly roaming data revenue</span><span class="rrow-val hi" id="oa-rev">$8,381</span></div>
+      <div class="rrow"><span class="rrow-label">Weighted plan ARPU (per active roamer)</span><span class="rrow-val" id="oa-plan">$75.00</span></div>
       <div class="panel-divider"></div>
       <div class="panel-sub-hd" style="margin-bottom:12px;">Account breakdown</div>
       <div class="rrow"><span class="rrow-label">Total lines</span><span class="rrow-val" id="oa-acct">1,000</span></div>
       <div class="rrow"><span class="rrow-label">Est. travellers / month (Eligible Pool)</span><span class="rrow-val" id="oa-trav">143</span></div>
       <div class="rrow"><span class="rrow-label">Est. active roamers / month</span><span class="rrow-val" id="oa-roamers">105</span></div>
-      <div class="rrow"><span class="rrow-label"><span class="tip">Est. silent roamers / month<span class="tip-i">?</span><span class="tip-box">Travellers who went overseas but did not activate a roaming plan — zero revenue contribution. Calculated as Travellers minus Active Roamers.</span></span></span><span class="rrow-val" id="oa-silent">38</span></div>
+      <div class="rrow"><span class="rrow-label">Est. silent roamers / month</span><span class="rrow-val" id="oa-silent">38</span></div>
     </div>
   </div>
 
   <div id="plan-anchor-a"></div>
 
   <div class="panel" style="margin-bottom:14px;">
-    <div class="panel-hd">Formula &amp; assumptions <button class="formula-toggle no-print" onclick="toggleFormula('a')">▾ collapse</button></div>
-    <div class="formula-body" id="formula-body-a">
+    <div class="panel-hd">Formula &amp; assumptions</div>
     <div class="formula-section">
       <div class="f-label">How blended ARPU is derived</div>
       <div class="f-row">
@@ -296,9 +1058,9 @@ input[type=range]{width:100%;height:2px;accent-color:var(--blue);cursor:pointer;
         <span class="f-step">Step 2</span>
         <div class="f-node amber"><div class="f-node-lbl">Roaming penetration</div><div class="f-node-val" id="fa-pen2">10.5%</div></div>
         <div class="f-op">×</div>
-        <div class="f-node"><div class="f-node-lbl">Weighted plan ARPU</div><div class="f-node-val" id="fa-plan">$80</div></div>
+        <div class="f-node"><div class="f-node-lbl">Weighted plan ARPU per active roamer</div><div class="f-node-val" id="fa-plan">$75.00</div></div>
         <div class="f-op">=</div>
-        <div class="f-node blue"><div class="f-node-lbl">Blended ARPU / line</div><div class="f-node-val" id="fa-out">$8.38</div></div>
+        <div class="f-node blue"><div class="f-node-lbl">Blended roaming ARPU per line, per month</div><div class="f-node-val" id="fa-out">$7.86</div></div>
       </div>
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:0 28px;margin-top:4px;">
@@ -319,11 +1081,11 @@ input[type=range]{width:100%;height:2px;accent-color:var(--blue);cursor:pointer;
         <div class="arow"><span class="arow-label">Daily Plans rate</span><span class="arow-val" id="aa-rate">$29 / day</span></div>
         <div class="arow" style="opacity:0.5;"><span class="arow-label">↳ Daily Plans ARPU / roamer</span><span class="arow-val" id="aa-daily">$159.50</span></div>
         <div class="arow"><span class="arow-label">Monthly Passes ARPU / roamer</span><span class="arow-val" id="aa-monthly">$35.00</span></div>
-        <div class="arow" style="opacity:0.5;"><span class="arow-label">↳ Weighted plan ARPU</span><span class="arow-val" id="aa-plan">$79.82</span></div>
+        <div class="arow" style="opacity:0.5;"><span class="arow-label">↳ Weighted plan ARPU per active roamer</span><span class="arow-val" id="aa-plan">$75.00</span></div>
       </div>
     </div>
     <div class="assume-note">Derived values (↳) are calculated from inputs above them. Roaming penetration = Traveller % × Active Roamer %. Weighted plan ARPU = Daily Plans mix × Daily ARPU + Monthly Passes mix × Monthly ARPU.</div>
-    </div><!-- /formula-body-a -->
+    <div class="assume-note muted">Formula values are shown with cents for reconciliation. Revenue cards use exact values rather than rounded intermediate figures.</div>
   </div>
 </div>
 
@@ -345,18 +1107,21 @@ input[type=range]{width:100%;height:2px;accent-color:var(--blue);cursor:pointer;
       <div class="irow">
         <div class="irow-hd"><span class="irow-label">Account size (lines)</span></div>
         <input type="number" id="nb-acct" value="1000" step="50" min="1" class="num" oninput="calcB()">
-        <div class="irow-hint">Total number of lines in the account.</div>
+        <div class="irow-hint"><span id="nb-acct-fmt" style="font-family:'JetBrains Mono',monospace;font-weight:500;color:var(--text2);">= 1,000 lines</span></div>
+      </div>
+      <div class="warn" id="wb-warn">
+        <strong>Above observed base rate.</strong> Implied roaming penetration (<span id="wb-pen">—</span>) exceeds the observed base of <span id="wb-base">10.5%</span>. May be valid for high-travel industries (consulting, finance) — verify before presenting.
       </div>
       <div class="irow">
         <div class="irow-hd">
           <span class="irow-label">Expected active roamers / month</span>
           <span class="irow-val" id="vb-roamers">105</span>
         </div>
-        <input type="range" min="1" max="1000" step="1" value="105" id="sb-roamers" oninput="onSliderB()">
-        <div class="range-ends"><span class="range-end">1</span><span class="range-end" id="sb-max">1,000</span></div>
-        <div class="warn" id="wb-warn">
-          <strong>Above observed base rate.</strong> Implied roaming penetration (<span id="wb-pen">—</span>) exceeds the observed base of <span id="wb-base">10.5%</span>. May be valid for high-travel industries (consulting, finance) — verify before presenting.
+        <div class="slider-input-row">
+          <input type="range" min="0" max="1000" step="1" value="105" id="sb-roamers" oninput="syncSliderNum('sb-roamers','nb-roamers');calcB();">
+          <input type="number" id="nb-roamers" value="105" min="0" step="1" class="slider-num" oninput="syncNumSlider('nb-roamers','sb-roamers');calcB();">
         </div>
+        <div class="range-ends"><span class="range-end">1</span><span class="range-end" id="sb-max">1,000</span></div>
         <div class="irow-hint">Lines expected to actively roam per month. Roaming penetration = this ÷ account size.</div>
       </div>
       <div class="ref-field">
@@ -368,19 +1133,29 @@ input[type=range]{width:100%;height:2px;accent-color:var(--blue);cursor:pointer;
       </div>
     </div>
 
-    <div class="panel">
+    <div class="panel panel-results">
       <div class="panel-hd">Results</div>
       <div class="result-hero">
         <div class="rh-label">Blended roaming data ARPU — per line / month</div>
-        <div class="rh-value" id="ob-blended">$8.38</div>
+        <div class="rh-value" id="ob-blended">$7.86</div>
         <div class="rh-sub">Blended across all lines including non-roamers</div>
+      </div>
+      <div class="rev-cards">
+        <div class="rev-card">
+          <div class="rev-card-label">Est. monthly revenue</div>
+          <div class="rev-card-value" id="ob-rev">$7,860.00</div>
+        </div>
+        <div class="rev-card annual">
+          <div class="rev-card-label">Est. annual revenue</div>
+          <div class="rev-card-value" id="ob-rev-annual">$94,320.00</div>
+        </div>
       </div>
       <div class="rrow">
         <span class="rrow-label"><span class="tip">Roaming penetration of base<span class="tip-i">?</span><span class="tip-box">Active roamers ÷ total base. In this mode derived directly from your input, not via Traveller% × Roamer%.</span></span></span>
         <span class="rrow-val am" id="ob-pen">10.5%</span>
       </div>
-      <div class="rrow"><span class="rrow-label">Weighted plan ARPU (per active roamer)</span><span class="rrow-val" id="ob-plan">$79.82</span></div>
-      <div class="rrow"><span class="rrow-label">Est. monthly roaming data revenue</span><span class="rrow-val hi" id="ob-rev">$8,381</span></div>
+      <div class="rrow"><span class="rrow-label">Weighted plan ARPU (per active roamer)</span><span class="rrow-val" id="ob-plan">$75.00</span></div>
+      <div class="rrow revenue-basis"><span class="rrow-label"><span id="ob-rev-sub-label">Revenue basis</span></span><span class="rrow-val" id="ob-rev-sub">$8,381 / month</span></div>
       <div class="rrow"><span class="rrow-label">Est. active roamers / month</span><span class="rrow-val" id="ob-roamers">105 lines</span></div>
     </div>
   </div>
@@ -388,8 +1163,7 @@ input[type=range]{width:100%;height:2px;accent-color:var(--blue);cursor:pointer;
   <div id="plan-anchor-b"></div>
 
   <div class="panel" style="margin-bottom:14px;">
-    <div class="panel-hd">Formula &amp; assumptions <button class="formula-toggle no-print" onclick="toggleFormula('b')">▾ collapse</button></div>
-    <div class="formula-body" id="formula-body-b">
+    <div class="panel-hd">Formula &amp; assumptions</div>
     <div class="formula-section">
       <div class="f-label">How blended ARPU is derived</div>
       <div class="f-row">
@@ -405,9 +1179,9 @@ input[type=range]{width:100%;height:2px;accent-color:var(--blue);cursor:pointer;
         <span class="f-step">Step 2</span>
         <div class="f-node amber"><div class="f-node-lbl">Roaming penetration</div><div class="f-node-val" id="fb-pen2">10.5%</div></div>
         <div class="f-op">×</div>
-        <div class="f-node"><div class="f-node-lbl">Weighted plan ARPU</div><div class="f-node-val" id="fb-plan">$80</div></div>
+        <div class="f-node"><div class="f-node-lbl">Weighted plan ARPU per active roamer</div><div class="f-node-val" id="fb-plan">$75.00</div></div>
         <div class="f-op">=</div>
-        <div class="f-node blue"><div class="f-node-lbl">Blended ARPU / line</div><div class="f-node-val" id="fb-out">$8.38</div></div>
+        <div class="f-node blue"><div class="f-node-lbl">Blended roaming ARPU per line, per month</div><div class="f-node-val" id="fb-out">$7.86</div></div>
       </div>
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:0 28px;margin-top:4px;">
@@ -422,11 +1196,161 @@ input[type=range]{width:100%;height:2px;accent-color:var(--blue);cursor:pointer;
         <div class="arow"><span class="arow-label">Daily Plans / Monthly Passes mix</span><span class="arow-val" id="ab-mix"><span style="color:var(--blue);">36% Daily</span> / <span style="color:var(--green);">64% Monthly</span></span></div>
         <div class="arow" style="opacity:0.5;"><span class="arow-label">↳ Daily Plans ARPU / roamer</span><span class="arow-val" id="ab-daily">$159.50</span></div>
         <div class="arow"><span class="arow-label">Monthly Passes ARPU / roamer</span><span class="arow-val" id="ab-monthly">$35.00</span></div>
-        <div class="arow" style="opacity:0.5;"><span class="arow-label">↳ Weighted plan ARPU</span><span class="arow-val" id="ab-plan">$79.82</span></div>
+        <div class="arow" style="opacity:0.5;"><span class="arow-label">↳ Weighted plan ARPU per active roamer</span><span class="arow-val" id="ab-plan">$75.00</span></div>
       </div>
     </div>
     <div class="assume-note">Roaming penetration is set directly (roamers ÷ account size) rather than via the two-filter method. Derived values (↳) are calculated from inputs above them.</div>
-    </div><!-- /formula-body-b -->
+    <div class="assume-note muted">Formula values are shown with cents for reconciliation. Revenue cards use exact values rather than rounded intermediate figures.</div>
+  </div>
+</div>
+
+<!-- ══ TAB C ══ -->
+<div class="section" id="tab-c">
+  <div class="cols">
+
+    <!-- LEFT: inputs -->
+    <div class="panel">
+      <div class="panel-hd">Revenue target</div>
+
+      <div class="irow">
+        <div class="irow-hd"><span class="irow-label">Target annual roaming data revenue ($)</span></div>
+        <input type="number" id="nc-target" value="36000000" step="1000000" min="0" class="num" oninput="calcC()">
+        <div class="irow-hint">The annual roaming data revenue you want the new account(s) to generate. Divided by 12 internally to derive the monthly blended ARPU target.</div>
+      </div>
+
+      <div class="panel-divider"></div>
+      <div class="panel-sub-hd">Travel behaviour assumptions</div>
+
+      <!-- Industry preset -->
+      <div class="preset-row no-print">
+        <span class="preset-label">Industry profile</span>
+        <select id="preset-select-c" class="preset-select" onchange="applyPreset('c')">
+          <option value="">— Select a profile —</option>
+        </select>
+        <span class="preset-badge" id="preset-custom-c">Custom</span>
+      </div>
+
+      <div class="irow">
+        <div class="irow-hd">
+          <span class="irow-label">Traveller % of base</span>
+          <span class="irow-val" id="vc-trav">14.3%</span>
+        </div>
+        <div class="slider-input-row">
+          <input type="range" min="0" max="100" step="0.1" value="14.3" id="sc-trav" oninput="syncSliderNum('sc-trav','nc-trav');onSliderC();">
+          <input type="number" id="nc-trav" value="14.3" min="0" max="100" step="0.1" class="slider-num" oninput="syncNumSlider('nc-trav','sc-trav');onSliderC();">
+        </div>
+        <div class="range-ends"><span class="range-end">0%</span><span class="range-end">100%</span></div>
+        <div class="irow-hint">% of lines expected to travel overseas per month. Use 0% to model no travel in month.</div>
+      </div>
+
+      <div class="irow">
+        <div class="irow-hd">
+          <span class="irow-label">Active roamer % of travellers</span>
+          <span class="irow-val" id="vc-roam">73.3%</span>
+        </div>
+        <div class="slider-input-row">
+          <input type="range" min="0" max="100" step="0.1" value="73.3" id="sc-roam" oninput="syncSliderNum('sc-roam','nc-roam');onSliderC();">
+          <input type="number" id="nc-roam" value="73.3" min="0" max="100" step="0.1" class="slider-num" oninput="syncNumSlider('nc-roam','sc-roam');onSliderC();">
+        </div>
+        <div class="range-ends"><span class="range-end">0%</span><span class="range-end">100%</span></div>
+        <div class="irow-hint">Of travellers, % who activate roaming and incur charges. Use 0% to model no roaming among travellers.</div>
+      </div>
+    </div>
+
+    <!-- RIGHT: results -->
+    <div class="panel">
+      <div class="panel-hd">Lines needed</div>
+
+      <div class="result-hero">
+        <div class="rh-label">Lines required to hit annual target</div>
+        <div class="rh-value" id="oc-lines">358,566</div>
+        <div class="rh-sub" id="oc-lines-sub">at $8.37 blended ARPU / line / month</div>
+      </div>
+
+      <div class="rev-cards">
+        <div class="rev-card">
+          <div class="rev-card-label">Monthly revenue</div>
+          <div class="rev-card-value" id="oc-rev-monthly">$3,000,000.00</div>
+        </div>
+        <div class="rev-card annual">
+          <div class="rev-card-label">Annual revenue target</div>
+          <div class="rev-card-value" id="oc-rev-annual">$36,000,000.00</div>
+        </div>
+      </div>
+      <div class="rrow">
+        <span class="rrow-label"><span class="tip">Roaming penetration of base<span class="tip-i">?</span><span class="tip-box">Traveller % × Active Roamer % of travellers. The compound rate of lines that generate roaming revenue in a given month.</span></span></span>
+        <span class="rrow-val" id="oc-pen">10.5%</span>
+      </div>
+      <div class="rrow"><span class="rrow-label">Weighted plan ARPU (per active roamer)</span><span class="rrow-val" id="oc-plan">$79.82</span></div>
+      <div class="rrow">
+        <span class="rrow-label">Blended roaming ARPU per line, per month</span>
+        <span class="rrow-val am" id="oc-blended">$8.37</span>
+      </div>
+
+      <div class="panel-divider"></div>
+      <div class="panel-sub-hd" style="margin-bottom:12px;">Implied account composition</div>
+
+      <div class="rrow"><span class="rrow-label">Est. active roamers / month</span><span class="rrow-val" id="oc-roamers">—</span></div>
+      <div class="rrow"><span class="rrow-label">Est. travellers / month (Eligible Pool)</span><span class="rrow-val" id="oc-travellers">—</span></div>
+      <div class="rrow"><span class="rrow-label">Est. non-roaming lines</span><span class="rrow-val" id="oc-nonroaming">—</span></div>
+
+      <!-- Infeasibility warning -->
+      <div class="warn show" id="wc-warn" style="display:none;margin-top:12px;margin-bottom:0;">
+        <strong>Target not reachable with current assumptions.</strong> <span id="wc-warn-msg">Blended ARPU is zero — adjust travel behaviour or plan assumptions.</span>
+      </div>
+    </div>
+  </div>
+
+  <div id="plan-anchor-c"></div>
+
+  <!-- Formula panel -->
+  <div class="panel" style="margin-bottom:14px;">
+    <div class="panel-hd">Formula &amp; assumptions</div>
+    <div class="formula-section">
+      <div class="f-label">How lines needed is derived</div>
+      <div class="f-row">
+        <span class="f-step">Step 1</span>
+        <div class="f-node"><div class="f-node-lbl">Traveller %</div><div class="f-node-val" id="fc-trav">14.3%</div></div>
+        <div class="f-op">×</div>
+        <div class="f-node"><div class="f-node-lbl">Active roamer %</div><div class="f-node-val" id="fc-roam">73.3%</div></div>
+        <div class="f-op">=</div>
+        <div class="f-node amber"><div class="f-node-lbl">Roaming penetration</div><div class="f-node-val" id="fc-pen">10.5%</div></div>
+        <div class="f-op">×</div>
+        <div class="f-node"><div class="f-node-lbl">Weighted plan ARPU per active roamer</div><div class="f-node-val" id="fc-plan">$80.00</div></div>
+        <div class="f-op">=</div>
+        <div class="f-node amber"><div class="f-node-lbl">Blended roaming ARPU per line, per month</div><div class="f-node-val" id="fc-blended">$8.37</div></div>
+      </div>
+      <div class="f-step-div"></div>
+      <div class="f-row">
+        <span class="f-step">Step 2</span>
+        <div class="f-node"><div class="f-node-lbl">Annual target ÷ 12</div><div class="f-node-val" id="fc-target">$3,000,000</div></div>
+        <div class="f-op">÷</div>
+        <div class="f-node amber"><div class="f-node-lbl">Blended roaming ARPU per line, per month</div><div class="f-node-val" id="fc-blended2">$8.37</div></div>
+        <div class="f-op">=</div>
+        <div class="f-node blue"><div class="f-node-lbl">Lines needed</div><div class="f-node-val" id="fc-lines">358,566</div></div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0 28px;margin-top:4px;">
+      <div>
+        <div style="font-size:10px;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;color:var(--text3);padding:6px 0;border-bottom:0.5px solid var(--border);margin-bottom:2px;">Scenario</div>
+        <div class="arow"><span class="arow-label">Industry profile</span><span class="arow-val" id="ac-profile">Enterprise base</span></div>
+        <div class="arow"><span class="arow-label">Traveller % of base</span><span class="arow-val" id="ac-trav">14.3%</span></div>
+        <div class="arow"><span class="arow-label">Active roamer % of travellers</span><span class="arow-val" id="ac-roam">73.3%</span></div>
+        <div class="arow" style="opacity:0.5;"><span class="arow-label">↳ Roaming penetration of base</span><span class="arow-val" id="ac-pen">10.5%</span></div>
+        <div class="arow" style="opacity:0.5;"><span class="arow-label">↳ Blended ARPU / line</span><span class="arow-val" id="ac-blended">$8.37</span></div>
+        <div class="arow"><span class="arow-label">Target annual revenue</span><span class="arow-val" id="ac-target">$36,000,000 / yr</span></div>
+        <div class="arow" style="opacity:0.5;"><span class="arow-label">↳ Lines needed</span><span class="arow-val" id="ac-lines">358,566</span></div>
+      </div>
+      <div>
+        <div style="font-size:10px;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;color:var(--text3);padding:6px 0;border-bottom:0.5px solid var(--border);margin-bottom:2px;">Plan economics</div>
+        <div class="arow"><span class="arow-label">Daily Plans / Monthly Passes mix</span><span class="arow-val" id="ac-mix"><span style="color:var(--blue);">36% Daily</span> / <span style="color:var(--green);">64% Monthly</span></span></div>
+        <div class="arow" style="opacity:0.5;"><span class="arow-label">↳ Daily Plans ARPU / roamer</span><span class="arow-val" id="ac-daily">$159.50</span></div>
+        <div class="arow"><span class="arow-label">Monthly Passes ARPU / roamer</span><span class="arow-val" id="ac-monthly">$35.00</span></div>
+        <div class="arow" style="opacity:0.5;"><span class="arow-label">↳ Weighted plan ARPU per active roamer</span><span class="arow-val" id="ac-plan">$79.82</span></div>
+      </div>
+    </div>
+    <div class="assume-note">Derived values (↳) are calculated from inputs above them. Lines needed = Target revenue ÷ Blended ARPU. Result is exact — round up to nearest whole line in practice.</div>
+    <div class="assume-note muted">Formula values are shown with cents for reconciliation. Revenue cards use exact values rather than rounded intermediate figures.</div>
   </div>
 </div>
 
@@ -439,25 +1363,26 @@ input[type=range]{width:100%;height:2px;accent-color:var(--blue);cursor:pointer;
   <div class="settings-cols">
     <div class="settings-section">
       <div class="settings-hd">Base defaults</div>
-      <div class="srow"><span class="srow-label">Traveller % of base</span><div class="srow-right"><input type="number" id="def-trav" value="14.3" step="0.1" class="snum" oninput="markSettingsDirty()">%</div></div>
-      <div class="srow"><span class="srow-label">Active roamer % of travellers</span><div class="srow-right"><input type="number" id="def-roam" value="73.3" step="0.1" class="snum" oninput="markSettingsDirty()">%</div></div>
-      <div class="srow"><span class="srow-label">Observed roaming penetration</span><div class="srow-right"><input type="number" id="def-base-pen" value="10.5" step="0.1" class="snum" oninput="markSettingsDirty()">%</div></div>
-      <div class="srow"><span class="srow-label">Default account size</span><div class="srow-right"><input type="number" id="def-acct" value="1000" step="50" class="snum" oninput="markSettingsDirty()">lines</div></div>
-      <div class="srow"><span class="srow-label">"By roamer count" default roamers</span><div class="srow-right"><input type="number" id="def-broamers" value="105" step="1" class="snum" oninput="markSettingsDirty()"></div></div>
+      <div class="srow"><span class="srow-label">Traveller % of base</span><div class="srow-right"><input type="number" id="def-trav" value="14.3" step="0.1" class="snum">%</div></div>
+      <div class="srow"><span class="srow-label">Active roamer % of travellers</span><div class="srow-right"><input type="number" id="def-roam" value="73.3" step="0.1" class="snum">%</div></div>
+      <div class="srow"><span class="srow-label">Observed roaming penetration</span><div class="srow-right"><input type="number" id="def-base-pen" value="10.5" step="0.1" class="snum">%</div></div>
+      <div class="srow"><span class="srow-label">Default account size</span><div class="srow-right"><input type="number" id="def-acct" value="1000" step="50" class="snum">lines</div></div>
+      <div class="srow"><span class="srow-label">"By roamer count" default roamers</span><div class="srow-right"><input type="number" id="def-broamers" value="105" step="1" min="0" class="snum"></div></div>
+      <div class="srow"><span class="srow-label">Revenue target annual default</span><div class="srow-right">$<input type="number" id="def-targetAnnual" value="36000000" step="1000000" min="0" class="snum"></div></div>
     </div>
     <div class="settings-section">
       <div class="settings-hd">Plan assumption defaults</div>
-      <div class="srow"><span class="srow-label">Daily Plans avg days / month</span><input type="number" id="def-days" value="5.5" step="0.5" class="snum" oninput="markSettingsDirty()"></div>
-      <div class="srow"><span class="srow-label">Daily Plans rate ($ / day)</span><div class="srow-right">$<input type="number" id="def-rate" value="29" step="1" class="snum" oninput="markSettingsDirty()"></div></div>
-      <div class="srow"><span class="srow-label">Monthly Passes ARPU ($)</span><div class="srow-right">$<input type="number" id="def-monthly" value="35" step="1" class="snum" oninput="markSettingsDirty()"></div></div>
-      <div class="srow"><span class="srow-label">% on Daily Plans (default)</span><div class="srow-right"><input type="number" id="def-mix" value="36" step="1" class="snum" oninput="markSettingsDirty()">%</div></div>
+      <div class="srow"><span class="srow-label">Daily Plans avg days / month</span><input type="number" id="def-days" value="5.5" step="0.5" class="snum"></div>
+      <div class="srow"><span class="srow-label">Daily Plans rate ($ / day)</span><div class="srow-right">$<input type="number" id="def-rate" value="29" step="1" class="snum"></div></div>
+      <div class="srow"><span class="srow-label">Monthly Passes ARPU ($)</span><div class="srow-right">$<input type="number" id="def-monthly" value="35" step="1" class="snum"></div></div>
+      <div class="srow"><span class="srow-label">% on Daily Plans (default)</span><div class="srow-right"><input type="number" id="def-mix" value="36" step="1" class="snum">%</div></div>
     </div>
   </div>
 
   <!-- Industry profiles -->
   <div class="settings-section">
     <div class="settings-hd">Industry profiles</div>
-    <p style="font-size:11px;color:var(--text3);margin-bottom:12px;line-height:1.5;">Edit profile names and values. The first profile (Enterprise base) cannot be deleted. Changes apply to the preset dropdown in both modes after saving.</p>
+    <p style="font-size:11px;color:var(--text3);margin-bottom:12px;line-height:1.5;">Edit profile names and values. The first profile is protected and cannot be deleted. Changes apply to the preset dropdown in both modes after saving.</p>
     <table class="profile-table">
       <thead>
         <tr>
@@ -479,6 +1404,7 @@ input[type=range]{width:100%;height:2px;accent-color:var(--blue);cursor:pointer;
 </div>
 
 </div><!-- /wrap -->
+</div><!-- /main-content -->
 
 <!-- PLAN PANEL — lives here, moved into active tab by JS -->
 <div class="panel plan-config-panel" style="margin-bottom:14px;display:none;" id="plan-panel">
@@ -486,25 +1412,25 @@ input[type=range]{width:100%;height:2px;accent-color:var(--blue);cursor:pointer;
   <!-- Print-only static summary -->
   <div class="print-plan-summary" style="display:none;">
     <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px 20px;font-size:12px;">
-      <div><div style="font-size:10px;color:#9c9a92;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:3px;">Avg days / month</div><div style="font-family:'DM Mono',monospace;font-weight:500;" id="pp-days">5.5</div></div>
-      <div><div style="font-size:10px;color:#9c9a92;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:3px;">Rate ($ / day)</div><div style="font-family:'DM Mono',monospace;font-weight:500;" id="pp-rate">$29</div></div>
-      <div><div style="font-size:10px;color:#9c9a92;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:3px;">Monthly Passes ARPU</div><div style="font-family:'DM Mono',monospace;font-weight:500;" id="pp-monthly">$35</div></div>
-      <div><div style="font-size:10px;color:#9c9a92;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:3px;">Weighted ARPU</div><div style="font-family:'DM Mono',monospace;font-weight:500;" id="pp-wtd">$75.00</div><div style="font-size:10px;color:#9c9a92;" id="pp-mix">36% Daily / 64% Monthly</div></div>
+      <div><div style="font-size:10px;color:#9c9a92;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:3px;">Avg days / month</div><div style="font-family:'JetBrains Mono',monospace;font-weight:500;" id="pp-days">5.5</div></div>
+      <div><div style="font-size:10px;color:#9c9a92;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:3px;">Rate ($ / day)</div><div style="font-family:'JetBrains Mono',monospace;font-weight:500;" id="pp-rate">$29</div></div>
+      <div><div style="font-size:10px;color:#9c9a92;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:3px;">Monthly Passes ARPU</div><div style="font-family:'JetBrains Mono',monospace;font-weight:500;" id="pp-monthly">$35</div></div>
+      <div><div style="font-size:10px;color:#9c9a92;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:3px;">Weighted ARPU</div><div style="font-family:'JetBrains Mono',monospace;font-weight:500;" id="pp-wtd">$75.00</div><div style="font-size:10px;color:#9c9a92;" id="pp-mix">36% Daily / 64% Monthly</div></div>
     </div>
   </div>
   <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px 20px;margin-bottom:16px;">
     <div class="pf">
       <span class="pf-label">Daily Plans avg days / month</span>
-      <input type="number" id="n-days" value="5.5" step="0.5" min="1" max="31" class="num" oninput="onPlan()">
+      <input type="number" id="n-days" value="5.5" step="0.5" min="0" max="31" class="num" oninput="onPlan()">
       <span class="pf-hint">ARPU = days × rate: <span id="daily-arpu">$159.50</span></span>
     </div>
     <div class="pf">
       <span class="pf-label">Daily Plans rate ($ / day)</span>
-      <input type="number" id="n-rate" value="29" step="1" min="1" class="num" oninput="onPlan()">
+      <input type="number" id="n-rate" value="29" step="1" min="0" class="num" oninput="onPlan()">
     </div>
     <div class="pf">
       <span class="pf-label">Monthly Passes ARPU / roamer ($)</span>
-      <input type="number" id="n-monthly" value="35" step="1" min="1" class="num" oninput="onPlan()">
+      <input type="number" id="n-monthly" value="35" step="1" min="0" class="num" oninput="onPlan()">
       <span class="pf-hint">Blended incl. discounts</span>
     </div>
   </div>
@@ -513,20 +1439,23 @@ input[type=range]{width:100%;height:2px;accent-color:var(--blue);cursor:pointer;
       <span class="irow-label">Plan mix — Daily Plans / Monthly Passes</span>
       <span class="irow-val" id="v-mix-a">36%</span>
     </div>
-    <input type="range" min="0" max="100" step="1" value="36" id="s-mix" oninput="onMix(this.value)">
-    <div class="range-ends"><span class="range-end">← 0% Daily Plans</span><span class="range-end">100% Daily Plans →</span></div>
+    <div class="slider-input-row">
+      <input type="range" min="0" max="100" step="1" value="36" id="s-mix" oninput="syncSliderNum('s-mix','n-mix-num');onMix(this.value);">
+      <input type="number" id="n-mix-num" value="36" min="0" max="100" step="1" class="slider-num" oninput="syncNumSlider('n-mix-num','s-mix');onMix(document.getElementById('s-mix').value);">
+    </div>
+    <div class="range-ends"><span class="range-end">100% Monthly Passes</span><span class="range-end">100% Daily Plans</span></div>
     <div class="mix-bar" style="margin-top:6px;"><div class="mix-seg-d" id="bar-d" style="width:36%"></div><div class="mix-seg-m" id="bar-m" style="width:64%"></div></div>
     <div class="mix-legend" style="margin-top:4px;">
       <div class="mix-li"><div class="mix-dot" style="background:var(--blue)"></div>Daily Plans <span id="leg-d">36%</span></div>
       <div class="mix-li"><div class="mix-dot" style="background:var(--green)"></div>Monthly Passes <span id="leg-m">64%</span></div>
-      <div class="mix-li" style="margin-left:auto;"><span style="color:var(--text3);font-size:10px;">Weighted ARPU: </span><span style="font-family:'DM Mono',monospace;font-size:13px;font-weight:500;margin-left:4px;" id="wtd-arpu">$75.00</span></div>
+      <div class="mix-li" style="margin-left:auto;"><span style="color:var(--text3);font-size:10px;">Weighted ARPU: </span><span style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:500;margin-left:4px;" id="wtd-arpu">$75.00</span></div>
     </div>
   </div>
 </div>
 <script>
 // ── CORE STATE ──────────────────────────────────────────────────────────────
 var currentTab = 'a';
-var settingsDirty = false;
+var lastScenarioTab = 'a';
 
 // Default profiles — used if localStorage is empty
 var DEFAULT_PROFILES = [
@@ -540,11 +1469,88 @@ var DEFAULT_PROFILES = [
 // Default scalar settings
 var DEFAULT_SETTINGS = {
   trav:14.3, roam:73.3, basePen:10.5, acct:1000, broamers:105,
-  days:5.5,  rate:29,   monthly:35,   mix:36
+  days:5.5,  rate:29,   monthly:35,   mix:36, targetAnnual:36000000
 };
 
 // Live profiles array (populated from localStorage or defaults)
 var profiles = [];
+
+// ── HELPERS ─────────────────────────────────────────────────────────────────
+function clamp(value,min,max,fallback){
+  var n=Number(value);
+  if(!Number.isFinite(n)) return fallback;
+  return Math.min(max,Math.max(min,n));
+}
+function clampPct(value,fallback){
+  return clamp(value,0,100,fallback);
+}
+function clampNonNegative(value,fallback){
+  var n=Number(value);
+  if(!Number.isFinite(n)) return fallback;
+  return Math.max(0,n);
+}
+function clampInt(value,min,fallback){
+  var n=parseInt(value,10);
+  if(!Number.isFinite(n)) return fallback;
+  return Math.max(min,n);
+}
+function formatCurrency(value,decimals){
+  if(decimals===undefined) decimals=0;
+  return '$'+Number(value).toLocaleString(undefined,{minimumFractionDigits:decimals,maximumFractionDigits:decimals});
+}
+function formatPercent(value,decimals){
+  if(decimals===undefined) decimals=1;
+  return Number(value).toFixed(decimals)+'%';
+}
+function calculatePlan(days,rate,monthly,mixPct){
+  var safeDays=clampNonNegative(days,5.5);
+  var safeRate=clampNonNegative(rate,29);
+  var safeMonthly=clampNonNegative(monthly,35);
+  var safeMix=clampPct(mixPct,36);
+  var dailyArpu=safeDays*safeRate;
+  var weightedPlanArpu=(safeMix/100)*dailyArpu+((100-safeMix)/100)*safeMonthly;
+  return {days:safeDays,rate:safeRate,monthly:safeMonthly,mix:safeMix,dailyA:dailyArpu,planArpu:weightedPlanArpu};
+}
+function calculateTravelScenario(acct,travPct,roamPct,weightedPlanArpu){
+  var safeAcct=Math.max(1,clampInt(acct,1,1000));
+  var safeTrav=clampPct(travPct,0);
+  var safeRoam=clampPct(roamPct,0);
+  var penetration=(safeTrav/100)*(safeRoam/100);
+  var blendedArpu=penetration*weightedPlanArpu;
+  var travellers=Math.round((safeTrav/100)*safeAcct);
+  var activeRoamers=Math.min(travellers,Math.round(penetration*safeAcct));
+  var silentRoamers=travellers-activeRoamers;
+  var monthlyRevenue=blendedArpu*safeAcct;
+  var annualRevenue=monthlyRevenue*12;
+  return {acct:safeAcct,trav:safeTrav,roam:safeRoam,penetration:penetration,blendedArpu:blendedArpu,travellers:travellers,activeRoamers:activeRoamers,silentRoamers:silentRoamers,monthlyRevenue:monthlyRevenue,annualRevenue:annualRevenue};
+}
+function calculateRoamerScenario(acct,roamers,weightedPlanArpu,observedRoamerPct,basePenPct){
+  var safeAcct=Math.max(1,clampInt(acct,1,1000));
+  var safeRoamers=clampInt(roamers,0,0);
+  safeRoamers=Math.min(safeRoamers,safeAcct);
+  var penetration=safeAcct>0?safeRoamers/safeAcct:0;
+  var blendedArpu=penetration*weightedPlanArpu;
+  var monthlyRevenue=safeRoamers*weightedPlanArpu;
+  var annualRevenue=monthlyRevenue*12;
+  var safeObservedRoamerPct=clampPct(observedRoamerPct,73.3);
+  var impliedTravellerPct=safeObservedRoamerPct>0?(penetration/(safeObservedRoamerPct/100))*100:null;
+  var safeBasePenPct=clampPct(basePenPct,10.5);
+  return {acct:safeAcct,roamers:safeRoamers,penetration:penetration,blendedArpu:blendedArpu,monthlyRevenue:monthlyRevenue,annualRevenue:annualRevenue,impliedTravellerPct:impliedTravellerPct,observedRoamerPct:safeObservedRoamerPct,basePenPct:safeBasePenPct,warn:penetration*100>safeBasePenPct};
+}
+function calculateTargetScenario(targetAnnual,travPct,roamPct,weightedPlanArpu){
+  var safeTargetAnnual=clampNonNegative(targetAnnual,0);
+  var safeTrav=clampPct(travPct,0);
+  var safeRoam=clampPct(roamPct,0);
+  var targetMonthly=safeTargetAnnual/12;
+  var penetration=(safeTrav/100)*(safeRoam/100);
+  var blendedArpu=penetration*weightedPlanArpu;
+  var infeasible=blendedArpu<=0;
+  if(infeasible){
+    return {targetAnnual:safeTargetAnnual,targetMonthly:targetMonthly,trav:safeTrav,roam:safeRoam,penetration:penetration,blendedArpu:blendedArpu,infeasible:true,linesNeeded:null,activeRoamers:null,travellers:null,nonRoamingLines:null};
+  }
+  var linesNeeded=targetMonthly/blendedArpu;
+  return {targetAnnual:safeTargetAnnual,targetMonthly:targetMonthly,trav:safeTrav,roam:safeRoam,penetration:penetration,blendedArpu:blendedArpu,infeasible:false,linesNeeded:linesNeeded,activeRoamers:linesNeeded*penetration,travellers:linesNeeded*(safeTrav/100),nonRoamingLines:linesNeeded-(linesNeeded*penetration)};
+}
 
 // ── LOCALSTORAGE ────────────────────────────────────────────────────────────
 function loadFromStorage(){
@@ -558,7 +1564,6 @@ function loadFromStorage(){
     });
   }catch(e){
     profiles=JSON.parse(JSON.stringify(DEFAULT_PROFILES));
-    // Also reset settings DOM fields so they match DEFAULT_SETTINGS exactly
     Object.keys(DEFAULT_SETTINGS).forEach(function(k){
       var el=document.getElementById('def-'+k);
       if(el) el.value=DEFAULT_SETTINGS[k];
@@ -572,7 +1577,15 @@ function saveToStorage(){
     var settings={};
     Object.keys(DEFAULT_SETTINGS).forEach(function(k){
       var el=document.getElementById('def-'+k);
-      settings[k]=el?el.value:DEFAULT_SETTINGS[k];
+      if(!el){
+        settings[k]=DEFAULT_SETTINGS[k];
+        return;
+      }
+      if(k==='trav'||k==='roam'||k==='basePen'||k==='mix') settings[k]=clampPct(el.value, DEFAULT_SETTINGS[k]);
+      else if(k==='acct') settings[k]=clampInt(el.value, 1, DEFAULT_SETTINGS[k]);
+      else if(k==='broamers') settings[k]=clampInt(el.value, 0, DEFAULT_SETTINGS[k]);
+      else settings[k]=clampNonNegative(el.value, DEFAULT_SETTINGS[k]);
+      el.value=settings[k];
     });
     localStorage.setItem('singtel_settings',JSON.stringify(settings));
   }catch(e){}
@@ -584,61 +1597,96 @@ function buildProfileTable(){
   tbody.innerHTML='';
   profiles.forEach(function(p,i){
     var tr=document.createElement('tr');
-    tr.innerHTML=
-      '<td class="ptd-name"><input class="p-name-input" value="'+escHtml(p.name)+'" data-i="'+i+'" oninput="markSettingsDirty();updateProfileField('+i+',\'name\',this.value)"></td>'+
-      '<td class="ptd-num"><input class="p-num-input" type="number" min="0" max="100" step="0.1" value="'+p.trav+'" data-i="'+i+'" oninput="markSettingsDirty();updateProfileField('+i+',\'trav\',this.value)">%</td>'+
-      '<td class="ptd-num"><input class="p-num-input" type="number" min="0" max="100" step="0.1" value="'+p.roam+'" data-i="'+i+'" oninput="markSettingsDirty();updateProfileField('+i+',\'roam\',this.value)">%</td>'+
-      '<td class="ptd-del"><button class="p-del-btn'+(p.protected?' protected':'')+'" onclick="deleteProfileRow('+i+')" title="Delete">✕</button></td>';
+
+    var tdName=document.createElement('td');
+    tdName.className='ptd-name';
+    var nameInput=document.createElement('input');
+    nameInput.className='p-name-input';
+    nameInput.value=p.name;
+    nameInput.addEventListener('input',function(e){updateProfileField(i,'name',e.target.value);});
+    tdName.appendChild(nameInput);
+
+    var tdTrav=document.createElement('td');
+    tdTrav.className='ptd-num';
+    var travInput=document.createElement('input');
+    travInput.className='p-num-input';
+    travInput.type='number';
+    travInput.min='0';
+    travInput.max='100';
+    travInput.step='0.1';
+    travInput.value=p.trav;
+    travInput.addEventListener('input',function(e){updateProfileField(i,'trav',e.target.value);});
+    tdTrav.appendChild(travInput);
+    tdTrav.appendChild(document.createTextNode('%'));
+
+    var tdRoam=document.createElement('td');
+    tdRoam.className='ptd-num';
+    var roamInput=document.createElement('input');
+    roamInput.className='p-num-input';
+    roamInput.type='number';
+    roamInput.min='0';
+    roamInput.max='100';
+    roamInput.step='0.1';
+    roamInput.value=p.roam;
+    roamInput.addEventListener('input',function(e){updateProfileField(i,'roam',e.target.value);});
+    tdRoam.appendChild(roamInput);
+    tdRoam.appendChild(document.createTextNode('%'));
+
+    var tdDel=document.createElement('td');
+    tdDel.className='ptd-del';
+    var delBtn=document.createElement('button');
+    delBtn.type='button';
+    delBtn.className='p-del-btn'+(p.protected?' protected':'');
+    delBtn.title='Delete';
+    delBtn.textContent='✕';
+    delBtn.disabled=!!p.protected;
+    delBtn.addEventListener('click',function(){deleteProfileRow(i);});
+    tdDel.appendChild(delBtn);
+
+    tr.appendChild(tdName);
+    tr.appendChild(tdTrav);
+    tr.appendChild(tdRoam);
+    tr.appendChild(tdDel);
     tbody.appendChild(tr);
   });
 }
 
-function markSettingsDirty(){ settingsDirty=true; updateSettingsTabLabel(); }
-
 function updateProfileField(i,field,val){
-  if(field==='name'){
-    profiles[i].name=val;
-  } else {
-    var num=parseFloat(val);
-    if(!isNaN(num)) profiles[i][field]=num;
-    // If invalid, preserve previous value — browser native validation handles display
-  }
+  if(!profiles[i]) return;
+  if(field==='name') profiles[i].name=String(val||'').trim()||'Untitled profile';
+  else profiles[i][field]=clampPct(val,0);
 }
 
 function addProfileRow(){
   profiles.push({name:'New profile',trav:14.3,roam:73.3,protected:false});
-  settingsDirty=true;
-  updateSettingsTabLabel();
   buildProfileTable();
+  populatePresetDropdowns();
 }
 
 function deleteProfileRow(i){
-  if(profiles[i].protected) return;
+  if(!profiles[i]||profiles[i].protected) return;
   profiles.splice(i,1);
-  settingsDirty=true;
-  updateSettingsTabLabel();
   buildProfileTable();
+  populatePresetDropdowns();
+  calcAll();
 }
 
-function escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;');}
 
 function populatePresetDropdowns(){
-  ['a','b'].forEach(function(tab){
+  ['a','b','c'].forEach(function(tab){
     var sel=document.getElementById('preset-select-'+tab);
-    // Track selection by name so index shifts after delete don't corrupt selection
-    var currentName='';
-    var ci=parseInt(sel.value);
-    if(!isNaN(ci) && profiles[ci]) currentName=profiles[ci].name;
+    var current=sel.value;
     sel.innerHTML='<option value="">— Select a profile —</option>';
-    var matchIdx=0; // default to Enterprise base (index 0)
     profiles.forEach(function(p,i){
       var opt=document.createElement('option');
       opt.value=i;
       opt.textContent=p.name;
       sel.appendChild(opt);
-      if(currentName && p.name===currentName) matchIdx=i;
     });
-    sel.value=matchIdx;
+    // Restore previous selection, or default to Enterprise base (index 0)
+    if(current!=='' && profiles[parseInt(current)]) sel.value=current;
+    else sel.value='0';
   });
 }
 
@@ -655,6 +1703,15 @@ function applyPreset(tab){
     document.getElementById('sa-roam').value=p.roam;
     document.getElementById('preset-custom-a').classList.remove('show');
     calcA();
+    fillAllSliders();
+  } else if(tab==='c'){
+    document.getElementById('sc-trav').value=p.trav;
+    document.getElementById('nc-trav').value=p.trav;
+    document.getElementById('sc-roam').value=p.roam;
+    document.getElementById('nc-roam').value=p.roam;
+    document.getElementById('preset-custom-c').classList.remove('show');
+    calcC();
+    fillAllSliders();
   } else {
     // For Tab B, preset sets implied roamer count based on default acct size
     var acct=parseInt(document.getElementById('nb-acct').value)||1000;
@@ -665,48 +1722,61 @@ function applyPreset(tab){
     sl.value=Math.min(roamers,acct);
     document.getElementById('preset-custom-b').classList.remove('show');
     calcB();
+    fillAllSliders();
   }
 }
 
 // Called when sliders are moved manually — marks preset as custom
+function popBadge(id){
+  var el=document.getElementById(id);
+  if(!el) return;
+  el.classList.remove('pop');
+  void el.offsetWidth;
+  el.classList.add('pop');
+  setTimeout(function(){el.classList.remove('pop');},400);
+}
+
 function onSliderA(){
+  syncSliderNum('sa-trav','na-trav');
+  syncSliderNum('sa-roam','na-roam');
   document.getElementById('preset-select-a').value='';
   document.getElementById('preset-custom-a').classList.add('show');
   calcA();
 }
 
-function onSliderB(){
-  document.getElementById('preset-select-b').value='';
-  document.getElementById('preset-custom-b').classList.add('show');
-  calcB();
-}
-
 // ── PLAN ────────────────────────────────────────────────────────────────────
 function getPlan(){
-  var days   =parseFloat(document.getElementById('n-days').value)||5.5;
-  var rate   =parseFloat(document.getElementById('n-rate').value)||29;
-  var monthly=parseFloat(document.getElementById('n-monthly').value)||35;
-  var mix    =parseFloat(document.getElementById('s-mix').value);
-  if(isNaN(mix)) mix=36;
-  var dailyA =days*rate;
-  // FORMULA: Weighted plan ARPU = (DRS% × dailyARPU) + ((100-DRS%) × monthlyARPU)
-  var planArpu=(mix/100)*dailyA+((100-mix)/100)*monthly;
-  return{days:days,rate:rate,monthly:monthly,mix:mix,dailyA:dailyA,planArpu:planArpu};
+  var plan=calculatePlan(
+    document.getElementById('n-days').value,
+    document.getElementById('n-rate').value,
+    document.getElementById('n-monthly').value,
+    document.getElementById('s-mix').value
+  );
+  document.getElementById('n-days').value=plan.days;
+  document.getElementById('n-rate').value=plan.rate;
+  document.getElementById('n-monthly').value=plan.monthly;
+  document.getElementById('s-mix').value=plan.mix;
+  document.getElementById('n-mix-num').value=plan.mix;
+  return plan;
 }
 
 function updatePlanDisplay(p){
-  document.getElementById('daily-arpu').textContent='$'+p.dailyA.toFixed(2);
-  document.getElementById('wtd-arpu').textContent='$'+p.planArpu.toFixed(2);
+  document.getElementById('daily-arpu').textContent=formatCurrency(p.dailyA,2);
+  document.getElementById('wtd-arpu').textContent=formatCurrency(p.planArpu,2);
   // Print summary
   document.getElementById('pp-days').textContent=p.days+' days';
-  document.getElementById('pp-rate').textContent='$'+p.rate;
-  document.getElementById('pp-monthly').textContent='$'+p.monthly;
-  document.getElementById('pp-wtd').textContent='$'+p.planArpu.toFixed(2);
+  document.getElementById('pp-rate').textContent=formatCurrency(p.rate,0);
+  document.getElementById('pp-monthly').textContent=formatCurrency(p.monthly,0);
+  document.getElementById('pp-wtd').textContent=formatCurrency(p.planArpu,2);
   document.getElementById('pp-mix').textContent=p.mix+'% Daily Plans / '+(100-p.mix)+'% Monthly Passes';
 }
 
 function onMix(v){
-  v=parseFloat(v);
+  v=clampPct(v,36);
+  var sl=document.getElementById('s-mix');
+  sl.value=v;
+  document.getElementById('n-mix-num').value=v;
+  setSliderFill(sl);
   document.getElementById('v-mix-a').textContent=v+'%';
   document.getElementById('bar-d').style.width=v+'%';
   document.getElementById('bar-m').style.width=(100-v)+'%';
@@ -717,11 +1787,60 @@ function onMix(v){
 
 function onPlan(){calcAll();}
 
+// ── SLIDER FILL — sets --val on each range input for the track gradient ──────
+function setSliderFill(el){
+  var min=parseFloat(el.min)||0;
+  var max=parseFloat(el.max)||100;
+  var val=parseFloat(el.value)||0;
+  var pct=((val-min)/(max-min))*100;
+  el.style.setProperty('--val',pct.toFixed(1)+'%');
+}
+function fillAllSliders(){
+  document.querySelectorAll('input[type=range]').forEach(function(sl){
+    setSliderFill(sl);
+    var numId=sl.id.replace(/^sa-/,'na-').replace(/^sc-/,'nc-').replace(/^sb-/,'nb-').replace(/^s-mix$/,'n-mix-num');
+    var nm=document.getElementById(numId);
+    if(nm) nm.value=sl.value;
+  });
+}
+
+// ── SLIDER ↔ NUMBER INPUT SYNC ───────────────────────────────────────────────
+function syncSliderNum(sliderId,numId){
+  var sl=document.getElementById(sliderId);
+  var nm=document.getElementById(numId);
+  if(!sl||!nm) return;
+  nm.value=parseFloat(sl.value);
+  setSliderFill(sl);
+}
+function syncNumSlider(numId,sliderId){
+  var nm=document.getElementById(numId);
+  var sl=document.getElementById(sliderId);
+  if(!sl||!nm) return;
+  var min=parseFloat(sl.min)||0;
+  var max=parseFloat(sl.max)||100;
+  var val=parseFloat(nm.value);
+  if(isNaN(val)) return;
+  val=Math.min(max,Math.max(min,val));
+  sl.value=val;
+  setSliderFill(sl);
+}
+
+// ── FLASH helper — brief highlight when a value updates ──────────────────────
+function flash(id){
+  var el=document.getElementById(id);
+  if(!el) return;
+  el.classList.remove('flash');
+  void el.offsetWidth;
+  el.classList.add('flash');
+  setTimeout(function(){el.classList.remove('flash');},600);
+}
+
 function calcAll(){
   var p=getPlan();
   updatePlanDisplay(p);
   if(currentTab==='a') calcA(p);
   else if(currentTab==='b') calcB(p);
+  else if(currentTab==='c') calcC(p);
 }
 
 // ── CALC A ──────────────────────────────────────────────────────────────────
@@ -729,139 +1848,272 @@ function calcAll(){
 // All display-only — no side effects on other state
 function calcA(p){
   p=p||getPlan();
-  var trav  =parseFloat(document.getElementById('sa-trav').value)||0;
-  var roam  =parseFloat(document.getElementById('sa-roam').value)||0;
-  var acct  =parseInt(document.getElementById('na-acct').value)||1000;
+  var scenario=calculateTravelScenario(
+    document.getElementById('na-acct').value,
+    document.getElementById('sa-trav').value,
+    document.getElementById('sa-roam').value,
+    p.planArpu
+  );
+  var trav=scenario.trav;
+  var roam=scenario.roam;
+  var acct=scenario.acct;
+  var pen=scenario.penetration;
+  var blended=scenario.blendedArpu;
+  var travellers=scenario.travellers;
+  var roamers=scenario.activeRoamers;
+  var silent=scenario.silentRoamers;
+  var exactMonthlyRevenue=scenario.monthlyRevenue;
+  var exactAnnualRevenue=scenario.annualRevenue;
+  var planArpuText=formatCurrency(p.planArpu,2);
 
-  // Core calculation
-  var pen       =(trav/100)*(roam/100);
-  var travellers=Math.round((trav/100)*acct);
-  var roamers   =Math.round(pen*acct);
-  var silent    =travellers-roamers;
-  // Revenue derived from rounded roamer count so displayed arithmetic is consistent:
-  // rev displayed == displayed_roamers × displayed_planArpu
-  var rev       =Math.round(roamers*p.planArpu);
-  var blended   =acct>0 ? rev/acct : 0;
+  document.getElementById('sa-trav').value=trav;
+  document.getElementById('na-trav').value=trav;
+  document.getElementById('sa-roam').value=roam;
+  document.getElementById('na-roam').value=roam;
+  document.getElementById('na-acct').value=acct;
 
-  // Active preset name for assumptions
   var selA=document.getElementById('preset-select-a');
-  var pidx=parseInt(selA.value);
+  var pidx=parseInt(selA.value,10);
   var profName=(!isNaN(pidx)&&profiles[pidx])?profiles[pidx].name:'Custom';
 
-  // Update display
-  document.getElementById('va-trav').textContent  =trav.toFixed(1)+'%';
-  document.getElementById('va-roam').textContent  =roam.toFixed(1)+'%';
-  document.getElementById('oa-arpu').textContent  ='$'+blended.toFixed(2);
-  document.getElementById('oa-pen').textContent   =(pen*100).toFixed(1)+'%';
-  document.getElementById('oa-plan').textContent  ='$'+p.planArpu.toFixed(2);
-  document.getElementById('oa-rev').textContent   ='$'+rev.toLocaleString();
-  document.getElementById('oa-acct').textContent  =acct.toLocaleString();
-  document.getElementById('oa-trav').textContent  =travellers.toLocaleString();
+  document.getElementById('va-trav').textContent=formatPercent(trav,1);
+  document.getElementById('va-roam').textContent=formatPercent(roam,1);
+  var blendedStr=formatCurrency(blended,2);
+  var heroA=document.getElementById('oa-arpu');
+  heroA.classList.add('updating');
+  setTimeout(function(){
+    countUp('oa-arpu',blendedStr);
+    heroA.classList.remove('updating');
+    heroA.classList.remove('flash');
+    void heroA.offsetWidth;
+    heroA.classList.add('flash');
+  },120);
+  document.getElementById('oa-pen').textContent=formatPercent(pen*100,1);
+  document.getElementById('oa-plan').textContent=planArpuText;
+  document.getElementById('oa-rev').textContent=formatCurrency(exactMonthlyRevenue,2);
+  document.getElementById('oa-rev-annual').textContent=formatCurrency(exactAnnualRevenue,2);
+  document.getElementById('oa-acct').textContent=acct.toLocaleString();
+  document.getElementById('na-acct-fmt').textContent='= '+acct.toLocaleString()+' lines';
+  document.getElementById('oa-trav').textContent=travellers.toLocaleString();
   document.getElementById('oa-roamers').textContent=roamers.toLocaleString();
   document.getElementById('oa-silent').textContent=silent.toLocaleString();
-  // Formula
-  document.getElementById('fa-trav').textContent  =trav.toFixed(1)+'%';
-  document.getElementById('fa-roam').textContent  =roam.toFixed(1)+'%';
-  document.getElementById('fa-pen').textContent   =(pen*100).toFixed(1)+'%';
-  document.getElementById('fa-pen2').textContent  =(pen*100).toFixed(1)+'%';
-  document.getElementById('fa-plan').textContent  ='$'+Math.round(p.planArpu);
-  document.getElementById('fa-out').textContent   ='$'+blended.toFixed(2);
-  // Assumptions
+  document.getElementById('fa-trav').textContent=formatPercent(trav,1);
+  document.getElementById('fa-roam').textContent=formatPercent(roam,1);
+  document.getElementById('fa-pen').textContent=formatPercent(pen*100,1);
+  document.getElementById('fa-pen2').textContent=formatPercent(pen*100,1);
+  document.getElementById('fa-plan').textContent=planArpuText;
+  document.getElementById('fa-out').textContent=blendedStr;
   document.getElementById('aa-profile').textContent=profName;
-  document.getElementById('aa-trav').textContent  =trav.toFixed(1)+'%';
-  document.getElementById('aa-roam').textContent  =roam.toFixed(1)+'%';
-  document.getElementById('aa-silent').textContent=(100-roam).toFixed(1)+'%';
-  document.getElementById('aa-pen').textContent   =(pen*100).toFixed(1)+'%';
+  document.getElementById('aa-trav').textContent=formatPercent(trav,1);
+  document.getElementById('aa-roam').textContent=formatPercent(roam,1);
+  document.getElementById('aa-silent').textContent=formatPercent(100-roam,1);
+  document.getElementById('aa-pen').textContent=formatPercent(pen*100,1);
   document.getElementById('aa-mix').innerHTML='<span style="color:var(--blue);">'+p.mix+'% Daily</span> / <span style="color:var(--green);">'+(100-p.mix)+'% Monthly</span>';
-  document.getElementById('aa-days').textContent  =p.days+' days';
-  document.getElementById('aa-rate').textContent  ='$'+p.rate+' / day';
-  document.getElementById('aa-daily').textContent ='$'+p.dailyA.toFixed(2);
-  document.getElementById('aa-monthly').textContent='$'+p.monthly.toFixed(2);
-  document.getElementById('aa-plan').textContent  ='$'+p.planArpu.toFixed(2);
+  document.getElementById('aa-days').textContent=p.days+' days';
+  document.getElementById('aa-rate').textContent=formatCurrency(p.rate,0)+' / day';
+  document.getElementById('aa-daily').textContent=formatCurrency(p.dailyA,2);
+  document.getElementById('aa-monthly').textContent=formatCurrency(p.monthly,2);
+  document.getElementById('aa-plan').textContent=planArpuText;
 }
 
 // ── CALC B ──────────────────────────────────────────────────────────────────
 // FORMULA: blended = (roamers/acct) × planArpu
 function calcB(p){
   p=p||getPlan();
-  var acct   =parseInt(document.getElementById('nb-acct').value)||1000;
-  var sl     =document.getElementById('sb-roamers');
-  // Slider max always equals account size — never cache a stale larger value
+  var acct=Math.max(1,clampInt(document.getElementById('nb-acct').value,1,1000));
+  var sl=document.getElementById('sb-roamers');
   sl.max=acct;
-  if(parseInt(sl.value)>acct){sl.value=acct;}
+  var roamers=clampInt(sl.value,0,0);
+  roamers=Math.min(roamers,acct);
+  sl.value=roamers;
+  document.getElementById('nb-roamers').value=roamers;
+  setSliderFill(sl);
   document.getElementById('sb-max').textContent=acct.toLocaleString();
-  var roamers=parseInt(sl.value)||1;
+  document.getElementById('nb-acct').value=acct;
+  document.getElementById('nb-acct-fmt').textContent='= '+acct.toLocaleString()+' lines';
 
-  // Core calculation — unchanged from original
-  var pen    =roamers/acct;
-  var blended=pen*p.planArpu;
-  var rev    =Math.round(blended*acct);
+  var defRoam=clampPct(document.getElementById('def-roam').value,73.3);
+  var basePen=clampPct(document.getElementById('def-base-pen').value,10.5);
+  var scenario=calculateRoamerScenario(acct,roamers,p.planArpu,defRoam,basePen);
+  var pen=scenario.penetration;
+  var blended=scenario.blendedArpu;
+  var exactMonthlyRevenue=scenario.monthlyRevenue;
+  var exactAnnualRevenue=scenario.annualRevenue;
+  var impTravDisplay=scenario.impliedTravellerPct===null?'—':(scenario.impliedTravellerPct>100?'> 100% — not feasible':formatPercent(scenario.impliedTravellerPct,1));
+  var planArpuText=formatCurrency(p.planArpu,2);
 
-  // Implied traveller %: pen / (defRoam/100) — display only, does NOT affect blended
-  var defRoam=parseFloat(document.getElementById('def-roam').value)||73.3;
-  var basePen=parseFloat(document.getElementById('def-base-pen').value)||10.5;
-  var impTrav=(pen/(defRoam/100))*100;
-  var impTravDisplay=impTrav>100?'> 100% — not feasible':impTrav.toFixed(1)+'%';
-
-  // Update display
-  document.getElementById('vb-roamers').textContent =roamers.toLocaleString();
-  document.getElementById('vb-imp').textContent     =impTravDisplay;
-  document.getElementById('vb-roam-ref').textContent=defRoam.toFixed(1)+'%';
-  document.getElementById('ob-rev').textContent     ='$'+rev.toLocaleString();
-  document.getElementById('ob-pen').textContent     =(pen*100).toFixed(1)+'%';
-  document.getElementById('ob-plan').textContent    ='$'+p.planArpu.toFixed(2);
-  document.getElementById('ob-blended').textContent ='$'+blended.toFixed(2);
-  document.getElementById('ob-roamers').textContent =roamers.toLocaleString()+' lines';
-  // Formula
-  document.getElementById('fb-roamers').textContent =roamers.toLocaleString();
-  document.getElementById('fb-acct').textContent    =acct.toLocaleString();
-  document.getElementById('fb-pen').textContent     =(pen*100).toFixed(1)+'%';
-  document.getElementById('fb-pen2').textContent    =(pen*100).toFixed(1)+'%';
-  document.getElementById('fb-plan').textContent    ='$'+Math.round(p.planArpu);
-  document.getElementById('fb-out').textContent     ='$'+blended.toFixed(2);
-  // Assumptions
-  document.getElementById('ab-direct').textContent  =roamers.toLocaleString();
-  document.getElementById('ab-pen').textContent     =(pen*100).toFixed(1)+'%';
-  document.getElementById('ab-imp').textContent     =impTravDisplay;
+  document.getElementById('vb-roamers').textContent=roamers.toLocaleString();
+  document.getElementById('vb-imp').textContent=impTravDisplay;
+  document.getElementById('vb-roam-ref').textContent=formatPercent(defRoam,1);
+  document.getElementById('ob-rev').textContent=formatCurrency(exactMonthlyRevenue,2);
+  document.getElementById('ob-rev-annual').textContent=formatCurrency(exactAnnualRevenue,2);
+  document.getElementById('ob-rev-sub-label').textContent='Revenue basis';
+  document.getElementById('ob-rev-sub').textContent=formatCurrency(exactMonthlyRevenue,0)+' / month';
+  document.getElementById('ob-pen').textContent=formatPercent(pen*100,1);
+  document.getElementById('ob-plan').textContent=planArpuText;
+  var blendedBStr=formatCurrency(blended,2);
+  var heroB=document.getElementById('ob-blended');
+  heroB.classList.add('updating');
+  setTimeout(function(){
+    countUp('ob-blended',blendedBStr);
+    heroB.classList.remove('updating');
+    heroB.classList.remove('flash');
+    void heroB.offsetWidth;
+    heroB.classList.add('flash');
+  },120);
+  document.getElementById('ob-roamers').textContent=roamers.toLocaleString()+' lines';
+  document.getElementById('fb-roamers').textContent=roamers.toLocaleString();
+  document.getElementById('fb-acct').textContent=acct.toLocaleString();
+  document.getElementById('fb-pen').textContent=formatPercent(pen*100,1);
+  document.getElementById('fb-pen2').textContent=formatPercent(pen*100,1);
+  document.getElementById('fb-plan').textContent=planArpuText;
+  document.getElementById('fb-out').textContent=blendedBStr;
+  document.getElementById('ab-direct').textContent=roamers.toLocaleString();
+  document.getElementById('ab-pen').textContent=formatPercent(pen*100,1);
+  document.getElementById('ab-imp').textContent=impTravDisplay;
   document.getElementById('ab-mix').innerHTML='<span style="color:var(--blue);">'+p.mix+'% Daily</span> / <span style="color:var(--green);">'+(100-p.mix)+'% Monthly</span>';
-  document.getElementById('ab-daily').textContent   ='$'+p.dailyA.toFixed(2);
-  document.getElementById('ab-monthly').textContent ='$'+p.monthly.toFixed(2);
-  document.getElementById('ab-plan').textContent    ='$'+p.planArpu.toFixed(2);
-  // Warning
-  document.getElementById('wb-base').textContent    =basePen.toFixed(1)+'%';
-  document.getElementById('wb-pen').textContent     =(pen*100).toFixed(1)+'%';
-  document.getElementById('wb-warn').classList.toggle('show',pen*100>basePen);
+  document.getElementById('ab-daily').textContent=formatCurrency(p.dailyA,2);
+  document.getElementById('ab-monthly').textContent=formatCurrency(p.monthly,2);
+  document.getElementById('ab-plan').textContent=planArpuText;
+  document.getElementById('wb-base').textContent=formatPercent(basePen,1);
+  document.getElementById('wb-pen').textContent=formatPercent(pen*100,1);
+  document.getElementById('wb-warn').classList.toggle('show',scenario.warn);
+}
+
+// ── CALC C ──────────────────────────────────────────────────────────────────
+// FORMULA: lines = targetRev / (trav/100 × roam/100 × planArpu)
+function onSliderC(){
+  syncSliderNum('sc-trav','nc-trav');
+  syncSliderNum('sc-roam','nc-roam');
+  document.getElementById('preset-select-c').value='';
+  document.getElementById('preset-custom-c').classList.add('show');
+  calcC();
+}
+
+function calcC(p){
+  p=p||getPlan();
+  var scenario=calculateTargetScenario(
+    document.getElementById('nc-target').value,
+    document.getElementById('sc-trav').value,
+    document.getElementById('sc-roam').value,
+    p.planArpu
+  );
+  var targetAnnual=scenario.targetAnnual;
+  var targetMonthly=scenario.targetMonthly;
+  var trav=scenario.trav;
+  var roam=scenario.roam;
+  var pen=scenario.penetration;
+  var blended=scenario.blendedArpu;
+  var infeas=scenario.infeasible;
+  var lines=scenario.linesNeeded;
+  var roamers=scenario.activeRoamers;
+  var travellers=scenario.travellers;
+  var nonRoaming=scenario.nonRoamingLines;
+  var planArpuText=formatCurrency(p.planArpu,2);
+
+  document.getElementById('nc-target').value=targetAnnual;
+  document.getElementById('sc-trav').value=trav;
+  document.getElementById('nc-trav').value=trav;
+  document.getElementById('sc-roam').value=roam;
+  document.getElementById('nc-roam').value=roam;
+
+  var selC=document.getElementById('preset-select-c');
+  var pidx=parseInt(selC.value,10);
+  var profName=(!isNaN(pidx)&&profiles[pidx])?profiles[pidx].name:'Custom';
+  var targetFmt=formatCurrency(targetAnnual,0)+' / yr';
+
+  document.getElementById('vc-trav').textContent=formatPercent(trav,1);
+  document.getElementById('vc-roam').textContent=formatPercent(roam,1);
+  var linesStr=infeas?'—':Math.ceil(lines).toLocaleString();
+  var heroC=document.getElementById('oc-lines');
+  heroC.classList.add('updating');
+  setTimeout(function(){
+    if(!infeas) countUp('oc-lines',linesStr);
+    else heroC.textContent='—';
+    heroC.classList.remove('updating');
+    heroC.classList.remove('flash');
+    void heroC.offsetWidth;
+    heroC.classList.add('flash');
+  },120);
+  document.getElementById('oc-lines-sub').textContent=infeas?'—':'at '+formatCurrency(blended,2)+' blended roaming ARPU per line, per month';
+  document.getElementById('oc-rev-monthly').textContent=infeas?'—':formatCurrency(targetMonthly,2);
+  document.getElementById('oc-rev-annual').textContent=infeas?'—':formatCurrency(targetAnnual,2);
+  document.getElementById('oc-blended').textContent=formatCurrency(blended,2);
+  document.getElementById('oc-pen').textContent=formatPercent(pen*100,1);
+  document.getElementById('oc-plan').textContent=planArpuText;
+  document.getElementById('oc-roamers').textContent=infeas?'—':Math.ceil(roamers).toLocaleString()+' lines';
+  document.getElementById('oc-travellers').textContent=infeas?'—':Math.ceil(travellers).toLocaleString()+' lines';
+  document.getElementById('oc-nonroaming').textContent=infeas?'—':Math.ceil(nonRoaming).toLocaleString()+' lines';
+  document.getElementById('wc-warn').style.display=infeas?'block':'none';
+  document.getElementById('wc-warn-msg').textContent=
+    p.planArpu<=0?'Weighted plan ARPU is zero — adjust plan assumptions.':
+    pen<=0?'Roaming penetration is zero — increase Traveller % and Active Roamer %, or use 0% only when modelling a no-travel month.':
+    'Blended ARPU is zero — adjust travel behaviour or plan assumptions.';
+  document.getElementById('fc-trav').textContent=formatPercent(trav,1);
+  document.getElementById('fc-roam').textContent=formatPercent(roam,1);
+  document.getElementById('fc-pen').textContent=formatPercent(pen*100,1);
+  document.getElementById('fc-plan').textContent=planArpuText;
+  document.getElementById('fc-blended').textContent=formatCurrency(blended,2);
+  document.getElementById('fc-target').textContent=formatCurrency(targetMonthly,0);
+  document.getElementById('fc-blended2').textContent=formatCurrency(blended,2);
+  document.getElementById('fc-lines').textContent=infeas?'—':Math.ceil(lines).toLocaleString();
+  document.getElementById('ac-profile').textContent=profName;
+  document.getElementById('ac-trav').textContent=formatPercent(trav,1);
+  document.getElementById('ac-roam').textContent=formatPercent(roam,1);
+  document.getElementById('ac-pen').textContent=formatPercent(pen*100,1);
+  document.getElementById('ac-blended').textContent=formatCurrency(blended,2);
+  document.getElementById('ac-target').textContent=targetFmt;
+  document.getElementById('ac-lines').textContent=infeas?'—':Math.ceil(lines).toLocaleString();
+  document.getElementById('ac-mix').innerHTML='<span style="color:var(--blue);">'+p.mix+'% Daily</span> / <span style="color:var(--green);">'+(100-p.mix)+'% Monthly</span>';
+  document.getElementById('ac-daily').textContent=formatCurrency(p.dailyA,2);
+  document.getElementById('ac-monthly').textContent=formatCurrency(p.monthly,2);
+  document.getElementById('ac-plan').textContent=planArpuText;
+}
+
+// ── SLIDING TAB PILL — uses getBoundingClientRect for reliability ────────────
+
+
+function initTabPill(){
+  var nav=document.querySelector('.tab-nav');
+  if(!nav) return;
+  var pill=document.createElement('div');
+  pill.className='tab-pill';
+  nav.appendChild(pill);
+  // Disable transition on first paint to avoid animate-from-zero
+  pill.style.transition='none';
+  requestAnimationFrame(function(){
+    moveTabPill();
+    requestAnimationFrame(function(){
+      pill.style.transition='';
+    });
+  });
+}
+
+function moveTabPill(){
+  var nav=document.querySelector('.tab-nav');
+  var activeTab=document.querySelector('.tab.active');
+  var pill=document.querySelector('.tab-pill');
+  if(!nav||!activeTab||!pill) return;
+  var navRect=nav.getBoundingClientRect();
+  var tabRect=activeTab.getBoundingClientRect();
+  var leftOffset=tabRect.left - navRect.left;
+  pill.style.left=leftOffset+'px';
+  pill.style.width=tabRect.width+'px';
 }
 
 // ── TABS ────────────────────────────────────────────────────────────────────
-function updateSettingsTabLabel(){
-  var btn=document.querySelector('.tab[onclick="setTab(\'settings\')"]');
-  if(btn) btn.textContent=(settingsDirty ? '⚙ Settings ●' : '⚙ Settings');
-}
-
 function setTab(t){
-  // Warn if leaving settings with unsaved changes
-  if(currentTab==='settings' && t!=='settings' && settingsDirty){
-    if(!confirm('You have unsaved settings changes. Leave without saving?')) return;
-    // Revert in-memory profiles to what's in storage
-    try{var raw=localStorage.getItem('singtel_profiles');if(raw) profiles=JSON.parse(raw);}catch(e){}
-    settingsDirty=false;
-    updateSettingsTabLabel();
-    buildProfileTable();
-  }
-
   currentTab=t;
+  if(t==='a'||t==='b'||t==='c') lastScenarioTab=t;
   document.querySelectorAll('.tab').forEach(function(b,i){
-    b.classList.toggle('active',['a','b','settings'][i]===t);
+    var isActive=['a','b','c','settings'][i]===t;
+    b.classList.toggle('active',isActive);
+    b.setAttribute('aria-selected',isActive?'true':'false');
   });
   document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active');});
   document.getElementById('tab-'+t).classList.add('active');
+  requestAnimationFrame(moveTabPill);
 
-  // Disable export button when on settings tab (no calc data to export)
-  var exportBtn=document.querySelector('.btn-ghost[onclick="exportCSV()"]');
-  if(exportBtn) exportBtn.disabled=(t==='settings');
-
-  // Move plan panel to correct position using explicit anchors
   var pp=document.getElementById('plan-panel');
   if(t==='settings'){
     pp.style.display='none';
@@ -871,59 +2123,86 @@ function setTab(t){
     if(anchor) anchor.parentNode.insertBefore(pp, anchor);
   }
 
-  if(t!=='settings') calcAll();
+  var exportBtn=document.getElementById('btn-export');
+  if(exportBtn){
+    exportBtn.disabled=(t==='settings');
+    exportBtn.style.opacity=t==='settings'?'0.5':'';
+    exportBtn.style.cursor=t==='settings'?'not-allowed':'';
+    exportBtn.title=t==='settings'?'CSV export is only available for scenario tabs.':'Export current scenario as CSV';
+  }
+
+  if(t!=='settings'){calcAll();fillAllSliders();}
 }
 
 // ── RESET ───────────────────────────────────────────────────────────────────
 function getDefs(){
   return{
-    trav    :parseFloat(document.getElementById('def-trav').value)||14.3,
-    roam    :parseFloat(document.getElementById('def-roam').value)||73.3,
-    basePen :parseFloat(document.getElementById('def-base-pen').value)||10.5,
-    acct    :parseInt(document.getElementById('def-acct').value)||1000,
-    broamers:parseInt(document.getElementById('def-broamers').value)||105,
-    days    :parseFloat(document.getElementById('def-days').value)||5.5,
-    rate    :parseFloat(document.getElementById('def-rate').value)||29,
-    monthly :parseFloat(document.getElementById('def-monthly').value)||35,
-    mix     :parseFloat(document.getElementById('def-mix').value)||36
+    trav:clampPct(document.getElementById('def-trav').value,14.3),
+    roam:clampPct(document.getElementById('def-roam').value,73.3),
+    basePen:clampPct(document.getElementById('def-base-pen').value,10.5),
+    acct:clampInt(document.getElementById('def-acct').value,1,1000),
+    broamers:clampInt(document.getElementById('def-broamers').value,0,105),
+    days:clampNonNegative(document.getElementById('def-days').value,5.5),
+    rate:clampNonNegative(document.getElementById('def-rate').value,29),
+    monthly:clampNonNegative(document.getElementById('def-monthly').value,35),
+    mix:clampPct(document.getElementById('def-mix').value,36),
+    targetAnnual:clampNonNegative(document.getElementById('def-targetAnnual').value,36000000)
   };
 }
 
 function resetDefaults(){
   var d=getDefs();
-  document.getElementById('sa-trav').value  =d.trav;
-  document.getElementById('sa-roam').value  =d.roam;
-  document.getElementById('na-acct').value  =d.acct;
-  document.getElementById('nb-acct').value  =d.acct;
-  document.getElementById('sb-roamers').value=d.broamers;
-  document.getElementById('n-days').value   =d.days;
-  document.getElementById('n-rate').value   =d.rate;
+  document.getElementById('sa-trav').value=d.trav;
+  document.getElementById('na-trav').value=d.trav;
+  document.getElementById('sa-roam').value=d.roam;
+  document.getElementById('na-roam').value=d.roam;
+  document.getElementById('na-acct').value=d.acct;
+  document.getElementById('nb-acct').value=d.acct;
+  document.getElementById('sb-roamers').value=Math.min(d.broamers,d.acct);
+  document.getElementById('nb-roamers').value=Math.min(d.broamers,d.acct);
+  document.getElementById('n-days').value=d.days;
+  document.getElementById('n-rate').value=d.rate;
   document.getElementById('n-monthly').value=d.monthly;
-  document.getElementById('s-mix').value    =d.mix;
-  // Restore Enterprise base preset (index 0) to match reset values
-  document.getElementById('preset-select-a').value='0';
+  document.getElementById('s-mix').value=d.mix;
+  document.getElementById('n-mix-num').value=d.mix;
+  document.getElementById('nc-target').value=d.targetAnnual;
+  document.getElementById('preset-select-a').value='';
   document.getElementById('preset-custom-a').classList.remove('show');
-  document.getElementById('preset-select-b').value='0';
+  document.getElementById('preset-select-b').value='';
   document.getElementById('preset-custom-b').classList.remove('show');
+  document.getElementById('preset-select-c').value='';
+  document.getElementById('preset-custom-c').classList.remove('show');
+  document.getElementById('sc-trav').value=d.trav;
+  document.getElementById('nc-trav').value=d.trav;
+  document.getElementById('sc-roam').value=d.roam;
+  document.getElementById('nc-roam').value=d.roam;
   onMix(d.mix);
+  calcAll();
+  fillAllSliders();
 }
 
 // ── SAVE ALL SETTINGS ───────────────────────────────────────────────────────
 function saveAllSettings(){
-  // Read profiles from table inputs into profiles array
   var rows=document.querySelectorAll('#profile-tbody tr');
   rows.forEach(function(row,i){
     var inputs=row.querySelectorAll('input');
     if(profiles[i]){
-      profiles[i].name=inputs[0].value;
-      profiles[i].trav=parseFloat(inputs[1].value)||0;
-      profiles[i].roam=parseFloat(inputs[2].value)||0;
+      profiles[i].name=String(inputs[0].value||'').trim()||'Untitled profile';
+      profiles[i].trav=clampPct(inputs[1].value,0);
+      profiles[i].roam=clampPct(inputs[2].value,0);
+      inputs[0].value=profiles[i].name;
+      inputs[1].value=profiles[i].trav;
+      inputs[2].value=profiles[i].roam;
     }
   });
+  var defs=getDefs();
+  Object.keys(defs).forEach(function(k){
+    var el=document.getElementById('def-'+k);
+    if(el) el.value=defs[k];
+  });
   saveToStorage();
-  settingsDirty=false;
-  updateSettingsTabLabel();
   populatePresetDropdowns();
+  calcAll();
   var ok=document.getElementById('save-ok');
   ok.classList.add('show');
   setTimeout(function(){ok.classList.remove('show');},2500);
@@ -931,78 +2210,102 @@ function saveAllSettings(){
 
 // ── CSV EXPORT ──────────────────────────────────────────────────────────────
 function exportCSV(){
-  if(currentTab==='settings') return; // Nothing to export from settings
+  if(currentTab==='settings') return;
+
   var p=getPlan();
+  var exportTab=currentTab==='settings'?lastScenarioTab:currentTab;
   var rows=[];
   var ts=new Date().toISOString().slice(0,16).replace('T',' ');
   rows.push(['Singtel Enterprise Mobility — Roaming ARPU Simulator','']);
   rows.push(['Exported',ts]);
-  rows.push(['Mode',currentTab==='a'?'By travel behaviour':'By roamer count']);
+  rows.push(['Mode',exportTab==='a'?'By travel behaviour':exportTab==='b'?'By roamer count':'By revenue target']);
   rows.push(['','']);
 
-  if(currentTab==='a'){
-    var trav  =parseFloat(document.getElementById('sa-trav').value)||0;
-    var roam  =parseFloat(document.getElementById('sa-roam').value)||0;
-    var acct  =parseInt(document.getElementById('na-acct').value)||1000;
-    var pen        =(trav/100)*(roam/100);
-    var travellers =Math.round((trav/100)*acct);
-    var roamersA   =Math.round(pen*acct);
-    var silent     =travellers-roamersA;
-    // Consistent with calcA(): revenue = roamers × planArpu (no double-rounding)
-    var rev        =Math.round(roamersA*p.planArpu);
-    var blended    =acct>0 ? rev/acct : 0;
-    var selA  =document.getElementById('preset-select-a');
-    var pidx  =parseInt(selA.value);
+  if(exportTab==='c'){
+    var cscenario=calculateTargetScenario(
+      document.getElementById('nc-target').value,
+      document.getElementById('sc-trav').value,
+      document.getElementById('sc-roam').value,
+      p.planArpu
+    );
+    var cselC=document.getElementById('preset-select-c');
+    var cpidx=parseInt(cselC.value,10);
+    var cprofName=(!isNaN(cpidx)&&profiles[cpidx])?profiles[cpidx].name:'Custom';
+    rows.push(['SCENARIO INPUTS','']);
+    rows.push(['Industry profile',cprofName]);
+    rows.push(['Target annual revenue',formatCurrency(cscenario.targetAnnual,0)+' / yr']);
+    rows.push(['Target monthly revenue (÷12)',formatCurrency(cscenario.targetMonthly,0)]);
+    rows.push(['Traveller % of base',formatPercent(cscenario.trav,1)]);
+    rows.push(['Active roamer % of travellers',formatPercent(cscenario.roam,1)]);
+    rows.push(['','']);
+    rows.push(['RESULTS','']);
+    rows.push(['Lines needed',cscenario.infeasible?'Not achievable':Math.ceil(cscenario.linesNeeded).toLocaleString()]);
+    rows.push(['Blended ARPU / line / month',formatCurrency(cscenario.blendedArpu,2)]);
+    rows.push(['Roaming penetration of base',formatPercent(cscenario.penetration*100,1)]);
+    rows.push(['Weighted plan ARPU per active roamer',formatCurrency(p.planArpu,2)]);
+    rows.push(['Est. active roamers / month',cscenario.infeasible?'—':Math.ceil(cscenario.activeRoamers).toLocaleString()]);
+    rows.push(['Est. travellers / month',cscenario.infeasible?'—':Math.ceil(cscenario.travellers).toLocaleString()]);
+  } else if(exportTab==='a'){
+    var scenarioA=calculateTravelScenario(
+      document.getElementById('na-acct').value,
+      document.getElementById('sa-trav').value,
+      document.getElementById('sa-roam').value,
+      p.planArpu
+    );
+    var selA=document.getElementById('preset-select-a');
+    var pidx=parseInt(selA.value,10);
     var profName=(!isNaN(pidx)&&profiles[pidx])?profiles[pidx].name:'Custom';
 
     rows.push(['SCENARIO INPUTS','']);
     rows.push(['Industry profile',profName]);
-    rows.push(['Account size (lines)',acct]);
-    rows.push(['Traveller % of base',trav.toFixed(1)+'%']);
-    rows.push(['Active roamer % of travellers',roam.toFixed(1)+'%']);
+    rows.push(['Account size (lines)',scenarioA.acct]);
+    rows.push(['Traveller % of base',formatPercent(scenarioA.trav,1)]);
+    rows.push(['Active roamer % of travellers',formatPercent(scenarioA.roam,1)]);
     rows.push(['','']);
     rows.push(['RESULTS','']);
-    rows.push(['Blended roaming data ARPU / line / month','$'+blended.toFixed(2)]);
-    rows.push(['Roaming penetration of base',(pen*100).toFixed(1)+'%']);
-    rows.push(['Weighted plan ARPU (per active roamer)','$'+p.planArpu.toFixed(2)]);
-    rows.push(['Est. monthly roaming data revenue','$'+rev.toLocaleString()]);
-    rows.push(['Est. travellers / month',travellers]);
-    rows.push(['Est. active roamers / month',roamersA]);
-    rows.push(['Est. silent roamers / month',silent]);
+    rows.push(['Blended roaming data ARPU / line / month',formatCurrency(scenarioA.blendedArpu,2)]);
+    rows.push(['Roaming penetration of base',formatPercent(scenarioA.penetration*100,1)]);
+    rows.push(['Weighted plan ARPU (per active roamer)',formatCurrency(p.planArpu,2)]);
+    rows.push(['Est. monthly roaming data revenue',formatCurrency(scenarioA.monthlyRevenue,0)]);
+    rows.push(['Est. annual roaming data revenue',formatCurrency(scenarioA.annualRevenue,0)]);
+    rows.push(['Est. travellers / month',scenarioA.travellers]);
+    rows.push(['Est. active roamers / month',scenarioA.activeRoamers]);
+    rows.push(['Est. silent roamers / month',scenarioA.silentRoamers]);
   } else {
-    var acctB  =parseInt(document.getElementById('nb-acct').value)||1000;
-    var roamers=parseInt(document.getElementById('sb-roamers').value)||1;
-    var penB   =roamers/acctB;
-    var blendedB=penB*p.planArpu;
-    var revB   =Math.round(blendedB*acctB);
-    var defRoam=parseFloat(document.getElementById('def-roam').value)||73.3;
-    var impTrav=(penB/(defRoam/100))*100;
+    var scenarioB=calculateRoamerScenario(
+      document.getElementById('nb-acct').value,
+      document.getElementById('sb-roamers').value,
+      p.planArpu,
+      document.getElementById('def-roam').value,
+      document.getElementById('def-base-pen').value
+    );
 
     rows.push(['SCENARIO INPUTS','']);
-    rows.push(['Account size (lines)',acctB]);
-    rows.push(['Expected active roamers / month',roamers]);
+    rows.push(['Account size (lines)',scenarioB.acct]);
+    rows.push(['Expected active roamers / month',scenarioB.roamers]);
     rows.push(['','']);
     rows.push(['RESULTS','']);
-    rows.push(['Est. monthly roaming data revenue','$'+revB.toLocaleString()]);
-    rows.push(['Roaming penetration of base',(penB*100).toFixed(1)+'%']);
-    rows.push(['Weighted plan ARPU (per active roamer)','$'+p.planArpu.toFixed(2)]);
-    rows.push(['Blended ARPU / line (incl. non-roamers)','$'+blendedB.toFixed(2)]);
-    rows.push(['Implied traveller % (reference)',impTrav>100?'> 100%':impTrav.toFixed(1)+'%']);
+    rows.push(['Est. monthly roaming data revenue',formatCurrency(scenarioB.monthlyRevenue,0)]);
+    rows.push(['Est. annual roaming data revenue',formatCurrency(scenarioB.annualRevenue,0)]);
+    rows.push(['Roaming penetration of base',formatPercent(scenarioB.penetration*100,1)]);
+    rows.push(['Weighted plan ARPU (per active roamer)',formatCurrency(p.planArpu,2)]);
+    rows.push(['Blended ARPU / line (incl. non-roamers)',formatCurrency(scenarioB.blendedArpu,2)]);
+    rows.push(['Implied traveller % (reference)',scenarioB.impliedTravellerPct===null?'—':(scenarioB.impliedTravellerPct>100?'> 100%':formatPercent(scenarioB.impliedTravellerPct,1))]);
   }
 
   rows.push(['','']);
   rows.push(['PLAN ASSUMPTIONS','']);
   rows.push(['Daily Plans avg days / month',p.days]);
-  rows.push(['Daily Plans rate ($ / day)','$'+p.rate]);
-  rows.push(['Daily Plans ARPU / active roamer','$'+p.dailyA.toFixed(2)]);
-  rows.push(['Monthly Passes ARPU / active roamer','$'+p.monthly.toFixed(2)]);
+  rows.push(['Daily Plans rate ($ / day)',formatCurrency(p.rate,0)]);
+  rows.push(['Daily Plans ARPU / active roamer',formatCurrency(p.dailyA,2)]);
+  rows.push(['Monthly Passes ARPU / active roamer',formatCurrency(p.monthly,2)]);
   rows.push(['% of active roamers on Daily Plans',p.mix+'%']);
-  rows.push(['Weighted plan ARPU','$'+p.planArpu.toFixed(2)]);
+  rows.push(['Weighted plan ARPU',formatCurrency(p.planArpu,2)]);
 
   var csv=rows.map(function(r){
     return r.map(function(c){
       var s=String(c);
-      if(s.indexOf(',')>-1||s.indexOf('"')>-1||s.indexOf('\n')>-1){s='"'+s.replace(/"/g,'""')+'"';}
+      if(s.indexOf(',')>-1||s.indexOf('\"')>-1||s.indexOf('\n')>-1){s='\"'+s.replace(/\"/g,'\"\"')+'\"';}
       return s;
     }).join(',');
   }).join('\n');
@@ -1011,97 +2314,164 @@ function exportCSV(){
   var url=URL.createObjectURL(blob);
   var a=document.createElement('a');
   a.href=url;
-  a.download='roaming-arpu-'+(currentTab==='a'?'travel':'roamer')+'-'+new Date().toISOString().slice(0,10)+'.csv';
+  a.download='roaming-arpu-'+(exportTab==='a'?'travel':exportTab==='b'?'roamer':'target')+'-'+new Date().toISOString().slice(0,10)+'.csv';
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
 }
 
-// ── FORMULA TOGGLE ──────────────────────────────────────────────────────────
-function toggleFormula(tab){
-  var body=document.getElementById('formula-body-'+tab);
-  var btn=document.querySelector('#tab-'+tab+' .formula-toggle');
-  if(!body||!btn) return;
-  var collapsed=body.classList.toggle('collapsed');
-  btn.textContent=collapsed?'▸ expand':'▾ collapse';
+// Self-tests removed
+
+// ── COUNT-UP animation for hero values ───────────────────────────────────────
+function countUp(id, targetStr, duration){
+  duration = duration||350;
+  var el=document.getElementById(id);
+  if(!el) return;
+  // Parse numeric part from strings like "$8.37" or "358,566"
+  var isGradient=el.classList.contains('rh-value');
+  var prefix='', suffix='', num;
+  var stripped=targetStr.replace(/,/g,'');
+  var match=stripped.match(/^([^0-9\-]*)([0-9.]+)(.*)$/);
+  if(!match){el.textContent=targetStr;return;}
+  prefix=match[1]; num=parseFloat(match[2]); suffix=match[3];
+  var decimals=(match[2].indexOf('.')>-1)?match[2].split('.')[1].length:0;
+  var start=performance.now();
+  var startVal=parseFloat(el.textContent.replace(/[^0-9.]/g,''))||0;
+  function step(now){
+    var elapsed=now-start;
+    var progress=Math.min(elapsed/duration,1);
+    // Ease out cubic
+    var eased=1-Math.pow(1-progress,3);
+    var current=startVal+(num-startVal)*eased;
+    var formatted=prefix+current.toFixed(decimals).replace(/\B(?=(\d{3})+(?!\d))/g,',')+suffix;
+    if(isGradient){el.textContent=formatted;}
+    else{el.textContent=formatted;}
+    if(progress<1) requestAnimationFrame(step);
+    else{el.textContent=targetStr;}
+  }
+  requestAnimationFrame(step);
 }
 
-// ── SELF-TEST ───────────────────────────────────────────────────────────────
-// Runs silently on load. Logs failures to console only. Does not affect UI.
-function runTests(){
-  var pass=0; var fail=0;
-  function assert(label,actual,expected,tol){
-    tol=tol||0.001;
-    if(Math.abs(actual-expected)<=tol){pass++;}
-    else{fail++;console.warn('FAIL ['+label+']: got '+actual+', expected '+expected+' ±'+tol);}
+// ── SPLASH MOUSE EFFECTS ─────────────────────────────────────────────────────
+(function(){
+  var splash=null, spotlight=null, inner=null;
+  var mouseX=0.5, mouseY=0.5;
+  var lerpX=0.5, lerpY=0.5;
+  var raf=null;
+  var active=false;
+
+  function lerp(a,b,t){return a+(b-a)*t;}
+
+  function tick(){
+    if(!active) return;
+    // Smooth lerp toward mouse position
+    lerpX=lerp(lerpX,mouseX,0.07);
+    lerpY=lerp(lerpY,mouseY,0.07);
+
+    // Move spotlight to follow cursor
+    if(spotlight){
+      spotlight.style.background='radial-gradient(circle 500px at '+(lerpX*100)+'% '+(lerpY*100)+'%,rgba(165,180,252,0.14) 0%,rgba(99,102,241,0.06) 40%,transparent 70%)';
+    }
+
+    // Subtle tilt on inner card — max ±8deg
+    if(inner){
+      var tiltX=(lerpY-0.5)*-10;  // pitch
+      var tiltY=(lerpX-0.5)*12;   // yaw
+      inner.style.transform='perspective(900px) rotateX('+tiltX+'deg) rotateY('+tiltY+'deg) translateZ(0)';
+    }
+
+    raf=requestAnimationFrame(tick);
   }
-  function assertBool(label,actual,expected){
-    if(actual===expected){pass++;}
-    else{fail++;console.warn('FAIL ['+label+']: got '+actual+', expected '+expected);}
+
+  function onMove(e){
+    if(!splash) return;
+    var rect=splash.getBoundingClientRect();
+    mouseX=(e.clientX-rect.left)/rect.width;
+    mouseY=(e.clientY-rect.top)/rect.height;
   }
 
-  // getPlan formula: planArpu = (mix/100)*dailyA + ((100-mix)/100)*monthly
-  // Test 1: baseline defaults — 5.5×29=159.5; (0.36×159.5)+(0.64×35)=57.42+22.40=79.82
-  var dailyA=5.5*29; // 159.5
-  var planArpu=(36/100)*dailyA+((100-36)/100)*35;
-  assert('planArpu baseline',planArpu,79.82,0.01);
+  function onEnter(){
+    active=true;
+    if(raf) cancelAnimationFrame(raf);
+    raf=requestAnimationFrame(tick);
+  }
 
-  // Test 2: calcA penetration — pen = (14.3/100)×(73.3/100) = 0.104819
-  var pen=(14.3/100)*(73.3/100);
-  assert('pen baseline',pen*100,10.4819,0.01);
+  function onLeave(){
+    active=false;
+    if(raf) cancelAnimationFrame(raf);
+    // Reset tilt smoothly
+    if(inner) inner.style.transition='transform 0.8s cubic-bezier(0.16,1,0.3,1)';
+    if(inner) inner.style.transform='perspective(900px) rotateX(0deg) rotateY(0deg) translateZ(0)';
+    setTimeout(function(){if(inner) inner.style.transition='';},800);
+  }
 
-  // Test 3: blended ARPU = rev/acct (post revenue-from-roamers fix)
-  // roamers = Math.round(0.104819×1000) = 105; rev = Math.round(105×79.82) = 8381
-  // blended = 8381/1000 = 8.381
-  var roamersT3=Math.round(pen*1000);
-  var revT3=Math.round(roamersT3*planArpu);
-  var blendedT3=revT3/1000;
-  assert('blended baseline',blendedT3,8.381,0.01);
+  // Init after DOM ready
+  document.addEventListener('DOMContentLoaded',function(){
+    splash=document.getElementById('splash');
+    spotlight=document.getElementById('splash-spotlight');
+    inner=document.getElementById('splash-inner');
+    if(!splash) return;
+    splash.addEventListener('mousemove',onMove);
+    splash.addEventListener('mouseenter',onEnter);
+    splash.addEventListener('mouseleave',onLeave);
+  });
+})();
 
-  // Test 4: 100% Daily Plans mix → planArpu = dailyA
-  var p100=(100/100)*dailyA+0*35;
-  assert('100pct DRS planArpu',p100,dailyA,0.001);
+// ── SPLASH SCREEN ────────────────────────────────────────────────────────────
+function dismissSplash(e){
+  var splash=document.getElementById('splash');
+  var main=document.getElementById('main-content');
+  if(!splash||splash.classList.contains('hiding')) return;
 
-  // Test 5: 0% Daily Plans → planArpu = monthly
-  var p0=0*dailyA+(100/100)*35;
-  assert('0pct DRS planArpu',p0,35,0.001);
+  // Calculate click origin as percentage for iris centre
+  var x=50,y=50;
+  if(e&&e.clientX){
+    var rect=splash.getBoundingClientRect();
+    x=((e.clientX-rect.left)/rect.width*100).toFixed(1);
+    y=((e.clientY-rect.top)/rect.height*100).toFixed(1);
+  }
+  splash.style.setProperty('--click-x',x+'%');
+  splash.style.setProperty('--click-y',y+'%');
 
-  // Test 6: calcB formula — pen = roamers/acct
-  var penB=105/1000;
-  assert('calcB pen',penB,0.105,0.001);
-  // calcB revenue = Math.round(roamers × planArpu) — blended = rev/acct
-  var revB=Math.round(105*planArpu);
-  assert('calcB rev',revB,8381,1);
-
-  // Test 7: revenue = roamers × planArpu (rounded once — post Finding 2 fix)
-  assert('calcA rev',revT3,8381,1);
-
-  // Test 8: revenue consistency — rev == displayed_roamers × planArpu exactly
-  assert('rev consistency',revT3,Math.round(roamersT3*planArpu),0);
-
-  // Test 9: implied trav cap — boolean check via assertBool (not numeric tolerance)
-  var defRoam=73.3;
-  var impTrav=(1.0/(defRoam/100))*100; // pen=100% → >100
-  assertBool('impTrav at 100pct pen > 100',impTrav>100,true);
-
-  // Test 10: preset apply — Consulting/Finance: pen = 0.28×0.85 = 0.238
-  var presetPen=(28/100)*(85/100);
-  assert('preset pen consulting',presetPen*100,23.8,0.01);
-
-  // Test 11: warning threshold is strictly > basePen, not >=
-  var basePen=10.5;
-  assertBool('warning at exactly basePen is OFF', (10.5*100)>basePen*100, false);
-  assertBool('warning just above basePen is ON',  (10.6*100)>basePen*100, true);
-
-  if(fail>0) console.warn('runTests: '+fail+' failure(s), '+pass+' passed.');
+  // Start iris: briefly expand to full to avoid flash, then close
+  splash.style.clipPath='circle(150% at '+x+'% '+y+'%)';
+  // Force a reflow so the starting state is painted before we add .hiding
+  void splash.offsetWidth;
+  splash.classList.add('hiding');
+  main.classList.add('visible');
+  setTimeout(function(){
+    splash.style.display='none';
+  },700);
 }
+// Also dismiss on keyboard
+document.addEventListener('keydown',function(e){
+  if(e.key==='Enter'||e.key===' '||e.key==='Escape') dismissSplash(null);
+});
+
+window.__simTestApi={
+  clamp:clamp,
+  clampPct:clampPct,
+  clampInt:clampInt,
+  clampNonNegative:clampNonNegative,
+  calculatePlan:calculatePlan,
+  calculateTravelScenario:calculateTravelScenario,
+  calculateRoamerScenario:calculateRoamerScenario,
+  calculateTargetScenario:calculateTargetScenario,
+  getPlan:getPlan,
+  calcA:calcA,
+  calcB:calcB,
+  calcC:calcC,
+  getCurrentTab:function(){return currentTab;},
+  getLastScenarioTab:function(){return lastScenarioTab;}
+};
 
 // ── INIT ────────────────────────────────────────────────────────────────────
 loadFromStorage();
 buildProfileTable();
 populatePresetDropdowns();
-runTests();
+initTabPill();
+window.addEventListener('resize', moveTabPill);
 setTab('a'); // calls calcAll internally, AND moves plan panel to correct position
 </script>
 </body>
