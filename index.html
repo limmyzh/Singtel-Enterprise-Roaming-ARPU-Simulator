@@ -916,6 +916,55 @@ input[type=range]::-moz-range-thumb{
   opacity:1;
   transform:translateY(0);
 }
+
+
+/* ── Revenue ramp-up panel ── */
+.ramp-panel{margin-bottom:14px;}
+.ramp-note{
+  background:linear-gradient(135deg,#f8faff,#f2f5ff);
+  border:1px solid var(--i100);border-radius:var(--r-sm);
+  padding:12px 14px;font-size:11px;color:var(--text2);line-height:1.7;
+  margin-bottom:16px;font-weight:600;
+}
+.ramp-profile-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:16px;}
+.ramp-profile-label{font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.06em;}
+.ramp-toggle-group{display:flex;gap:8px;flex-wrap:wrap;}
+.ramp-toggle{
+  border:1px solid var(--border2);background:#fff;color:var(--text2);
+  border-radius:999px;padding:8px 14px;font-size:11px;font-weight:800;
+  cursor:pointer;transition:all var(--t) var(--ease-out);box-shadow:var(--s-xs);
+}
+.ramp-toggle:hover{transform:translateY(-1px);box-shadow:var(--s-sm);border-color:var(--i300);}
+.ramp-toggle.active{background:var(--grad-brand);color:#fff;border-color:transparent;box-shadow:var(--s-indigo);}
+.ramp-select-wrap{display:flex;align-items:center;gap:8px;margin-left:auto;flex-wrap:wrap;}
+.ramp-select-label{font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.06em;}
+.ramp-select{font-family:'Manrope',sans-serif;font-size:11px;font-weight:800;padding:8px 12px;border:1px solid var(--border2);border-radius:999px;background:#fff;color:var(--text2);cursor:pointer;box-shadow:var(--s-xs);outline:none;transition:all var(--t) var(--ease-out);}
+.ramp-select:hover{border-color:var(--i300);box-shadow:var(--s-sm);}
+.ramp-select:focus{border-color:var(--i500);box-shadow:0 0 0 3px rgba(99,102,241,0.12);}
+.ramp-summary-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px;}
+@media(max-width:760px){.ramp-summary-grid{grid-template-columns:1fr 1fr;}}
+@media(max-width:480px){.ramp-summary-grid{grid-template-columns:1fr;}}
+.ramp-card{border:1px solid var(--i100);border-radius:var(--r-sm);padding:14px;background:linear-gradient(135deg,#fff,#f8faff);}
+.ramp-card-label{font-family:'Syne',sans-serif;font-size:9px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--text3);margin-bottom:7px;}
+.ramp-card-value{font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:700;color:var(--i700);letter-spacing:-0.03em;}
+.ramp-card-sub{font-size:10px;color:var(--text3);margin-top:6px;line-height:1.5;font-weight:600;}
+.ramp-chart-wrap{border:1px solid var(--border);border-radius:var(--r-sm);background:linear-gradient(180deg,#fff 0%,#fafbff 100%);padding:14px;margin-bottom:18px;}
+.ramp-chart-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px;}
+.ramp-chart-title{font-size:11px;font-weight:800;color:var(--text2);}
+.ramp-chart-legend{display:flex;gap:12px;flex-wrap:wrap;font-size:10px;color:var(--text3);font-weight:700;}
+.ramp-legend-item{display:flex;align-items:center;gap:6px;}
+.ramp-legend-line{width:18px;height:0;border-top:2px solid var(--i500);}
+.ramp-legend-line.target{border-top:2px dashed var(--red);}
+.ramp-canvas{width:100%;height:320px;display:block;}
+.ramp-table-wrap{overflow:auto;border:1px solid var(--border);border-radius:var(--r-sm);}
+.ramp-table{width:100%;border-collapse:collapse;background:#fff;min-width:720px;}
+.ramp-table th{font-family:'Syne',sans-serif;font-size:9px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--text3);text-align:left;padding:10px 12px;border-bottom:1px solid var(--border);background:#fafbff;}
+.ramp-table td{padding:10px 12px;border-bottom:1px solid var(--border);font-size:11px;color:var(--text2);font-weight:600;}
+.ramp-table tr:last-child td{border-bottom:none;}
+.ramp-table tr:hover td{background:var(--i50);}
+.ramp-table .mono{font-family:'JetBrains Mono',monospace;}
+.ramp-table .hi{color:var(--i700);font-weight:700;}
+
 </style>
 
 </head>
@@ -956,14 +1005,14 @@ input[type=range]::-moz-range-thumb{
 
 <!-- TABS -->
 <div class="tab-nav no-print" role="tablist" aria-label="Simulator modes">
-  <button type="button" class="tab active" role="tab" aria-selected="true" onclick="setTab('a')">By travel behaviour</button>
+  <button type="button" class="tab active" role="tab" aria-selected="true" onclick="setTab('c')">By revenue target</button>
+  <button type="button" class="tab" role="tab" aria-selected="false" onclick="setTab('a')">By travel behaviour</button>
   <button type="button" class="tab" role="tab" aria-selected="false" onclick="setTab('b')">By roamer count</button>
-  <button type="button" class="tab" role="tab" aria-selected="false" onclick="setTab('c')">By revenue target</button>
   <button type="button" class="tab" role="tab" aria-selected="false" onclick="setTab('settings')">⚙ Settings</button>
 </div>
 
 <!-- ══ TAB A ══ -->
-<div class="section active" id="tab-a">
+<div class="section" id="tab-a">
   <div class="cols">
     <div class="panel">
       <div class="panel-hd">Scenario inputs</div>
@@ -985,11 +1034,11 @@ input[type=range]::-moz-range-thumb{
       <div class="irow">
         <div class="irow-hd">
           <span class="irow-label">Traveller % of base</span>
-          <span class="irow-val" id="va-trav">14.3%</span>
+          <span class="irow-val" id="va-trav">24.0%</span>
         </div>
         <div class="slider-input-row">
-          <input type="range" min="0" max="100" step="0.1" value="14.3" id="sa-trav" oninput="syncSliderNum('sa-trav','na-trav');onSliderA();">
-          <input type="number" id="na-trav" value="14.3" min="0" max="100" step="0.1" class="slider-num" oninput="syncNumSlider('na-trav','sa-trav');onSliderA();">
+          <input type="range" min="0" max="100" step="0.1" value="24" id="sa-trav" oninput="syncSliderNum('sa-trav','na-trav');onSliderA();">
+          <input type="number" id="na-trav" value="24" min="0" max="100" step="0.1" class="slider-num" oninput="syncNumSlider('na-trav','sa-trav');onSliderA();">
         </div>
         <div class="range-ends"><span class="range-end">0%</span><span class="range-end">100%</span></div>
         <div class="irow-hint">% of lines that travel overseas in a given month. Travellers don't pay — they're the eligible pool only. Use 0% to model no travel in month.</div>
@@ -1047,7 +1096,7 @@ input[type=range]::-moz-range-thumb{
       <div class="f-label">How blended ARPU is derived</div>
       <div class="f-row">
         <span class="f-step">Step 1</span>
-        <div class="f-node"><div class="f-node-lbl">Traveller %</div><div class="f-node-val" id="fa-trav">14.3%</div></div>
+        <div class="f-node"><div class="f-node-lbl">Traveller %</div><div class="f-node-val" id="fa-trav">24.0%</div></div>
         <div class="f-op">×</div>
         <div class="f-node"><div class="f-node-lbl">Active roamer % of travellers</div><div class="f-node-val" id="fa-roam">73.3%</div></div>
         <div class="f-op">=</div>
@@ -1068,7 +1117,7 @@ input[type=range]::-moz-range-thumb{
       <div>
         <div style="font-size:10px;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;color:var(--text3);padding:6px 0;border-bottom:0.5px solid var(--border);margin-bottom:2px;">Scenario</div>
         <div class="arow"><span class="arow-label">Industry profile</span><span class="arow-val" id="aa-profile">Enterprise base</span></div>
-        <div class="arow"><span class="arow-label">Traveller % of base</span><span class="arow-val" id="aa-trav">14.3%</span></div>
+        <div class="arow"><span class="arow-label">Traveller % of base</span><span class="arow-val" id="aa-trav">24.0%</span></div>
         <div class="arow"><span class="arow-label">Active roamer % of travellers</span><span class="arow-val" id="aa-roam">73.3%</span></div>
         <div class="arow" style="opacity:0.5;"><span class="arow-label">↳ Silent roamer % of travellers</span><span class="arow-val" id="aa-silent">26.7%</span></div>
         <div class="arow" style="opacity:0.5;"><span class="arow-label">↳ Roaming penetration of base</span><span class="arow-val" id="aa-pen">10.5%</span></div>
@@ -1205,7 +1254,7 @@ input[type=range]::-moz-range-thumb{
 </div>
 
 <!-- ══ TAB C ══ -->
-<div class="section" id="tab-c">
+<div class="section active" id="tab-c">
   <div class="cols">
 
     <!-- LEFT: inputs -->
@@ -1214,7 +1263,7 @@ input[type=range]::-moz-range-thumb{
 
       <div class="irow">
         <div class="irow-hd"><span class="irow-label">Target annual roaming data revenue ($)</span></div>
-        <input type="number" id="nc-target" value="36000000" step="1000000" min="0" class="num" oninput="calcC()">
+        <input type="number" id="nc-target" value="3000000" step="1000000" min="0" class="num" oninput="calcC()">
         <div class="irow-hint">The annual roaming data revenue you want the new account(s) to generate. Divided by 12 internally to derive the monthly blended ARPU target.</div>
       </div>
 
@@ -1233,11 +1282,11 @@ input[type=range]::-moz-range-thumb{
       <div class="irow">
         <div class="irow-hd">
           <span class="irow-label">Traveller % of base</span>
-          <span class="irow-val" id="vc-trav">14.3%</span>
+          <span class="irow-val" id="vc-trav">24%</span>
         </div>
         <div class="slider-input-row">
-          <input type="range" min="0" max="100" step="0.1" value="14.3" id="sc-trav" oninput="syncSliderNum('sc-trav','nc-trav');onSliderC();">
-          <input type="number" id="nc-trav" value="14.3" min="0" max="100" step="0.1" class="slider-num" oninput="syncNumSlider('nc-trav','sc-trav');onSliderC();">
+          <input type="range" min="0" max="100" step="0.1" value="24" id="sc-trav" oninput="syncSliderNum('sc-trav','nc-trav');onSliderC();">
+          <input type="number" id="nc-trav" value="24" min="0" max="100" step="0.1" class="slider-num" oninput="syncNumSlider('nc-trav','sc-trav');onSliderC();">
         </div>
         <div class="range-ends"><span class="range-end">0%</span><span class="range-end">100%</span></div>
         <div class="irow-hint">% of lines expected to travel overseas per month. Use 0% to model no travel in month.</div>
@@ -1310,7 +1359,7 @@ input[type=range]::-moz-range-thumb{
       <div class="f-label">How lines needed is derived</div>
       <div class="f-row">
         <span class="f-step">Step 1</span>
-        <div class="f-node"><div class="f-node-lbl">Traveller %</div><div class="f-node-val" id="fc-trav">14.3%</div></div>
+        <div class="f-node"><div class="f-node-lbl">Traveller %</div><div class="f-node-val" id="fc-trav">24.0%</div></div>
         <div class="f-op">×</div>
         <div class="f-node"><div class="f-node-lbl">Active roamer %</div><div class="f-node-val" id="fc-roam">73.3%</div></div>
         <div class="f-op">=</div>
@@ -1334,7 +1383,7 @@ input[type=range]::-moz-range-thumb{
       <div>
         <div style="font-size:10px;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;color:var(--text3);padding:6px 0;border-bottom:0.5px solid var(--border);margin-bottom:2px;">Scenario</div>
         <div class="arow"><span class="arow-label">Industry profile</span><span class="arow-val" id="ac-profile">Enterprise base</span></div>
-        <div class="arow"><span class="arow-label">Traveller % of base</span><span class="arow-val" id="ac-trav">14.3%</span></div>
+        <div class="arow"><span class="arow-label">Traveller % of base</span><span class="arow-val" id="ac-trav">24.0%</span></div>
         <div class="arow"><span class="arow-label">Active roamer % of travellers</span><span class="arow-val" id="ac-roam">73.3%</span></div>
         <div class="arow" style="opacity:0.5;"><span class="arow-label">↳ Roaming penetration of base</span><span class="arow-val" id="ac-pen">10.5%</span></div>
         <div class="arow" style="opacity:0.5;"><span class="arow-label">↳ Blended ARPU / line</span><span class="arow-val" id="ac-blended">$8.37</span></div>
@@ -1352,6 +1401,80 @@ input[type=range]::-moz-range-thumb{
     <div class="assume-note">Derived values (↳) are calculated from inputs above them. Lines needed = Target revenue ÷ Blended ARPU. Result is exact — round up to nearest whole line in practice.</div>
     <div class="assume-note muted">Formula values are shown with cents for reconciliation. Revenue cards use exact values rather than rounded intermediate figures.</div>
   </div>
+
+  <div class="panel ramp-panel">
+    <div class="panel-hd">Ramp-up view (Year 1)</div>
+    <div class="ramp-note">This panel is read-only and reactive. It ramps live lines toward the steady-state line count required above, then shows the revenue those lines would generate. Use the timeline selector to stretch the S-curve beyond 12 months for slower enterprise adoption scenarios.</div>
+
+    <div class="ramp-profile-row no-print">
+      <span class="ramp-profile-label">Ramp profile</span>
+      <div class="ramp-toggle-group" role="tablist" aria-label="Line ramp-up profile">
+        <button type="button" class="ramp-toggle" id="ramp-toggle-aggressive" onclick="setRampProfile('aggressive')">Aggressive</button>
+        <button type="button" class="ramp-toggle" id="ramp-toggle-base" onclick="setRampProfile('base')">Base Case</button>
+        <button type="button" class="ramp-toggle active" id="ramp-toggle-conservative" onclick="setRampProfile('conservative')">Conservative</button>
+      </div>
+      <div class="ramp-select-wrap">
+        <span class="ramp-select-label">Timeline</span>
+        <select id="ramp-horizon" class="ramp-select" onchange="setRampHorizon(this.value)" aria-label="Ramp timeline in months">
+          <option value="12">12 months</option>
+          <option value="18">18 months</option>
+          <option value="24">24 months</option>
+          <option value="36">36 months</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="ramp-summary-grid">
+      <div class="ramp-card">
+        <div class="ramp-card-label">Full run-rate lines</div>
+        <div class="ramp-card-value" id="ramp-full-runrate">40,000</div>
+        <div class="ramp-card-sub" id="ramp-full-runrate-sub">Steady-state live lines required to deliver the target monthly revenue</div>
+      </div>
+      <div class="ramp-card">
+        <div class="ramp-card-label" id="ramp-realised-label">Timeline realised revenue</div>
+        <div class="ramp-card-value" id="ramp-year1">$20,000,000</div>
+        <div class="ramp-card-sub" id="ramp-realised-sub">Revenue generated by the ramped live lines over the selected timeline</div>
+      </div>
+      <div class="ramp-card">
+        <div class="ramp-card-label" id="ramp-shortfall-label">Timeline shortfall</div>
+        <div class="ramp-card-value" id="ramp-shortfall">$16,000,000</div>
+        <div class="ramp-card-sub" id="ramp-shortfall-sub">Target annual revenue minus realised revenue over the selected timeline</div>
+      </div>
+      <div class="ramp-card">
+        <div class="ramp-card-label">Months to hit 90%</div>
+        <div class="ramp-card-value" id="ramp-hit90">8</div>
+        <div class="ramp-card-sub">First month that reaches at least 90% of the full run-rate lines</div>
+      </div>
+    </div>
+
+    <div class="ramp-chart-wrap">
+      <div class="ramp-chart-head">
+        <div class="ramp-chart-title" id="ramp-chart-title">Live ramped lines vs full run-rate lines</div>
+        <div class="ramp-chart-legend">
+          <div class="ramp-legend-item"><span class="ramp-legend-line"></span><span>S-curve live lines</span></div>
+          <div class="ramp-legend-item"><span class="ramp-legend-line target"></span><span>Target live lines</span></div>
+        </div>
+      </div>
+      <canvas id="ramp-canvas" class="ramp-canvas" aria-label="Line ramp-up S curve chart"></canvas>
+    </div>
+
+    <div class="ramp-table-wrap">
+      <table class="ramp-table">
+        <thead>
+          <tr>
+            <th>Month</th>
+            <th>% of target</th>
+            <th>Live lines</th>
+            <th>Monthly revenue</th>
+            <th>Cumulative revenue</th>
+            <th>Progress vs full run-rate</th>
+          </tr>
+        </thead>
+        <tbody id="ramp-table-body"></tbody>
+      </table>
+    </div>
+  </div>
+
 </div>
 
 <!-- ══ SETTINGS ══ -->
@@ -1363,12 +1486,12 @@ input[type=range]::-moz-range-thumb{
   <div class="settings-cols">
     <div class="settings-section">
       <div class="settings-hd">Base defaults</div>
-      <div class="srow"><span class="srow-label">Traveller % of base</span><div class="srow-right"><input type="number" id="def-trav" value="14.3" step="0.1" class="snum">%</div></div>
+      <div class="srow"><span class="srow-label">Traveller % of base</span><div class="srow-right"><input type="number" id="def-trav" value="24" step="0.1" class="snum">%</div></div>
       <div class="srow"><span class="srow-label">Active roamer % of travellers</span><div class="srow-right"><input type="number" id="def-roam" value="73.3" step="0.1" class="snum">%</div></div>
       <div class="srow"><span class="srow-label">Observed roaming penetration</span><div class="srow-right"><input type="number" id="def-base-pen" value="10.5" step="0.1" class="snum">%</div></div>
       <div class="srow"><span class="srow-label">Default account size</span><div class="srow-right"><input type="number" id="def-acct" value="1000" step="50" class="snum">lines</div></div>
       <div class="srow"><span class="srow-label">"By roamer count" default roamers</span><div class="srow-right"><input type="number" id="def-broamers" value="105" step="1" min="0" class="snum"></div></div>
-      <div class="srow"><span class="srow-label">Revenue target annual default</span><div class="srow-right">$<input type="number" id="def-targetAnnual" value="36000000" step="1000000" min="0" class="snum"></div></div>
+      <div class="srow"><span class="srow-label">Revenue target annual default</span><div class="srow-right">$<input type="number" id="def-targetAnnual" value="3000000" step="1000000" min="0" class="snum"></div></div>
     </div>
     <div class="settings-section">
       <div class="settings-hd">Plan assumption defaults</div>
@@ -1454,7 +1577,7 @@ input[type=range]::-moz-range-thumb{
 </div>
 <script>
 // ── CORE STATE ──────────────────────────────────────────────────────────────
-var currentTab = 'a';
+var currentTab = 'c';
 var lastScenarioTab = 'a';
 
 // Default profiles — used if localStorage is empty
@@ -1468,12 +1591,260 @@ var DEFAULT_PROFILES = [
 
 // Default scalar settings
 var DEFAULT_SETTINGS = {
-  trav:14.3, roam:73.3, basePen:10.5, acct:1000, broamers:105,
-  days:5.5,  rate:29,   monthly:35,   mix:36, targetAnnual:36000000
+  trav:24, roam:73.3, basePen:10.5, acct:1000, broamers:105,
+  days:5.5,  rate:29,   monthly:35,   mix:36, targetAnnual:3000000, rampHorizon:12
 };
 
 // Live profiles array (populated from localStorage or defaults)
 var profiles = [];
+
+
+var currentRampProfile = 'conservative';
+var currentRampHorizon = 12;
+var RAMP_PROFILES = {
+  aggressive:{label:'Aggressive', midpointPct:0.28, steepnessBase:10.5},
+  base:{label:'Base Case', midpointPct:0.42, steepnessBase:9.0},
+  conservative:{label:'Conservative', midpointPct:0.58, steepnessBase:7.8}
+};
+
+function logisticPct(month, midpoint, steepness){
+  return 1/(1+Math.exp(-steepness*(month-midpoint)));
+}
+function clamp01(v){ return Math.min(1,Math.max(0,v)); }
+function formatCount(value,decimals){
+  if(decimals===undefined) decimals=0;
+  return Number(value).toLocaleString(undefined,{minimumFractionDigits:decimals,maximumFractionDigits:decimals});
+}
+function getRampHorizonValue(raw){
+  var horizon=parseInt(raw,10);
+  if(!Number.isFinite(horizon)) horizon=DEFAULT_SETTINGS.rampHorizon||12;
+  return Math.max(12,horizon);
+}
+function syncRampHorizonControl(){
+  var el=document.getElementById('ramp-horizon');
+  if(el) el.value=String(currentRampHorizon);
+}
+function buildRampSeries(targetLines, blendedArpu, profileKey, horizon){
+  var cfg=RAMP_PROFILES[profileKey]||RAMP_PROFILES.base;
+  var safeHorizon=getRampHorizonValue(horizon);
+  var midpoint=Math.max(1, safeHorizon*cfg.midpointPct);
+  var steepness=cfg.steepnessBase/safeHorizon;
+  var first=logisticPct(1,midpoint,steepness);
+  var finalPct=logisticPct(safeHorizon,midpoint,steepness);
+  var rows=[];
+  var cumulativeRevenue=0;
+  for(var month=1; month<=safeHorizon; month++){
+    var raw=logisticPct(month,midpoint,steepness);
+    var pct=finalPct===first ? (month===safeHorizon?1:0) : (raw-first)/(finalPct-first);
+    pct=clamp01(pct);
+    if(month===safeHorizon) pct=1;
+    var liveLines=targetLines*pct;
+    var monthlyRevenue=liveLines*blendedArpu;
+    cumulativeRevenue+=monthlyRevenue;
+    rows.push({
+      month:month,
+      pct:pct,
+      liveLines:liveLines,
+      monthlyRevenue:monthlyRevenue,
+      cumulativeRevenue:cumulativeRevenue,
+      progressPct:pct
+    });
+  }
+  return rows;
+}
+function calculateRampScenario(targetScenario, profileKey, horizon){
+  var scenario=targetScenario||{};
+  var safeTargetAnnual=clampNonNegative(scenario.targetAnnual,0);
+  var targetMonthlyRevenue=clampNonNegative(scenario.targetMonthly,0);
+  var blendedArpu=clampNonNegative(scenario.blendedArpu,0);
+  var safeHorizon=getRampHorizonValue(horizon);
+  var targetLines=(scenario.infeasible && safeTargetAnnual>0)?null:clampNonNegative(scenario.linesNeeded,0);
+  var available=targetLines!==null;
+  var rows=available?buildRampSeries(targetLines, blendedArpu, profileKey, safeHorizon):[];
+  var realisedRevenue=rows.reduce(function(sum,row){return sum+row.monthlyRevenue;},0);
+  var annualizedTarget=safeTargetAnnual*(safeHorizon/12);
+  var shortfall=Math.max(0,annualizedTarget-realisedRevenue);
+  var hit90Row=rows.find(function(row){return row.pct>=0.9;});
+  return {
+    available:available,
+    profileKey:profileKey,
+    profileLabel:(RAMP_PROFILES[profileKey]||RAMP_PROFILES.base).label,
+    horizon:safeHorizon,
+    targetAnnual:safeTargetAnnual,
+    annualizedTarget:annualizedTarget,
+    targetMonthlyRevenue:targetMonthlyRevenue,
+    blendedArpu:blendedArpu,
+    targetLines:targetLines,
+    realisedRevenue:realisedRevenue,
+    shortfall:shortfall,
+    monthsTo90:hit90Row?hit90Row.month:('>'+safeHorizon),
+    rows:rows
+  };
+}
+function setRampProfile(profileKey){
+  if(!RAMP_PROFILES[profileKey]) return;
+  currentRampProfile=profileKey;
+  ['aggressive','base','conservative'].forEach(function(key){
+    var el=document.getElementById('ramp-toggle-'+key);
+    if(el) el.classList.toggle('active', key===profileKey);
+  });
+  calcC();
+}
+function setRampHorizon(value){
+  currentRampHorizon=getRampHorizonValue(value);
+  syncRampHorizonControl();
+  try{
+    var settings=JSON.parse(localStorage.getItem('singtel_settings')||'{}');
+    settings.rampHorizon=currentRampHorizon;
+    localStorage.setItem('singtel_settings',JSON.stringify(settings));
+  }catch(e){}
+  calcC();
+}
+function renderRampPanel(targetScenario){
+  syncRampHorizonControl();
+  var ramp=calculateRampScenario(targetScenario,currentRampProfile,currentRampHorizon);
+  var fullRunRateEl=document.getElementById('ramp-full-runrate');
+  var fullRunRateSub=document.getElementById('ramp-full-runrate-sub');
+  if(ramp.available){
+    fullRunRateEl.textContent=formatCount(ramp.targetLines,0);
+    fullRunRateSub.textContent='Steady-state live lines required to deliver '+formatCurrency(ramp.targetMonthlyRevenue,0)+' per month';
+    document.getElementById('ramp-year1').textContent=formatCurrency(ramp.realisedRevenue,0);
+    document.getElementById('ramp-shortfall').textContent=formatCurrency(ramp.shortfall,0);
+    document.getElementById('ramp-hit90').textContent=String(ramp.monthsTo90);
+    var labelText=''+ramp.horizon+'-month realised revenue';
+    document.getElementById('ramp-realised-label').textContent=labelText;
+    document.getElementById('ramp-shortfall-label').textContent=ramp.horizon+'-month shortfall';
+    document.getElementById('ramp-realised-sub').textContent='Revenue generated by the ramped live lines over '+ramp.horizon+' months';
+    document.getElementById('ramp-shortfall-sub').textContent=formatCurrency(ramp.annualizedTarget,0)+' target for '+ramp.horizon+' months minus realised ramp revenue';
+    document.getElementById('ramp-chart-title').textContent='Live ramped lines vs full run-rate lines ('+ramp.horizon+' months)';
+  }else{
+    fullRunRateEl.textContent='—';
+    fullRunRateSub.textContent='Not available while lines needed cannot be solved from the assumptions above';
+    document.getElementById('ramp-year1').textContent='—';
+    document.getElementById('ramp-realised-label').textContent=currentRampHorizon+'-month realised revenue';
+    document.getElementById('ramp-shortfall-label').textContent=currentRampHorizon+'-month shortfall';
+    document.getElementById('ramp-realised-sub').textContent='Revenue generated by the ramped live lines over '+currentRampHorizon+' months';
+    document.getElementById('ramp-shortfall-sub').textContent='Target revenue for the selected timeline minus realised ramp revenue';
+    document.getElementById('ramp-chart-title').textContent='Live ramped lines vs full run-rate lines ('+currentRampHorizon+' months)';
+    document.getElementById('ramp-shortfall').textContent='—';
+    document.getElementById('ramp-hit90').textContent='—';
+  }
+
+  var tbody=document.getElementById('ramp-table-body');
+  if(tbody){
+    if(ramp.available){
+      tbody.innerHTML=ramp.rows.map(function(row){
+        return '<tr>'+
+          '<td class="mono">M'+row.month+'</td>'+
+          '<td class="mono hi">'+formatPercent(row.pct*100,1)+'</td>'+
+          '<td class="mono">'+formatCount(row.liveLines,0)+'</td>'+
+          '<td class="mono">'+formatCurrency(row.monthlyRevenue,0)+'</td>'+
+          '<td class="mono">'+formatCurrency(row.cumulativeRevenue,0)+'</td>'+
+          '<td class="mono">'+formatPercent(row.progressPct*100,1)+'</td>'+
+        '</tr>';
+      }).join('');
+    }else{
+      tbody.innerHTML='<tr><td colspan="6" style="padding:14px 12px;color:var(--text3);font-weight:600;">Ramp view is unavailable until the model can solve a valid steady-state line requirement.</td></tr>'; 
+    }
+  }
+  drawRampChart(ramp);
+  return ramp;
+}
+function drawRampChart(ramp){
+  var canvas=document.getElementById('ramp-canvas');
+  if(!canvas) return;
+  var dpr=window.devicePixelRatio||1;
+  var cssWidth=Math.max(320, Math.round(canvas.clientWidth||canvas.parentElement.clientWidth||760));
+  var cssHeight=Math.max(260, Math.round(canvas.clientHeight||320));
+  canvas.width=cssWidth*dpr;
+  canvas.height=cssHeight*dpr;
+  var ctx=canvas.getContext('2d');
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  ctx.clearRect(0,0,cssWidth,cssHeight);
+
+  var pad={top:18,right:18,bottom:38,left:72};
+  var chartW=cssWidth-pad.left-pad.right;
+  var chartH=cssHeight-pad.top-pad.bottom;
+  var horizon=Math.max(12, ramp.horizon||12);
+  var targetLines=ramp.available?ramp.targetLines:0;
+  var maxVal=Math.max(targetLines, ramp.rows.reduce(function(m,row){return Math.max(m,row.liveLines||0);},0));
+  maxVal=maxVal>0?maxVal:1;
+  var yMax=maxVal*1.1;
+
+  function xFor(month){ return pad.left + ((month-1)/Math.max(1,horizon-1))*chartW; }
+  function yFor(value){ return pad.top + chartH - (value/yMax)*chartH; }
+
+  ctx.strokeStyle='rgba(0,0,0,0.08)';
+  ctx.lineWidth=1;
+  ctx.beginPath();
+  for(var i=0;i<=4;i++){
+    var y=pad.top + (chartH/4)*i;
+    ctx.moveTo(pad.left,y); ctx.lineTo(pad.left+chartW,y);
+  }
+  ctx.stroke();
+
+  ctx.strokeStyle='rgba(0,0,0,0.15)';
+  ctx.beginPath();
+  ctx.moveTo(pad.left,pad.top); ctx.lineTo(pad.left,pad.top+chartH); ctx.lineTo(pad.left+chartW,pad.top+chartH);
+  ctx.stroke();
+
+  ctx.fillStyle='#8b8ba0';
+  ctx.font='11px Manrope, sans-serif';
+  ctx.textAlign='right';
+  ctx.textBaseline='middle';
+  for(var j=0;j<=4;j++){
+    var val=yMax*(1-j/4);
+    ctx.fillText(formatCount(val,0), pad.left-8, pad.top+(chartH/4)*j);
+  }
+
+  ctx.textAlign='center';
+  ctx.textBaseline='top';
+  for(var m=1;m<=horizon;m++){
+    if(horizon>18 && !(m===1 || m===horizon || m%3===0)) continue;
+    ctx.fillText('M'+m, xFor(m), pad.top+chartH+10);
+  }
+
+  if(ramp.available){
+    var targetY=yFor(targetLines);
+    ctx.save();
+    ctx.setLineDash([8,6]);
+    ctx.strokeStyle='#ef4444';
+    ctx.lineWidth=2;
+    ctx.beginPath();
+    ctx.moveTo(pad.left,targetY); ctx.lineTo(pad.left+chartW,targetY);
+    ctx.stroke();
+    ctx.restore();
+
+    ctx.beginPath();
+    ramp.rows.forEach(function(row,idx){
+      var x=xFor(row.month), y=yFor(row.liveLines);
+      if(idx===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+    });
+    ctx.strokeStyle='#6366f1';
+    ctx.lineWidth=3;
+    ctx.lineJoin='round';
+    ctx.lineCap='round';
+    ctx.stroke();
+
+    ramp.rows.forEach(function(row){
+      var x=xFor(row.month), y=yFor(row.liveLines);
+      ctx.beginPath();
+      ctx.arc(x,y,4,0,Math.PI*2);
+      ctx.fillStyle='#ffffff';
+      ctx.fill();
+      ctx.lineWidth=2;
+      ctx.strokeStyle='#6366f1';
+      ctx.stroke();
+    });
+  }else{
+    ctx.fillStyle='#8b8ba0';
+    ctx.font='12px Manrope, sans-serif';
+    ctx.textAlign='center';
+    ctx.textBaseline='middle';
+    ctx.fillText('Line ramp unavailable until a valid lines-needed result is available.', pad.left + chartW/2, pad.top + chartH/2);
+  }
+}
+
 
 // ── HELPERS ─────────────────────────────────────────────────────────────────
 function clamp(value,min,max,fallback){
@@ -1562,12 +1933,16 @@ function loadFromStorage(){
       var el=document.getElementById('def-'+k);
       if(el && settings[k]!==undefined) el.value=settings[k];
     });
+    currentRampHorizon=getRampHorizonValue(settings.rampHorizon!==undefined?settings.rampHorizon:DEFAULT_SETTINGS.rampHorizon);
+    syncRampHorizonControl();
   }catch(e){
     profiles=JSON.parse(JSON.stringify(DEFAULT_PROFILES));
     Object.keys(DEFAULT_SETTINGS).forEach(function(k){
       var el=document.getElementById('def-'+k);
       if(el) el.value=DEFAULT_SETTINGS[k];
     });
+    currentRampHorizon=getRampHorizonValue(DEFAULT_SETTINGS.rampHorizon);
+    syncRampHorizonControl();
   }
 }
 
@@ -1582,6 +1957,7 @@ function saveToStorage(){
         return;
       }
       if(k==='trav'||k==='roam'||k==='basePen'||k==='mix') settings[k]=clampPct(el.value, DEFAULT_SETTINGS[k]);
+      else if(k==='rampHorizon') settings[k]=getRampHorizonValue(el.value);
       else if(k==='acct') settings[k]=clampInt(el.value, 1, DEFAULT_SETTINGS[k]);
       else if(k==='broamers') settings[k]=clampInt(el.value, 0, DEFAULT_SETTINGS[k]);
       else settings[k]=clampNonNegative(el.value, DEFAULT_SETTINGS[k]);
@@ -2068,6 +2444,7 @@ function calcC(p){
   document.getElementById('ac-daily').textContent=formatCurrency(p.dailyA,2);
   document.getElementById('ac-monthly').textContent=formatCurrency(p.monthly,2);
   document.getElementById('ac-plan').textContent=planArpuText;
+  renderRampPanel(scenario);
 }
 
 // ── SLIDING TAB PILL — uses getBoundingClientRect for reliability ────────────
@@ -2106,7 +2483,7 @@ function setTab(t){
   currentTab=t;
   if(t==='a'||t==='b'||t==='c') lastScenarioTab=t;
   document.querySelectorAll('.tab').forEach(function(b,i){
-    var isActive=['a','b','c','settings'][i]===t;
+    var isActive=['c','a','b','settings'][i]===t;
     b.classList.toggle('active',isActive);
     b.setAttribute('aria-selected',isActive?'true':'false');
   });
@@ -2146,7 +2523,7 @@ function getDefs(){
     rate:clampNonNegative(document.getElementById('def-rate').value,29),
     monthly:clampNonNegative(document.getElementById('def-monthly').value,35),
     mix:clampPct(document.getElementById('def-mix').value,36),
-    targetAnnual:clampNonNegative(document.getElementById('def-targetAnnual').value,36000000)
+    targetAnnual:clampNonNegative(document.getElementById('def-targetAnnual').value,3000000)
   };
 }
 
@@ -2176,6 +2553,11 @@ function resetDefaults(){
   document.getElementById('nc-trav').value=d.trav;
   document.getElementById('sc-roam').value=d.roam;
   document.getElementById('nc-roam').value=d.roam;
+  currentRampProfile='conservative';
+  ['aggressive','base','conservative'].forEach(function(key){
+    var el=document.getElementById('ramp-toggle-'+key);
+    if(el) el.classList.toggle('active', key==='aggressive');
+  });
   onMix(d.mix);
   calcAll();
   fillAllSliders();
@@ -2245,6 +2627,21 @@ function exportCSV(){
     rows.push(['Weighted plan ARPU per active roamer',formatCurrency(p.planArpu,2)]);
     rows.push(['Est. active roamers / month',cscenario.infeasible?'—':Math.ceil(cscenario.activeRoamers).toLocaleString()]);
     rows.push(['Est. travellers / month',cscenario.infeasible?'—':Math.ceil(cscenario.travellers).toLocaleString()]);
+    rows.push(['','']);
+    var ramp=calculateRampScenario(cscenario,currentRampProfile,currentRampHorizon);
+    rows.push(['REVENUE RAMP-UP','']);
+    rows.push(['Ramp profile',ramp.profileLabel]);
+    rows.push(['Ramp timeline',String(ramp.horizon)+' months']);
+    rows.push(['Full run-rate lines',ramp.available?formatCount(ramp.targetLines,0):'—']);
+    rows.push([ramp.horizon+'-month realised revenue',formatCurrency(ramp.realisedRevenue,0)]);
+    rows.push([ramp.horizon+'-month target revenue',formatCurrency(ramp.annualizedTarget,0)]);
+    rows.push([ramp.horizon+'-month shortfall',formatCurrency(ramp.shortfall,0)]);
+    rows.push(['Months to hit 90%',String(ramp.monthsTo90)]);
+    rows.push(['','']);
+    rows.push(['Month','% of target','Live lines','Monthly revenue','Cumulative revenue','Progress vs full run-rate']);
+    ramp.rows.forEach(function(row){
+      rows.push(['M'+row.month,formatPercent(row.pct*100,1),formatCount(row.liveLines,0),formatCurrency(row.monthlyRevenue,0),formatCurrency(row.cumulativeRevenue,0),formatPercent(row.progressPct*100,1)]);
+    });
   } else if(exportTab==='a'){
     var scenarioA=calculateTravelScenario(
       document.getElementById('na-acct').value,
@@ -2472,7 +2869,7 @@ buildProfileTable();
 populatePresetDropdowns();
 initTabPill();
 window.addEventListener('resize', moveTabPill);
-setTab('a'); // calls calcAll internally, AND moves plan panel to correct position
+setTab('c'); // calls calcAll internally, AND moves plan panel to correct position
 </script>
 </body>
 </html>
