@@ -716,6 +716,69 @@ input[type=range]::-moz-range-thumb{
   color:var(--text3);padding:8px 0;border-bottom:2px solid var(--i100);margin-bottom:4px;
 }
 
+/* ── Revenue Ramp-Up Section ── */
+.ramp-panel{margin-top:0;}
+.ramp-panel .panel-hd{display:flex;align-items:center;gap:10px;}
+.ramp-year-badge{
+  font-family:'Syne',sans-serif;font-size:9px;font-weight:700;letter-spacing:0.08em;
+  text-transform:uppercase;color:var(--i500);background:var(--i50);
+  border:1px solid var(--i200);border-radius:99px;padding:2px 9px;
+}
+.ramp-intro{font-size:12px;color:var(--text3);margin-bottom:20px;line-height:1.75;font-weight:500;}
+.ramp-profiles{display:flex;gap:8px;margin-bottom:22px;flex-wrap:wrap;}
+.ramp-profile-btn{
+  font-family:'Manrope',sans-serif;font-size:12px;font-weight:700;
+  padding:8px 18px;border-radius:99px;cursor:pointer;
+  border:1.5px solid var(--border2);background:var(--bg2);color:var(--text2);
+  transition:all var(--t) var(--spring);letter-spacing:0.01em;
+}
+.ramp-profile-btn:hover{border-color:var(--i300);color:var(--i600);background:var(--i50);transform:translateY(-1px);}
+.ramp-profile-btn.active.aggressive{background:linear-gradient(135deg,#d1fae5,#ecfdf5);border-color:#34d399;color:#065f46;}
+.ramp-profile-btn.active.base{background:linear-gradient(135deg,var(--i50),var(--i100));border-color:var(--i400);color:var(--i700);}
+.ramp-profile-btn.active.conservative{background:linear-gradient(135deg,#fffbeb,#fef3c7);border-color:#fbbf24;color:#92400e;}
+.ramp-summary-cards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px;}
+@media(max-width:700px){.ramp-summary-cards{grid-template-columns:1fr 1fr;}}
+.ramp-card{
+  background:var(--bg2);border:1px solid var(--border);border-radius:var(--r-sm);
+  padding:14px 16px;transition:all var(--t) var(--ease-out);
+}
+.ramp-card:hover{background:var(--i50);border-color:var(--i200);transform:translateY(-1px);box-shadow:var(--s-sm);}
+.ramp-card-label{font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:8px;}
+.ramp-card-value{font-family:'JetBrains Mono',monospace;font-size:15px;font-weight:600;color:var(--text);line-height:1.2;}
+.ramp-card-value.shortfall{color:var(--red);}
+.ramp-card-value.yr1{color:var(--green-d);}
+.ramp-chart-wrap{
+  background:var(--bg2);border:1px solid var(--border);border-radius:var(--r-sm);
+  padding:16px;margin-bottom:20px;overflow:hidden;
+}
+.ramp-chart-wrap canvas{display:block;width:100%;height:auto;}
+.ramp-table-wrap{overflow-x:auto;}
+.ramp-table{width:100%;border-collapse:collapse;font-size:12px;}
+.ramp-table thead tr{background:linear-gradient(135deg,var(--i50),var(--i100));}
+.ramp-table th{
+  font-family:'Syne',sans-serif;font-size:9px;font-weight:700;letter-spacing:0.07em;
+  text-transform:uppercase;color:var(--i700);padding:10px 12px;
+  border-bottom:2px solid var(--i200);text-align:left;white-space:nowrap;
+}
+.ramp-table th.num{text-align:right;}
+.ramp-table td{
+  padding:9px 12px;border-bottom:1px solid var(--border);
+  font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;color:var(--text);
+  white-space:nowrap;
+}
+.ramp-table td.label{font-family:'Manrope',sans-serif;font-weight:700;color:var(--text2);}
+.ramp-table td.num{text-align:right;}
+.ramp-table td.pct{text-align:right;color:var(--text2);}
+.ramp-table td.hi{color:var(--i600);font-weight:700;}
+.ramp-table tr:hover td{background:var(--i50);}
+.ramp-table tr:last-child td{border-bottom:none;font-weight:700;}
+.ramp-infeasible{
+  display:flex;align-items:center;justify-content:center;
+  min-height:80px;color:var(--text3);font-size:12px;font-weight:600;
+  background:var(--bg2);border-radius:var(--r-sm);border:1px solid var(--border);
+  margin-bottom:16px;
+}
+
 /* Print */
 @media print{
   .tab-nav,.header-right,.no-print,
@@ -1351,6 +1414,63 @@ input[type=range]::-moz-range-thumb{
     </div>
     <div class="assume-note">Derived values (↳) are calculated from inputs above them. Lines needed = Target revenue ÷ Blended ARPU. Result is exact — round up to nearest whole line in practice.</div>
     <div class="assume-note muted">Formula values are shown with cents for reconciliation. Revenue cards use exact values rather than rounded intermediate figures.</div>
+  </div>
+
+  <!-- Revenue Ramp-Up Section -->
+  <div class="panel ramp-panel" id="ramp-section">
+    <div class="panel-hd">Revenue Ramp-Up <span class="ramp-year-badge">Year 1</span></div>
+    <p class="ramp-intro">Shows how many lines are adopted each month and the revenue they generate, based on an S-curve adoption model. Switch profiles to see aggressive, base-case, and conservative scenarios. The ramp is read-only — it layers adoption reality on top of your target and does not affect the Lines Needed calculation above.</p>
+
+    <div class="ramp-profiles">
+      <button class="ramp-profile-btn base active" id="ramp-btn-base" onclick="setRampProfile('base')">Base Case</button>
+      <button class="ramp-profile-btn aggressive" id="ramp-btn-aggressive" onclick="setRampProfile('aggressive')">Aggressive</button>
+      <button class="ramp-profile-btn conservative" id="ramp-btn-conservative" onclick="setRampProfile('conservative')">Conservative</button>
+    </div>
+
+    <div id="ramp-feasible-content">
+      <div class="ramp-summary-cards">
+        <div class="ramp-card">
+          <div class="ramp-card-label">Full run-rate (annual)</div>
+          <div class="ramp-card-value" id="ramp-fullrate">—</div>
+        </div>
+        <div class="ramp-card">
+          <div class="ramp-card-label">Year 1 realised revenue</div>
+          <div class="ramp-card-value yr1" id="ramp-yr1rev">—</div>
+        </div>
+        <div class="ramp-card">
+          <div class="ramp-card-label">Shortfall vs annual target</div>
+          <div class="ramp-card-value shortfall" id="ramp-shortfall">—</div>
+        </div>
+        <div class="ramp-card">
+          <div class="ramp-card-label">Months to 90% of target lines</div>
+          <div class="ramp-card-value" id="ramp-mth90">—</div>
+        </div>
+      </div>
+
+      <div class="ramp-chart-wrap">
+        <canvas id="ramp-chart"></canvas>
+      </div>
+
+      <div class="ramp-table-wrap">
+        <table class="ramp-table">
+          <thead>
+            <tr>
+              <th>Month</th>
+              <th class="num">Lines adopted</th>
+              <th class="num">% of target lines</th>
+              <th class="num">Monthly revenue</th>
+              <th class="num">Cumulative revenue</th>
+              <th class="num">Progress vs annual target</th>
+            </tr>
+          </thead>
+          <tbody id="ramp-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="ramp-infeasible" id="ramp-infeasible-msg" style="display:none;">
+      Set a valid revenue target and travel behaviour assumptions above to see the ramp-up projection.
+    </div>
   </div>
 </div>
 
@@ -2068,6 +2188,265 @@ function calcC(p){
   document.getElementById('ac-daily').textContent=formatCurrency(p.dailyA,2);
   document.getElementById('ac-monthly').textContent=formatCurrency(p.monthly,2);
   document.getElementById('ac-plan').textContent=planArpuText;
+  // Update ramp section reactively
+  updateRampSection(scenario,p);
+}
+
+// ── REVENUE RAMP-UP ──────────────────────────────────────────────────────────
+var currentRampProfile='base';
+
+var RAMP_PROFILES={
+  aggressive:{label:'Aggressive',k:0.8,t0:3,lineColor:'#10b981',fillColor:'rgba(16,185,129,0.12)',desc:'Fast early adoption — ~90% of target lines by month 7'},
+  base:      {label:'Base Case', k:0.5,t0:5,lineColor:'#6366f1',fillColor:'rgba(99,102,241,0.10)',desc:'Standard adoption — inflection at month 5'},
+  conservative:{label:'Conservative',k:0.4,t0:8,lineColor:'#d97706',fillColor:'rgba(217,119,6,0.09)',desc:'Slow adoption — still ramping at month 12'}
+};
+
+function sCurve(k,t0,t){
+  return 1/(1+Math.exp(-k*(t-t0)));
+}
+
+function calculateRampData(linesNeeded,blendedArpu,profileKey){
+  var prof=RAMP_PROFILES[profileKey]||RAMP_PROFILES.base;
+  var rows=[];
+  var cumRev=0;
+  for(var m=1;m<=12;m++){
+    var frac=sCurve(prof.k,prof.t0,m);
+    // Clamp fraction to [0,1] — logistic can exceed 1 only numerically at extremes but guard anyway
+    frac=Math.min(1,Math.max(0,frac));
+    var lines=linesNeeded*frac;
+    var rev=lines*blendedArpu;
+    cumRev+=rev;
+    rows.push({month:m,fraction:frac,lines:lines,revenue:rev,cumRevenue:cumRev});
+  }
+  return rows;
+}
+
+function setRampProfile(key){
+  if(!RAMP_PROFILES[key]) return;
+  currentRampProfile=key;
+  ['aggressive','base','conservative'].forEach(function(k){
+    var btn=document.getElementById('ramp-btn-'+k);
+    if(!btn) return;
+    btn.classList.toggle('active',k===key);
+  });
+  updateRampSection();
+}
+
+function updateRampSection(scenario,plan){
+  // Allow calling without args — re-derive from current inputs
+  if(!scenario){
+    var p2=getPlan();
+    scenario=calculateTargetScenario(
+      document.getElementById('nc-target').value,
+      document.getElementById('sc-trav').value,
+      document.getElementById('sc-roam').value,
+      p2.planArpu
+    );
+    plan=p2;
+  }
+
+  var feasibleEl=document.getElementById('ramp-feasible-content');
+  var infeasEl=document.getElementById('ramp-infeasible-msg');
+  if(!feasibleEl||!infeasEl) return;
+
+  if(scenario.infeasible||!scenario.linesNeeded||scenario.linesNeeded<=0){
+    feasibleEl.style.display='none';
+    infeasEl.style.display='flex';
+    return;
+  }
+  feasibleEl.style.display='';
+  infeasEl.style.display='none';
+
+  var linesNeeded=scenario.linesNeeded;
+  var blendedArpu=scenario.blendedArpu;
+  var targetAnnual=scenario.targetAnnual;
+  var targetMonthly=scenario.targetMonthly;
+
+  var data=calculateRampData(linesNeeded,blendedArpu,currentRampProfile);
+  var yr1Rev=data[data.length-1].cumRevenue;
+  var shortfall=targetAnnual-yr1Rev;
+
+  // Months to 90% of target lines
+  var mth90=null;
+  for(var i=0;i<data.length;i++){
+    if(data[i].fraction>=0.9){mth90=data[i].month;break;}
+  }
+
+  // Summary cards
+  var frEl=document.getElementById('ramp-fullrate');
+  var yr1El=document.getElementById('ramp-yr1rev');
+  var sfEl=document.getElementById('ramp-shortfall');
+  var m90El=document.getElementById('ramp-mth90');
+  if(frEl) frEl.textContent=formatCurrency(targetAnnual,0);
+  if(yr1El) yr1El.textContent=formatCurrency(yr1Rev,0);
+  if(sfEl) sfEl.textContent=shortfall>0.005?'−'+formatCurrency(shortfall,0):'$0';
+  if(m90El) m90El.textContent=mth90?'Month '+mth90:'> 12 months';
+
+  // Table
+  renderRampTable(data,linesNeeded,targetAnnual);
+
+  // Chart — defer to next frame so canvas has final layout dimensions
+  requestAnimationFrame(function(){drawRampChart(data,targetMonthly);});
+}
+
+function renderRampTable(data,linesNeeded,targetAnnual){
+  var tbody=document.getElementById('ramp-tbody');
+  if(!tbody) return;
+  tbody.innerHTML='';
+  for(var i=0;i<data.length;i++){
+    var row=data[i];
+    var pctTarget=(row.fraction*100).toFixed(1)+'%';
+    var progress=(row.cumRevenue/targetAnnual*100).toFixed(1)+'%';
+    var isLast=i===data.length-1;
+    var tr=document.createElement('tr');
+    tr.innerHTML=
+      '<td class="label">Month '+row.month+'</td>'+
+      '<td class="num">'+(Math.round(row.lines)).toLocaleString()+'</td>'+
+      '<td class="num pct">'+pctTarget+'</td>'+
+      '<td class="num">'+formatCurrency(row.revenue,0)+'</td>'+
+      '<td class="num hi">'+formatCurrency(row.cumRevenue,0)+'</td>'+
+      '<td class="num pct">'+progress+'</td>';
+    tbody.appendChild(tr);
+  }
+}
+
+function drawRampChart(data,targetMonthly){
+  var canvas=document.getElementById('ramp-chart');
+  if(!canvas||!canvas.getContext) return;
+  var ctx=canvas.getContext('2d');
+
+  var dpr=window.devicePixelRatio||1;
+  var wrapW=canvas.parentElement.clientWidth||600;
+  var W=Math.max(wrapW,300);
+  var H=240;
+  canvas.width=Math.round(W*dpr);
+  canvas.height=Math.round(H*dpr);
+  canvas.style.width=W+'px';
+  canvas.style.height=H+'px';
+  ctx.scale(dpr,dpr);
+
+  ctx.clearRect(0,0,W,H);
+
+  var pad={top:20,right:24,bottom:48,left:72};
+  var cw=W-pad.left-pad.right;
+  var ch=H-pad.top-pad.bottom;
+
+  var prof=RAMP_PROFILES[currentRampProfile]||RAMP_PROFILES.base;
+
+  // Y-axis max: 10% above targetMonthly so the dashed line isn't at the edge
+  var yMax=targetMonthly<=0?1:targetMonthly*1.15;
+
+  // Helpers
+  function xAt(m){return pad.left+(m-0.5)*cw/12;}
+  function yAt(v){return pad.top+ch*(1-Math.min(v/yMax,1));}
+
+  // ── Grid lines ──
+  ctx.lineWidth=0.5;
+  ctx.strokeStyle='rgba(0,0,0,0.06)';
+  for(var g=0;g<=4;g++){
+    var gy=pad.top+(ch*g/4);
+    ctx.beginPath();ctx.moveTo(pad.left,gy);ctx.lineTo(pad.left+cw,gy);ctx.stroke();
+  }
+
+  // ── Target dashed line ──
+  var ty=yAt(targetMonthly);
+  ctx.save();
+  ctx.setLineDash([7,4]);
+  ctx.strokeStyle='#ef4444';
+  ctx.lineWidth=1.5;
+  ctx.globalAlpha=0.85;
+  ctx.beginPath();ctx.moveTo(pad.left,ty);ctx.lineTo(pad.left+cw,ty);ctx.stroke();
+  ctx.restore();
+
+  // Target label
+  ctx.save();
+  ctx.fillStyle='#ef4444';
+  ctx.font='bold 10px Manrope,sans-serif';
+  ctx.textAlign='right';
+  ctx.globalAlpha=0.9;
+  ctx.fillText('Target '+formatCurrencyShort(targetMonthly)+'/mo',pad.left+cw-4,ty-5);
+  ctx.restore();
+
+  // ── Filled area under curve ──
+  ctx.save();
+  ctx.beginPath();
+  ctx.moveTo(xAt(1),yAt(0));
+  for(var i=0;i<data.length;i++){
+    ctx.lineTo(xAt(data[i].month),yAt(data[i].revenue));
+  }
+  ctx.lineTo(xAt(12),yAt(0));
+  ctx.closePath();
+  ctx.fillStyle=prof.fillColor;
+  ctx.fill();
+  ctx.restore();
+
+  // ── S-curve line ──
+  ctx.save();
+  ctx.beginPath();
+  ctx.moveTo(xAt(data[0].month),yAt(data[0].revenue));
+  for(var j=1;j<data.length;j++){
+    // Smooth cubic bezier between points
+    var x0=xAt(data[j-1].month), y0=yAt(data[j-1].revenue);
+    var x1=xAt(data[j].month),   y1=yAt(data[j].revenue);
+    var cpx=(x0+x1)/2;
+    ctx.bezierCurveTo(cpx,y0,cpx,y1,x1,y1);
+  }
+  ctx.strokeStyle=prof.lineColor;
+  ctx.lineWidth=2.5;
+  ctx.lineJoin='round';
+  ctx.stroke();
+  ctx.restore();
+
+  // ── Data point dots ──
+  ctx.save();
+  for(var d=0;d<data.length;d++){
+    var dx=xAt(data[d].month), dy=yAt(data[d].revenue);
+    ctx.beginPath();
+    ctx.arc(dx,dy,3,0,Math.PI*2);
+    ctx.fillStyle=prof.lineColor;
+    ctx.fill();
+    ctx.strokeStyle='#fff';
+    ctx.lineWidth=1.5;
+    ctx.stroke();
+  }
+  ctx.restore();
+
+  // ── X-axis labels ──
+  ctx.save();
+  ctx.fillStyle='rgba(0,0,0,0.45)';
+  ctx.font='10px Manrope,sans-serif';
+  ctx.textAlign='center';
+  for(var m=1;m<=12;m++){
+    ctx.fillText('M'+m,xAt(m),H-pad.bottom+16);
+  }
+  ctx.restore();
+
+  // ── Y-axis labels ──
+  ctx.save();
+  ctx.fillStyle='rgba(0,0,0,0.45)';
+  ctx.font='10px Manrope,sans-serif';
+  ctx.textAlign='right';
+  for(var t=0;t<=4;t++){
+    var val=yMax*(4-t)/4;
+    var labelY=pad.top+(ch*t/4)+4;
+    ctx.fillText(formatCurrencyShort(val),pad.left-8,labelY);
+  }
+  ctx.restore();
+
+  // ── Axis lines ──
+  ctx.save();
+  ctx.strokeStyle='rgba(0,0,0,0.12)';
+  ctx.lineWidth=1;
+  ctx.beginPath();ctx.moveTo(pad.left,pad.top);ctx.lineTo(pad.left,pad.top+ch);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(pad.left,pad.top+ch);ctx.lineTo(pad.left+cw,pad.top+ch);ctx.stroke();
+  ctx.restore();
+}
+
+function formatCurrencyShort(v){
+  if(v===0) return '$0';
+  if(v>=1000000) return '$'+(v/1000000).toFixed(1).replace(/\.0$/,'')+'M';
+  if(v>=1000) return '$'+(v/1000).toFixed(0)+'K';
+  return '$'+Math.round(v);
 }
 
 // ── SLIDING TAB PILL — uses getBoundingClientRect for reliability ────────────
@@ -2245,6 +2624,36 @@ function exportCSV(){
     rows.push(['Weighted plan ARPU per active roamer',formatCurrency(p.planArpu,2)]);
     rows.push(['Est. active roamers / month',cscenario.infeasible?'—':Math.ceil(cscenario.activeRoamers).toLocaleString()]);
     rows.push(['Est. travellers / month',cscenario.infeasible?'—':Math.ceil(cscenario.travellers).toLocaleString()]);
+
+    // Ramp-up section
+    if(!cscenario.infeasible&&cscenario.linesNeeded>0){
+      var rampData=calculateRampData(cscenario.linesNeeded,cscenario.blendedArpu,currentRampProfile);
+      var rampYr1Rev=rampData[rampData.length-1].cumRevenue;
+      var rampShortfall=cscenario.targetAnnual-rampYr1Rev;
+      var rampMth90=null;
+      for(var ri=0;ri<rampData.length;ri++){if(rampData[ri].fraction>=0.9){rampMth90=rampData[ri].month;break;}}
+      var rampProfLabel=(RAMP_PROFILES[currentRampProfile]||RAMP_PROFILES.base).label;
+      rows.push(['','']);
+      rows.push(['REVENUE RAMP-UP (Year 1)','']);
+      rows.push(['Adoption profile',rampProfLabel]);
+      rows.push(['Full run-rate (annual target)',formatCurrency(cscenario.targetAnnual,0)]);
+      rows.push(['Year 1 realised revenue',formatCurrency(rampYr1Rev,0)]);
+      rows.push(['Shortfall vs annual target',rampShortfall>0.005?('−'+formatCurrency(rampShortfall,0)):'$0']);
+      rows.push(['Months to 90% of target lines',rampMth90?('Month '+rampMth90):'> 12 months']);
+      rows.push(['','']);
+      rows.push(['Month','Lines adopted','% of target lines','Monthly revenue','Cumulative revenue','Progress vs annual target']);
+      for(var ri2=0;ri2<rampData.length;ri2++){
+        var rd=rampData[ri2];
+        rows.push([
+          'Month '+rd.month,
+          Math.round(rd.lines).toLocaleString(),
+          (rd.fraction*100).toFixed(1)+'%',
+          formatCurrency(rd.revenue,0),
+          formatCurrency(rd.cumRevenue,0),
+          (rd.cumRevenue/cscenario.targetAnnual*100).toFixed(1)+'%'
+        ]);
+      }
+    }
   } else if(exportTab==='a'){
     var scenarioA=calculateTravelScenario(
       document.getElementById('na-acct').value,
@@ -2472,6 +2881,9 @@ buildProfileTable();
 populatePresetDropdowns();
 initTabPill();
 window.addEventListener('resize', moveTabPill);
+window.addEventListener('resize',function(){
+  if(currentTab==='c'){updateRampSection();}
+});
 setTab('a'); // calls calcAll internally, AND moves plan panel to correct position
 </script>
 </body>
